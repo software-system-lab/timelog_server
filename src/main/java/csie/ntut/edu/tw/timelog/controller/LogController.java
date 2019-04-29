@@ -3,10 +3,7 @@ package csie.ntut.edu.tw.timelog.controller;
 import csie.ntut.edu.tw.timelog.model.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import csie.ntut.edu.tw.timelog.service.LogService;
 
@@ -21,7 +18,7 @@ public class LogController {
     }
 
     @PostMapping(value = "/new")
-    public ResponseEntity<String> newLog(@RequestParam Log log) {
+    public ResponseEntity<String> newLog(@RequestBody Log log) {
         boolean result = this.logService.newLog(log);
         if (result) {
             return ResponseEntity.status(HttpStatus.OK)
