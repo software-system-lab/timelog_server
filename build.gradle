@@ -1,28 +1,32 @@
-plugins {
-	id 'org.springframework.boot' version '2.1.4.RELEASE'
-	id 'java'
+buildscript {
+    ext {
+        springBootVersion = '2.0.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
+apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+
 group = 'csie.ntut.edu.tw'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
-}
-
-ext {
-	set('springBootAdminVersion', '2.1.4')
+    mavenCentral()
 }
 
 dependencies {
-    implementation('org.springframework.boot:spring-boot-starter-web')
-	compile "org.springframework.data:spring-data-mongodb:1.0.0.RELEASE"
-	compileOnly('org.projectlombok:lombok')
-	annotationProcessor 'org.projectlombok:lombok:1.18.6'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+    compile("org.projectlombok:lombok:1.18.2")
+	testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
 
