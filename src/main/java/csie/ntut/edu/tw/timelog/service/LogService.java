@@ -15,6 +15,9 @@ public class LogService {
     }
 
     public boolean newLog(Log log) {
+        System.out.println("********************");
+        System.out.println(log);
+        System.out.println("********************");
         Log result = this.logRepo.save(log);
         return result.equals(log);
     }

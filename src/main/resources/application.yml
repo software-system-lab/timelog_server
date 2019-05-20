@@ -7,6 +7,6 @@ spring:
     mongodb:
       host: ${MONGODB_HOST:ssl-timelog.csie.ntut.edu.tw}
       port: ${MONGODB_PORT:27017}
-      username: ${MONGO_USER}
-      password: ${MONGO_PASSWD}
+      username: ${MONGO_USER:timelog}
+      password: ${MONGO_PASSWD:timelog}
       database: ${MONGO_DB:timelog}

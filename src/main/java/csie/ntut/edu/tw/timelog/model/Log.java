@@ -1,13 +1,14 @@
 package csie.ntut.edu.tw.timelog.model;
 
-import java.sql.Timestamp;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.sql.Date;
+
 
 @Data
 @NoArgsConstructor
@@ -20,7 +21,7 @@ public class Log {
     private String tag;
     private String title;
     private String description;
-    private Timestamp startTime;
-    private Timestamp endTime;
+    private Date startTime;
+    private Date endTime;
 
 }
