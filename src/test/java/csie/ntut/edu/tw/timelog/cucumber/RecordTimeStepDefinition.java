@@ -11,8 +11,6 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 
 public class RecordTimeStepDefinition extends SpringIntegrationTest {
-    private int hours;
-    private int storedHours;
 
     private RecordAPIRequestBody body;
     private RecordAPIResponse response;
