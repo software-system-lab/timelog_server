@@ -1,44 +1,58 @@
-package csie.ntut.edu.tw.timelog.cucumber;
+package ssl.ois.timelog;
 
-import static org.junit.Assert.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
-import io.cucumber.java.en.Then;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+public class StepDefinitions {
+    @Autowired
+    private MockMvc mvc;
 
-public class RecordTimeStepDefinition extends SpringIntegrationTest {
+    private MvcResult result;
 
     private RecordAPIRequestBody body;
     private RecordAPIResponse response;
 
     @Given("I {string} for {string} from {string} to {string}, the detail is {string}")
-    public void i_for_from_to_the_detail_is(String title,
-                                            String activityName,
-                                            String startTime,
-                                            String endTime,
-                                            String description) {
+    public void i_for_from_to_the_detail_is(String title,String activityName,String startTime,String endTime,String description) {
         this.body = new RecordAPIRequestBody(title, activityName, startTime, endTime, description);
     }
 
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @When("I record the activity")
-    public void i_record_the_activity() {
+    public void i_record_the_activity() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<RecordAPIRequestBody> request = new HttpEntity<>(this.body, headers);
-        this.response = this.restTemplate.postForObject(this.getURL("/log/create"),
-                                                        request,
-                                                        RecordAPIResponse.class);
+        this.mvc.perform(MockMvcRequestBuilders
+            .post("/log/record")
+            .content(asJsonString(this.body))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.logID").exists());
     }
 
-    @Then("the system should have the log record")
-    public void the_system_should_have_the_log_record() {
-        assertNotNull(this.response.getLogID());
-        assertNotEquals("", this.response.getLogID());
-        throw new io.cucumber.java.PendingException();
+//    @Then("the system should have the log record")
+//    public void the_system_should_have_the_log_record() {
+//        throw new io.cucumber.java.PendingException();
 //        GetLogAPIResponse resultObject = this.restTemplate.getForObject(this.getURL("/log/get/{id}"),
 //                                       GetLogAPIResponse.class,
 //                                        this.response.getLogID());
@@ -48,7 +62,7 @@ public class RecordTimeStepDefinition extends SpringIntegrationTest {
 //        assertEquals(this.body.getStartTime(), resultObject.getStartTime());
 //        assertEquals(this.body.getEndTime(), resultObject.getEndTime());
 //        assertEquals(this.body.getDescription(), resultObject.getDescription());
-    }
+//    }
 }
 
 class RecordAPIRequestBody {
