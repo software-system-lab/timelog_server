@@ -5,7 +5,7 @@
 // import org.springframework.http.ResponseEntity;
 // import org.springframework.web.bind.annotation.*;
 // import org.springframework.beans.factory.annotation.Autowired;
-// import csie.ntut.edu.tw.timelog.service.LogService;
+// import ssl.ois.timelog.service.log.LogService;
 
 // @RestController
 // @RequestMapping("/log")
