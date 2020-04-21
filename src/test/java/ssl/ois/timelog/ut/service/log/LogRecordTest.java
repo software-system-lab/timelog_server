@@ -37,7 +37,7 @@ public class LogRecordTest {
         String startTime = "2020/04/21 15:00";
         String endTime = "2020/04/21 18:00";
         String description = "Composite Pattern";
-        RecordInput inputData = new RecordInput(this.user.getUserID(),
+        RecordInput inputData = new RecordInput(this.user.getUserID().toString(),
                 title, startTime, endTime, description);
         RecordOutput outputData = new RecordOutput();
         LogRecord logRecord = new LogRecord(this.userRepository, logRepository);

@@ -65,7 +65,7 @@ public class RecordTimeFeature {
 
     @Then("the system should have the log record")
     public void the_system_should_have_the_log_record() throws Exception{
-        assertEquals(HttpStatus.OK, this.result.getResponse().getStatus());
+        assertEquals(HttpStatus.OK.value(), this.result.getResponse().getStatus());
         assertTrue(this.result.getResponse().getContentAsString().contains("logID"));
     }
 }

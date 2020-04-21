@@ -1,16 +1,14 @@
 package ssl.ois.timelog.service.log;
 
-import java.util.UUID;
-
 public class RecordInput {
-    private UUID userID;
+    private String userID;
     private String title;
     private String startTime;
     private String endTime;
     private String description;
     private String activityName;
 
-    public UUID getUserID() {
+    public String getUserID() {
         return userID;
     }
 
@@ -34,7 +32,7 @@ public class RecordInput {
         return activityName;
     }
 
-    public RecordInput(UUID userID, String title, String startTime, String endTime, String description) {
+    public RecordInput(String userID, String title, String startTime, String endTime, String description) {
         this.userID = userID;
         this.title = title;
         this.startTime = startTime;
