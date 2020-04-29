@@ -18,15 +18,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class LogRecordTest {
-    @Autowired
-    private LogRecord logRecord;
     private User user;
     private UserRepository userRepository;
     private LogRepository logRepository;
 
     @Before
     public void setup() {
-        user = new User("David");
+        this.user = new User("David");
         this.userRepository = new MemoryUserRepository();
         this.logRepository = new MemoryLogRepository();
     }
@@ -40,7 +38,7 @@ public class LogRecordTest {
         RecordInput inputData = new RecordInput(this.user.getUserID().toString(),
                 title, startTime, endTime, description);
         RecordOutput outputData = new RecordOutput();
-        LogRecord logRecord = new LogRecord(this.userRepository, logRepository);
+        LogRecord logRecord = new LogRecord(this.userRepository, this.logRepository);
         logRecord.execute(inputData, outputData);
         assertNotNull(outputData.getLogID());
     }
