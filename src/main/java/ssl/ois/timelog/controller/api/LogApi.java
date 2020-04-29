@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ssl.ois.timelog.service.log.LogRecord;
-import ssl.ois.timelog.service.log.RecordInput;
-import ssl.ois.timelog.service.log.RecordOutput;
+import ssl.ois.timelog.service.log.*;
 
 @RestController
 @RequestMapping("/log")
