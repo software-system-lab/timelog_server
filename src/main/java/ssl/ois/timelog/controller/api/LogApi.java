@@ -27,6 +27,13 @@ public class LogApi {
                     .body(responseOutput);
     }
 
+    @PostMapping(value = "/get/title")
+    public ResponseEntity<GetByTitleOutput> getLogByTitle(@RequestBody GetByTitleInput input) {
+        GetByTitleOutput output = new GetByTitleOutput();
+        this.getLogByTitle.execute(input, output);
+        return ResponseEntity.status(HttpStatus.OK).body(output);
+    }
+
     private class ResponseOutput {
         public String getLogID() {
             return logID;
@@ -38,4 +45,5 @@ public class LogApi {
 
         private String logID;
     }
+
 }

@@ -15,6 +15,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import org.springframework.mock.web.MockHttpServletResponse;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -79,7 +81,7 @@ public class RecordTimeFeature {
 
         body.setUserID(this.body.getUserID());
         body.setTitle(title);
-        MvcResult response = this.mvc.perform(MockMvcRequestBuilders
+        MockHttpServletResponse response = this.mvc.perform(MockMvcRequestBuilders
                         .post("/log/get/title")
                         .content(asJsonString(body))
                         .contentType(MediaType.APPLICATION_JSON)
