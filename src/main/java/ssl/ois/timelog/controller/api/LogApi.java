@@ -21,8 +21,8 @@ public class LogApi {
     public ResponseEntity<ResponseOutput> newLog(@RequestBody RecordInput input) {
         RecordOutput output = new RecordOutput();
         ResponseOutput responseOutput = new ResponseOutput();
-        responseOutput.setLogID(output.getLogID());
         this.logRecord.execute(input, output);
+        responseOutput.setLogID(output.getLogID());
             return ResponseEntity.status(HttpStatus.OK)
                     .body(responseOutput);
     }

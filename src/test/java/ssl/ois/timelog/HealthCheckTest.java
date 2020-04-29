@@ -17,7 +17,6 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 public class HealthCheckTest {
     @Autowired
     private MockMvc mvc;

@@ -51,8 +51,8 @@ public class RecordTimeFeature {
         this.body.setDescription(description);
     }
 
-    @When("I record the activity")
-    public void i_record_the_activity() throws Exception {
+    @When("I record the activity to the Timelog")
+    public void i_record_the_activity_to_the_Timelog() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<RecordAPIRequestBody> request = new HttpEntity<>(this.body, headers);
