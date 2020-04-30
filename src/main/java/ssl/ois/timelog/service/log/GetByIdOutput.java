@@ -1,6 +1,6 @@
 package ssl.ois.timelog.service.log;
 
-public class GetByTitleOutput {
+public class GetByIdOutput {
     private String title;
     private String startTime;
     private String endTime;

@@ -10,11 +10,11 @@ import ssl.ois.timelog.service.user.UserRepository;
 
 import static org.junit.Assert.assertEquals;
 
-public class GetLogByTitleTest {
+public class GetLogByIdTest {
     private User user;
     private LogRepository logRepository;
     private UserRepository userRepository;
-    private String logTitle;
+    private String logID;
 
     @Before
     public void setup() {
@@ -22,26 +22,26 @@ public class GetLogByTitleTest {
         this.logRepository = new MemoryLogRepository();
         this.userRepository = new MemoryUserRepository();
 
-        this.logTitle = "Study for Design Pattern";
+        String logTitle = "Study for Design Pattern";
         String startTime = "2020/04/21 15:00";
         String endTime = "2020/04/21 18:00";
         String description = "Composite Pattern";
         RecordInput inputData = new RecordInput(this.user.getUserID().toString(),
-                this.logTitle, startTime, endTime, description);
+                logTitle, startTime, endTime, description);
         RecordOutput outputData = new RecordOutput();
 
         LogRecord logRecord = new LogRecord(this.userRepository, this.logRepository);
         logRecord.execute(inputData, outputData);
+        this.logID = outputData.getLogID();
     }
 
     @Test
-    public void getLogByTitle() {
-        GetByTitleInput input = new GetByTitleInput();
-        GetByTitleOutput output = new GetByTitleOutput();
-        GetLogByTitle service = new GetLogByTitle(this.logRepository);
+    public void getLogById() {
+        GetByIdInput input = new GetByIdInput();
+        GetByIdOutput output = new GetByIdOutput();
+        GetLogById service = new GetLogById(this.logRepository);
 
-        input.setUserID(this.user.getUserID().toString());
-        input.setTitle(this.logTitle);
+        input.setLogID(logID);
 
         service.execute(input, output);
 

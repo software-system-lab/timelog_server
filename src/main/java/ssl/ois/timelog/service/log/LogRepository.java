@@ -2,6 +2,7 @@ package ssl.ois.timelog.service.log;
 
 import ssl.ois.timelog.model.log.Log;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface LogRepository {
