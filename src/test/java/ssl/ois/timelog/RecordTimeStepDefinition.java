@@ -130,132 +130,141 @@ public class RecordTimeStepDefinition {
 }
 
 class RecordAPIRequestBody {
-  private String userID;
-  private String title;
-  private String activityName;
-  private String startTime;
-  private String endTime;
-  private String description;
+    private String userID;
+    private String title;
+    private String activityName;
+    private String startTime;
+    private String endTime;
+    private String description;
 
-  public String getUserID() {
-      return userID;
-  }
+    public String getUserID() {
+        return userID;
+    }
 
-  public void setUserID(String userID) {
-      this.userID = userID;
-  }
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 
-  public String getTitle() {
-      return title;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public void setTitle(String title) {
-      this.title = title;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public String getActivityName() {
-      return activityName;
-  }
+    public String getActivityName() {
+        return activityName;
+    }
 
-  public void setActivityName(String activityName) {
-      this.activityName = activityName;
-  }
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
 
-  public String getStartTime() {
-      return startTime;
-  }
+    public String getStartTime() {
+        return startTime;
+    }
 
-  public void setStartTime(String startTime) {
-      this.startTime = startTime;
-  }
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
 
-  public String getEndTime() {
-      return endTime;
-  }
+    public String getEndTime() {
+        return endTime;
+    }
 
-  public void setEndTime(String endTime) {
-      this.endTime = endTime;
-  }
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 
-  public String getDescription() {
-      return description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public void setDescription(String description) {
-      this.description = description;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
 
 class RecordAPIResponseBody {
-  private String logID;
+    private String logID;
 
-  public void setLogID(String logID) {
-    this.logID = logID;
-  }
+    public void setLogID(String logID) {
+        this.logID = logID;
+    }
 
-  public String getLogID() {
-    return this.logID;
-  }
+    public String getLogID() {
+        return this.logID;
+    }
 }
 
 class GetLogByIdRequestBody{
-  private String logID;
+    private String logID;
 
-  public void setLogID(String logID){
-      this.logID = logID;
-  }
+    public void setLogID(String logID){
+        this.logID = logID;
+    }
 
-  public String getLogID(){
-      return this.logID;
-  }
+    public String getLogID(){
+        return this.logID;
+    }
 
 }
 
 class GetLogByIdResponseBody{
-  private String title;
-  private String startTime;
-  private String endTime;
-  private String activityType;
-  private String description;
+    private String logId;
+    private String title;
+    private String startTime;
+    private String endTime;
+    private String activityType;
+    private String description;
 
-  public void setTitle(String title){
-      this.title = title;
-  }
+    public void setLogId(String logId){
+        this.logId = logId;
+    }
 
-  public void setStartTime(String startTime){
-      this.startTime = startTime;
-  }
+    public void setTitle(String title){
+        this.title = title;
+    }
 
-  public void setEndTime(String endTime){
-      this.endTime = endTime;
-  }
+    public void setStartTime(String startTime){
+        this.startTime = startTime;
+    }
 
-  public void setActivityType(String activityType){
-      this.activityType = activityType;
-  }
+    public void setEndTime(String endTime){
+        this.endTime = endTime;
+    }
 
-  public void setDescription(String description){
-      this.description = description;
-  }
+    public void setActivityType(String activityType){
+        this.activityType = activityType;
+    }
 
-  public String getTitle(){
-      return this.title;
-  }
+    public void setDescription(String description){
+        this.description = description;
+    }
 
-  public String getStartTime(){
-      return this.startTime;
-  }
+    public String getLogId(){
+        return this.logId;
+    }
 
-  public String getEndTime(){
-      return this.endTime;
-  }
+    public String getTitle(){
+        return this.title;
+    }
 
-  public String getActivityType(){
-      return this.activityType;
-  }
+    public String getStartTime(){
+        return this.startTime;
+    }
 
-  public String getDescription(){
-      return this.description;
-  }
+    public String getEndTime(){
+        return this.endTime;
+    }
+
+    public String getActivityType(){
+        return this.activityType;
+    }
+
+    public String getDescription(){
+        return this.description;
+    }
 
 }
