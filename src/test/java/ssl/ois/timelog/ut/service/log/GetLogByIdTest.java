@@ -41,11 +41,12 @@ public class GetLogByIdTest {
         GetByIdOutput output = new GetByIdOutput();
         GetLogById service = new GetLogById(this.logRepository);
 
-        input.setLogID(logID);
+        input.setLogID(this.logID);
 
         service.execute(input, output);
 
-        assertEquals("Timelog development", output.getTitle());
+        assertEquals(this.logID, output.getLogId());
+        assertEquals("Study for Design Pattern", output.getTitle());
         assertEquals("2020/04/21 15:00", output.getStartTime());
         assertEquals("2020/04/21 18:00", output.getEndTime());
         assertEquals("Composite Pattern", output.getDescription());

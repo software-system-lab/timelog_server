@@ -1,11 +1,16 @@
 package ssl.ois.timelog.service.log;
 
 public class GetByIdOutput {
+    private String logId;
     private String title;
     private String startTime;
     private String endTime;
     private String activityType;
     private String description;
+
+    public void setLogId(String logId){
+        this.logId = logId;
+    }
 
     public void setTitle(String title){
         this.title = title;
@@ -25,6 +30,10 @@ public class GetByIdOutput {
 
     public void setDescription(String description){
         this.description = description;
+    }
+
+    public String getLogId(){
+        return this.logId;
     }
 
     public String getTitle(){

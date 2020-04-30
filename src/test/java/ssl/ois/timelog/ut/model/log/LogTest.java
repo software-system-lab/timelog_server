@@ -32,7 +32,7 @@ public class LogTest {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         assertEquals(this.startTime, dateFormat.format(this.log.getStartTime()));
         assertEquals(this.endTime, dateFormat.format(this.log.getEndTime()));
-        assertEquals("Others", this.log.getActivityID());
+        assertEquals("Others", this.log.getActivityType());
     }
 
     @Test

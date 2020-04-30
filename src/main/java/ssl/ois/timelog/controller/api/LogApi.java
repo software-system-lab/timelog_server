@@ -15,6 +15,9 @@ public class LogApi {
     @Autowired
     LogRecord logRecord;
 
+    @Autowired
+    GetLogById getLogById;
+
     @PostMapping(value = "/record")
     public ResponseEntity<ResponseOutput> newLog(@RequestBody RecordInput input) {
         RecordOutput output = new RecordOutput();
@@ -25,14 +28,17 @@ public class LogApi {
                     .body(responseOutput);
     }
 
-    // @PostMapping(value = "/get/title")
-    // public ResponseEntity<GetByTitleOutput> getLogByTitle(@RequestBody GetByTitleInput input) {
-    //     GetByTitleOutput output = new GetByTitleOutput();
-    //     this.getLogByTitle.execute(input, output);
-    //     return ResponseEntity.status(HttpStatus.OK).body(output);
-    // }
+    @PostMapping(value = "/get/id")
+    public ResponseEntity<GetByIdOutput> getLogByTitle(@RequestBody GetByIdInput input) {
+        GetByIdOutput output = new GetByIdOutput();
+        this.getLogById.execute(input, output);
+        return ResponseEntity.status(HttpStatus.OK).body(output);
+    }
 
     private class ResponseOutput {
+        
+        private String logID;
+
         public String getLogID() {
             return logID;
         }
@@ -40,8 +46,6 @@ public class LogApi {
         public void setLogID(String logID) {
             this.logID = logID;
         }
-
-        private String logID;
     }
 
 }

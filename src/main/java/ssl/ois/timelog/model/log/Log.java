@@ -12,7 +12,7 @@ public class Log {
     private Date startTime;
     private Date endTime;
     private String description;
-    private String activityName = "Others";
+    private String activityType = "Others";
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy/MM/dd HH:mm");
 
@@ -84,12 +84,12 @@ public class Log {
         this.description = description;
     }
 
-    public String getActivityID() {
-        return activityName;
+    public String getActivityType() {
+        return activityType;
     }
 
-    public void setActivityID(String activityID) {
-        this.activityName = activityID;
+    public void setActivityType(String activityType) {
+        this.activityType = activityType;
     }
 
     public SimpleDateFormat getDateFormat() {
