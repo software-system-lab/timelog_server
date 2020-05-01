@@ -12,3 +12,4 @@ Feature: user record a time
           And This log has end time with "2020/04/10 12:00"
           And This log has detail "I learned Composite Pattern."
           And This log has activity type "Others"
+
