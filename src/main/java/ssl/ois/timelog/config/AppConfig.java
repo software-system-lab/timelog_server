@@ -1,15 +1,13 @@
-package ssl.ois.timelog;
+package ssl.ois.timelog.config;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import ssl.ois.timelog.controller.filter.AuthFilter;
-import ssl.ois.timelog.controller.memory.MemoryLogRepository;
-import ssl.ois.timelog.controller.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.memory.MemoryLogRepository;
+import ssl.ois.timelog.adapter.memory.MemoryUserRepository;
 import ssl.ois.timelog.service.log.LogRepository;
 import ssl.ois.timelog.service.user.UserRepository;
 
@@ -28,13 +26,13 @@ public class AppConfig {
         return new MemoryUserRepository();
     }
 
-    @Bean
-    public FilterRegistrationBean<AuthFilter> loggingFilter(){
-        FilterRegistrationBean<AuthFilter> authorizationBean = new FilterRegistrationBean<>();
-        authorizationBean.setFilter(new AuthFilter());
-        authorizationBean.addUrlPatterns("/*");
-        return authorizationBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean<AuthFilter> loggingFilter(){
+//        FilterRegistrationBean<AuthFilter> authorizationBean = new FilterRegistrationBean<>();
+//        authorizationBean.setFilter(new AuthFilter());
+//        authorizationBean.addUrlPatterns("/*");
+//        return authorizationBean;
+//    }
 
     @Bean
     public CorsFilter corsFilter() {
@@ -47,7 +45,6 @@ public class AppConfig {
         config.setAllowCredentials(true);
 
         //允許使用那些請求方式
-//        config.addAllowedMethods("GET", "PUT", "POST","DELETE");
         config.setAllowedMethods(Arrays.asList("GET", "PUT", "POST","DELETE"));
 //        config.addAllowedMethod(HttpMethod.POST);
 

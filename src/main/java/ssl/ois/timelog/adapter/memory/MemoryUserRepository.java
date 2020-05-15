@@ -1,6 +1,5 @@
-package ssl.ois.timelog.controller.memory;
+package ssl.ois.timelog.adapter.memory;
 
-import ssl.ois.timelog.model.user.Activity;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.user.UserRepository;
 

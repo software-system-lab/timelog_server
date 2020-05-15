@@ -1,4 +1,4 @@
-package ssl.ois.timelog.controller.api;
+package ssl.ois.timelog.adapter.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ssl.ois.timelog.service.log.*;
 
 @RestController
-@RequestMapping("/log")
-public class LogApi {
+@RequestMapping("/api/log")
+public class LogRestAdapter {
     @Autowired
     LogRecord logRecord;
 

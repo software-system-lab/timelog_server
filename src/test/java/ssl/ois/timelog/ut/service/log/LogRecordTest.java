@@ -2,17 +2,14 @@ package ssl.ois.timelog.ut.service.log;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import ssl.ois.timelog.controller.memory.MemoryLogRepository;
-import ssl.ois.timelog.controller.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.memory.MemoryLogRepository;
+import ssl.ois.timelog.adapter.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.log.LogRecord;
 import ssl.ois.timelog.service.log.LogRepository;
 import ssl.ois.timelog.service.log.RecordInput;
 import ssl.ois.timelog.service.log.RecordOutput;
 import ssl.ois.timelog.service.user.UserRepository;
-
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

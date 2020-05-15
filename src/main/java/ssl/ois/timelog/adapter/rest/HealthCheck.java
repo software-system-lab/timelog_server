@@ -1,4 +1,4 @@
-package ssl.ois.timelog.controller.api;
+package ssl.ois.timelog.adapter.rest;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -62,7 +62,7 @@ public class RecordTimeStepDefinition {
     @When("I record the activity to Timelog")
     public void i_record_the_activity_to_Timelog() throws Exception {
         this.result = this.mvc.perform(MockMvcRequestBuilders
-            .post("/log/record")
+            .post("/api/log/record")
             .content(asJsonString(this.body))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
@@ -86,7 +86,7 @@ public class RecordTimeStepDefinition {
         body.setLogID(this.recordResponse.getLogID());
         try {
             response = this.mvc.perform(MockMvcRequestBuilders
-                        .post("/log/get/id")
+                        .post("/api/log/get/id")
                         .content(asJsonString(body))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

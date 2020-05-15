@@ -2,8 +2,8 @@ package ssl.ois.timelog.ut.service.log;
 
 import org.junit.Before;
 import org.junit.Test;
-import ssl.ois.timelog.controller.memory.MemoryLogRepository;
-import ssl.ois.timelog.controller.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.memory.MemoryLogRepository;
+import ssl.ois.timelog.adapter.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.log.*;
 import ssl.ois.timelog.service.user.UserRepository;

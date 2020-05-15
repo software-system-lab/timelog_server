@@ -1,10 +1,9 @@
-package ssl.ois.timelog.controller.memory;
+package ssl.ois.timelog.adapter.memory;
 
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.log.LogRepository;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
