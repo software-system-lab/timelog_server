@@ -1,11 +1,13 @@
 package ssl.ois.timelog.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.adapter.repository.mysql.MysqlLogRepository;
 import ssl.ois.timelog.service.log.LogRepository;
 import ssl.ois.timelog.service.user.UserRepository;
@@ -17,6 +19,17 @@ import java.util.Arrays;
 @Configuration
 @ComponentScan
 public class AppConfig {
+    @Value("${mysql.host}")
+    private String mysqlHost;
+    @Value("${mysql.port}")
+    private String mysqlPort;
+    @Value("${mysql.timelog_db}")
+    private String mysqlDB;
+    @Value("${mysql.username}")
+    private String mysqlUser;
+    @Value("${mysql.password}")
+    private String mysqlPasswd;
+
     @Bean
     public LogRepository getLogRepository() {
         return new MysqlLogRepository();
@@ -25,6 +38,12 @@ public class AppConfig {
     @Bean
     public UserRepository getUserRepository() {
         return new MemoryUserRepository();
+    }
+
+    @Bean
+    public MysqlDriverAdapter getMysqlDriverAdapter() {
+        final String mysqlJdbcLink = "jdbc:mysql://" + this.mysqlHost + ":" + this.mysqlPort;
+        return new MysqlDriverAdapter(mysqlJdbcLink, this.mysqlDB, this.mysqlUser, this.mysqlPasswd);
     }
 
 //    @Bean
