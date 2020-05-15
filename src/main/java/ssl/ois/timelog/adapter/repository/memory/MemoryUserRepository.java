@@ -1,4 +1,4 @@
-package ssl.ois.timelog.adapter.memory;
+package ssl.ois.timelog.adapter.repository.memory;
 
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.user.UserRepository;

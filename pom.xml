@@ -23,6 +23,7 @@
     </properties>
 
     <dependencies>
+        <!--    Cucumber    -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
@@ -44,12 +45,15 @@
             <scope>test</scope>
         </dependency>
 
+        <!--    JUnit    -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!--    Spring boot    -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -61,6 +65,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!--    Keycloak    -->
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-boot-starter</artifactId>

@@ -20,7 +20,6 @@ public class LogTest {
     private Log log;
     @Before
     public void setup() {
-        this.userID = UUID.randomUUID();
         this.userID = UUID.fromString("c61965be-8176-4419-b289-4d52617728fb");
         this.title = "Study for Design Pattern";
         this.startTime = "2020/04/21 15:00";

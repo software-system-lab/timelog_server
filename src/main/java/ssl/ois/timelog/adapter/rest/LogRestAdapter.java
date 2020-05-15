@@ -19,13 +19,23 @@ public class LogRestAdapter {
     GetLogById getLogById;
 
     @PostMapping(value = "/record")
-    public ResponseEntity<ResponseOutput> newLog(@RequestBody RecordInput input) {
+    public ResponseEntity<ResponseOutput> newLog(@RequestBody NewLogRequestInput requestBody) {
+        RecordInput input = new RecordInput();
         RecordOutput output = new RecordOutput();
-        ResponseOutput responseOutput = new ResponseOutput();
+
+        input.setUserID(requestBody.getUserID());
+        input.setTitle(requestBody.getTitle());
+        input.setStartTime(requestBody.getStartTime());
+        input.setEndTime(requestBody.getEndTime());
+        input.setDescription(requestBody.getDescription());
+        input.setActivityName(requestBody.getActivityName());
+
         this.logRecord.execute(input, output);
+
+        ResponseOutput responseOutput = new ResponseOutput();
         responseOutput.setLogID(output.getLogID());
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(responseOutput);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(responseOutput);
     }
 
     @PostMapping(value = "/get/id")
@@ -33,6 +43,48 @@ public class LogRestAdapter {
         GetByIdOutput output = new GetByIdOutput();
         this.getLogById.execute(input, output);
         return ResponseEntity.status(HttpStatus.OK).body(output);
+    }
+
+    public static class NewLogRequestInput {
+        private String userID;
+        private String title;
+        private String startTime;
+        private String endTime;
+        private String description;
+        private String activityName;
+
+        public NewLogRequestInput(String userID, String title, String startTime, String endTime, String description) {
+            this.userID = userID;
+            this.title = title;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.description = description;
+            this.activityName = "Others";
+        }
+
+        public String getUserID() {
+            return userID;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getStartTime() {
+            return startTime;
+        }
+
+        public String getEndTime() {
+            return endTime;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getActivityName() {
+            return activityName;
+        }
     }
 
     private class ResponseOutput {

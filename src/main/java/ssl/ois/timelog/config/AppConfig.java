@@ -6,10 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import ssl.ois.timelog.adapter.memory.MemoryLogRepository;
-import ssl.ois.timelog.adapter.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.repository.mysql.MysqlLogRepository;
 import ssl.ois.timelog.service.log.LogRepository;
 import ssl.ois.timelog.service.user.UserRepository;
+import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
+
 
 import java.util.Arrays;
 
@@ -18,7 +19,7 @@ import java.util.Arrays;
 public class AppConfig {
     @Bean
     public LogRepository getLogRepository() {
-        return new MemoryLogRepository();
+        return new MysqlLogRepository();
     }
 
     @Bean

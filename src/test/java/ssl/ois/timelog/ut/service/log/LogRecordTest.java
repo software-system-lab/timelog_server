@@ -2,8 +2,8 @@ package ssl.ois.timelog.ut.service.log;
 
 import org.junit.Before;
 import org.junit.Test;
-import ssl.ois.timelog.adapter.memory.MemoryLogRepository;
-import ssl.ois.timelog.adapter.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
+import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.log.LogRecord;
 import ssl.ois.timelog.service.log.LogRepository;
@@ -35,7 +35,7 @@ public class LogRecordTest {
         RecordInput inputData = new RecordInput(this.user.getUserID().toString(),
                 title, startTime, endTime, description);
         RecordOutput outputData = new RecordOutput();
-        LogRecord logRecord = new LogRecord(this.userRepository, this.logRepository);
+        LogRecord logRecord = new LogRecord(this.logRepository);
         logRecord.execute(inputData, outputData);
         assertNotNull(outputData.getLogID());
     }
