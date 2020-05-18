@@ -14,7 +14,6 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
-@Component
 public class MysqlLogRepository implements LogRepository {
     @Autowired
     private MysqlDriverAdapter mysqlDriverAdapter;
