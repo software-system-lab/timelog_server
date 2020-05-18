@@ -5,7 +5,12 @@ name: mysql_user
 kind: secret
 name: mysql_password
 ---
-
+kind: secret
+name: sonar_host
+---
+kind: secret
+name: sonar_project_token
+---
 kind: pipeline
 type: docker
 name: Test
@@ -27,3 +32,22 @@ trigger:
   branch:
   - master
 
+---
+kind: pipeline
+type: docker
+name: Sonar Scanner
+
+steps:
+  - name: Sonar Scanner
+    image: aosapps/drone-sonar-plugin
+    setting: 
+      sonar_host:
+        from_secret: sonar_host
+      sonar_token:
+        from_secret: sonar_project_token
+      ver: 1.0
+      sources: .
+
+trigger:
+  branch:
+    - master
