@@ -1,9 +1,9 @@
 
 kind: secret
-name: MYSQL_USER
+name: mysql_user
 ---
 kind: secret
-name: MYSQL_PASSWORD
+name: mysql_password
 ---
 
 kind: pipeline
@@ -13,6 +13,13 @@ name: Test
 steps:
 - name: Run test
   image: maven:3.6.3-jdk-11
+  environment:
+    MYSQL_USER:
+      from_secret:
+        mysql_user
+    MYSQL_PASSWORD:
+      from_secret:
+        mysql_password
   commands:
   - mvn test
 
