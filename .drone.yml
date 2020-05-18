@@ -1,0 +1,22 @@
+
+kind: secret
+name: MYSQL_USER
+---
+kind: secret
+name: MYSQL_PASSWORD
+---
+
+kind: pipeline
+type: docker
+name: Test
+
+steps:
+- name: Run test
+  image: maven:3.6.3-jdk-11
+  commands:
+  - mvn test
+
+trigger:
+  branch:
+  - master
+
