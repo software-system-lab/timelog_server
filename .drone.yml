@@ -40,7 +40,7 @@ name: Sonar Scanner
 steps:
   - name: Sonar Scanner
     image: aosapps/drone-sonar-plugin
-    setting: 
+    settings: 
       sonar_host:
         from_secret: sonar_host
       sonar_token:
