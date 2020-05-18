@@ -28,25 +28,15 @@ steps:
   commands:
   - mvn test
 
-trigger:
-  branch:
-  - master
-
----
-kind: pipeline
-type: docker
-name: Sonar Scanner
-
-steps:
-  - name: Sonar Scanner
-    image: aosapps/drone-sonar-plugin
-    settings: 
-      sonar_host:
-        from_secret: sonar_host
-      sonar_token:
-        from_secret: sonar_project_token
-      ver: 1.0
-      sources: .
+- name: Sonar Scanner
+  image: aosapps/drone-sonar-plugin
+  settings: 
+    sonar_host:
+      from_secret: sonar_host
+    sonar_token:
+      from_secret: sonar_project_token
+    ver: 1.0
+    sources: .
 
 trigger:
   branch:
