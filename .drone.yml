@@ -6,7 +6,7 @@ kind: secret
 name: mysql_password
 ---
 kind: secret
-name: sonar_host
+name: sonar_url
 ---
 kind: secret
 name: sonar_project_token
@@ -31,12 +31,12 @@ steps:
 - name: Sonar Scanner
   image: aosapps/drone-sonar-plugin
   settings:
-    sonar_host:
-      from_secret: sonar_host
     sonar_token:
       from_secret: sonar_project_token
-    ver: 1.0
-    sources: src
+  enviroment:
+    SONAR_URL:
+      from_secret: sonar_url
+
 
 trigger:
   branch:
