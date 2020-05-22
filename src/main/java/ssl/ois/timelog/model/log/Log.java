@@ -1,7 +1,5 @@
 package ssl.ois.timelog.model.log;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

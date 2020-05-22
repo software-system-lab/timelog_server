@@ -1,6 +1,5 @@
 package ssl.ois.timelog.service.user;
 
-import ssl.ois.timelog.model.user.Activity;
 import ssl.ois.timelog.model.user.User;
 
 import java.util.UUID;

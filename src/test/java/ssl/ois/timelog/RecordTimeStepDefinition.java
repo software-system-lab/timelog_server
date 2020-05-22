@@ -1,12 +1,12 @@
 package ssl.ois.timelog;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -14,12 +14,10 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import org.springframework.mock.web.MockHttpServletResponse;
-import ssl.ois.timelog.service.log.LogRepository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 
 public class RecordTimeStepDefinition {
 
@@ -34,12 +32,8 @@ public class RecordTimeStepDefinition {
 
     private RecordAPIResponseBody recordResponse;
 
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public static String asJsonString(final Object obj) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(obj);
     }
 
     @Given("My user ID is {string}")
@@ -86,22 +80,15 @@ public class RecordTimeStepDefinition {
         MockHttpServletResponse response;
 
         body.setLogID(this.recordResponse.getLogID());
-        try {
-            response = this.mvc.perform(MockMvcRequestBuilders
-                        .post("/api/log/get/id")
-                        .content(asJsonString(body))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                        .andReturn()
-                        .getResponse();
+        response = this.mvc.perform(MockMvcRequestBuilders
+                    .post("/api/log/get/id")
+                    .content(asJsonString(body))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andReturn()
+                    .getResponse();
 
-            this.resultLog = new ObjectMapper().readValue(response.getContentAsString(), GetLogByIdResponseBody.class);
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        
-
+        this.resultLog = new ObjectMapper().readValue(response.getContentAsString(), GetLogByIdResponseBody.class);
     }
 
     @Then("This log has title {string}")

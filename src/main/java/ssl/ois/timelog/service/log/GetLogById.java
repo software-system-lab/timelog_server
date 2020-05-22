@@ -3,7 +3,6 @@ package ssl.ois.timelog.service.log;
 import ssl.ois.timelog.model.log.Log;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;

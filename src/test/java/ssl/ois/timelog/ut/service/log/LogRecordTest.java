@@ -3,26 +3,21 @@ package ssl.ois.timelog.ut.service.log;
 import org.junit.Before;
 import org.junit.Test;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
-import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.log.LogRecord;
 import ssl.ois.timelog.service.log.LogRepository;
 import ssl.ois.timelog.service.log.RecordInput;
 import ssl.ois.timelog.service.log.RecordOutput;
-import ssl.ois.timelog.service.user.UserRepository;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class LogRecordTest {
     private User user;
-    private UserRepository userRepository;
     private LogRepository logRepository;
 
     @Before
     public void setup() {
         this.user = new User("David");
-        this.userRepository = new MemoryUserRepository();
         this.logRepository = new MemoryLogRepository();
     }
 

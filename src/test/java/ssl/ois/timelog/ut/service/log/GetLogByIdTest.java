@@ -3,24 +3,20 @@ package ssl.ois.timelog.ut.service.log;
 import org.junit.Before;
 import org.junit.Test;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
-import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.log.*;
-import ssl.ois.timelog.service.user.UserRepository;
 
 import static org.junit.Assert.assertEquals;
 
 public class GetLogByIdTest {
     private User user;
     private LogRepository logRepository;
-    private UserRepository userRepository;
     private String logID;
 
     @Before
     public void setup() {
         this.user = new User("Tim");
         this.logRepository = new MemoryLogRepository();
-        this.userRepository = new MemoryUserRepository();
 
         String logTitle = "Study for Design Pattern";
         String startTime = "2020/04/21 15:00";

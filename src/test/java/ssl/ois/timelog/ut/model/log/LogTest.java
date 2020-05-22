@@ -8,10 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class LogTest {
-    private final double epsilon = 0.001;
+    private static final double epsilon = 0.001;
     private UUID userID;
     private String title;
     private String startTime;

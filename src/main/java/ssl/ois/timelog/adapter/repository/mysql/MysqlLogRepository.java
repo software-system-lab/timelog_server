@@ -6,6 +6,7 @@ import ssl.ois.timelog.common.SqlDateTimeConverter;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.log.LogRepository;
 
+import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ public class MysqlLogRepository implements LogRepository {
     private MysqlDriverAdapter mysqlDriverAdapter;
 
     @Override
-    public void save(Log log) {
+    public void save(Log log) throws ConnectException {
         try {
             Connection connection = this.mysqlDriverAdapter.getConnection();
             PreparedStatement stmt = connection.prepareStatement(
@@ -36,7 +37,7 @@ public class MysqlLogRepository implements LogRepository {
 
             this.mysqlDriverAdapter.closeConnection(connection);
         } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new ConnectException(e.getMessage());
         }
     }
 
