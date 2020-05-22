@@ -1,7 +1,6 @@
 package ssl.ois.timelog.adapter.repository.mysql;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.common.SqlDateTimeConverter;
 import ssl.ois.timelog.model.log.Log;
@@ -10,8 +9,6 @@ import ssl.ois.timelog.service.log.LogRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 public class MysqlLogRepository implements LogRepository {
@@ -27,7 +24,6 @@ public class MysqlLogRepository implements LogRepository {
                             "(`id`, `user_id`, `title`, `start_time`, `end_time`, `description`, `activity_type`) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-
             stmt.setString(1, log.getLogID().toString());
             stmt.setString(2, log.getUserID().toString());
             stmt.setString(3, log.getTitle());
@@ -42,7 +38,6 @@ public class MysqlLogRepository implements LogRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
-
     }
 
     @Override

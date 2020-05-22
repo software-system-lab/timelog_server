@@ -6,7 +6,13 @@ kind: secret
 name: mysql_password
 ---
 kind: secret
-name: sonar_host
+name: docker_hub_user
+---
+kind: secret
+name: docker_hub_password
+---
+kind: secret
+name: sonar_url
 ---
 kind: secret
 name: sonar_project_token
@@ -30,14 +36,41 @@ steps:
 
 - name: Sonar Scanner
   image: aosapps/drone-sonar-plugin
-  settings: 
-    sonar_host:
-      from_secret: sonar_host
+  settings:
     sonar_token:
       from_secret: sonar_project_token
+    sonar_host:
+      from_secret:
+        sonar_url
     ver: 1.0
-    sources: .
+    sources: src
 
 trigger:
   branch:
     - master
+
+---
+kind: pipeline
+type: docker
+name: Publish
+
+steps:
+- name: Publish Docker Image
+  image: plugins/docker
+  settings:
+    repo: nightlord851108/timelog_server
+    tags:
+      ${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
+    username:
+      from_secret:
+        docker_hub_user
+    password:
+      from_secret:
+        docker_hub_password
+
+trigger:
+  branch:
+  - master
+
+depends_on:
+  - Test
