@@ -43,7 +43,6 @@ steps:
       from_secret:
         sonar_url
     ver: 1.0
-    sources: src
 
 trigger:
   branch:
