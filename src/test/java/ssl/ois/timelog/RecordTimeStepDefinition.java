@@ -35,18 +35,18 @@ public class RecordTimeStepDefinition {
         return new ObjectMapper().writeValueAsString(obj);
     }
 
-    @Given("My user ID is {string}")
-    public void my_user_ID_is(String userID) {
-        this.body = new RecordAPIRequestBody();
-        this.body.setUserID(userID);
-    }
-
     @Given("I {string} from {string} to {string}, the detail is {string}")
     public void i_from_to_the_detail_is(String title, String startTime, String endTime, String description) {
+        this.body = new RecordAPIRequestBody();
         this.body.setTitle(title);
         this.body.setStartTime(startTime);
         this.body.setEndTime(endTime);
         this.body.setDescription(description);
+    }
+
+    @Given("My user ID is {string}")
+    public void my_user_ID_is(String userID) {
+        this.body.setUserID(userID);
     }
 
     @Given("No activity type has been selected")
