@@ -52,7 +52,7 @@ public class RecordTimeStepDefinition {
 
     @Given("No activity type has been selected")
     public void no_activity_type_has_been_selected() {
-
+        //Since no activity time is selected, no operation should be done here
     }
 
     @When("I record the activity to Timelog")
@@ -76,13 +76,13 @@ public class RecordTimeStepDefinition {
 
     @Then("I can get the complete log with this log ID")
     public void i_can_get_the_complete_log_with_this_log_ID() throws Exception{
-        GetLogByIdRequestBody body = new GetLogByIdRequestBody();
+        GetLogByIdRequestBody getLogByIdRequestBody = new GetLogByIdRequestBody();
         MockHttpServletResponse response;
 
-        body.setLogID(this.recordResponse.getLogID());
+        getLogByIdRequestBody.setLogID(this.recordResponse.getLogID());
         response = this.mvc.perform(MockMvcRequestBuilders
                     .post("/api/log/get/id")
-                    .content(asJsonString(body))
+                    .content(asJsonString(getLogByIdRequestBody))
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
                     .andReturn()
