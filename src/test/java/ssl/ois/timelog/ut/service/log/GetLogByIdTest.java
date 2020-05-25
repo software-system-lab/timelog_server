@@ -9,23 +9,21 @@ import ssl.ois.timelog.service.log.*;
 import static org.junit.Assert.assertEquals;
 
 public class GetLogByIdTest {
-    private User user;
     private LogRepository logRepository;
     private String logID;
 
     @Before
     public void setup() {
-        this.user = new User("Tim");
+        User user = new User("Tim");
         this.logRepository = new MemoryLogRepository();
 
         String logTitle = "Study for Design Pattern";
         String startTime = "2020/04/21 15:00";
         String endTime = "2020/04/21 18:00";
         String description = "Composite Pattern";
-        RecordInput inputData = new RecordInput(this.user.getUserID().toString(),
+        RecordInput inputData = new RecordInput(user.getUserID().toString(),
                 logTitle, startTime, endTime, description);
         RecordOutput outputData = new RecordOutput();
-
         LogRecord logRecord = new LogRecord(this.logRepository);
         logRecord.execute(inputData, outputData);
         this.logID = outputData.getLogID();

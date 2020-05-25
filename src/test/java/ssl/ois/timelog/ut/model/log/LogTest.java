@@ -10,21 +10,20 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 
 public class LogTest {
-    private static final double epsilon = 0.001;
-    private UUID userID;
-    private String title;
+    private static final double EPSILON = 0.001;
+
     private String startTime;
     private String endTime;
-    private String description;
     private Log log;
     @Before
     public void setup() {
-        this.userID = UUID.fromString("c61965be-8176-4419-b289-4d52617728fb");
-        this.title = "Study for Design Pattern";
+        UUID userID = UUID.fromString("c61965be-8176-4419-b289-4d52617728fb");
+        String title = "Study for Design Pattern";
+        String description = "Composite Pattern";
+
         this.startTime = "2020/04/21 15:00";
         this.endTime = "2020/04/21 18:00";
-        this.description = "Composite Pattern";
-        this.log = new Log(userID, this.title, this.startTime, this.endTime, this.description);
+        this.log = new Log(userID, title, this.startTime, this.endTime, description);
     }
     @Test
     public void testWithoutActivity() {
@@ -37,6 +36,6 @@ public class LogTest {
     @Test
     public void getTime() {
         assertEquals(180, this.log.getMinutes());
-        assertEquals(3.0, this.log.getHours(), epsilon);
+        assertEquals(3.0, this.log.getHours(), EPSILON);
     }
 }
