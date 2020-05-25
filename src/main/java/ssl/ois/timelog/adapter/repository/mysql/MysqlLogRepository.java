@@ -18,27 +18,32 @@ public class MysqlLogRepository implements LogRepository {
 
     @Override
     public void save(Log log) throws ConnectException {
+        Connection connection = null;
         try {
-            Connection connection = this.mysqlDriverAdapter.getConnection();
-            PreparedStatement stmt = connection.prepareStatement(
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO `log`" +
                             "(`id`, `user_id`, `title`, `start_time`, `end_time`, `description`, `activity_type`) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?)");
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 
-            stmt.setString(1, log.getLogID().toString());
-            stmt.setString(2, log.getUserID().toString());
-            stmt.setString(3, log.getTitle());
-            stmt.setString(4, SqlDateTimeConverter.convert(log.getStartTime()));
-            stmt.setString(5, SqlDateTimeConverter.convert(log.getEndTime()));
-            stmt.setString(6, log.getDescription());
-            stmt.setString(7, log.getActivityType());
+                stmt.setString(1, log.getLogID().toString());
+                stmt.setString(2, log.getUserID().toString());
+                stmt.setString(3, log.getTitle());
+                stmt.setString(4, SqlDateTimeConverter.convert(log.getStartTime()));
+                stmt.setString(5, SqlDateTimeConverter.convert(log.getEndTime()));
+                stmt.setString(6, log.getDescription());
+                stmt.setString(7, log.getActivityType());
 
-            stmt.executeUpdate();
-
-            this.mysqlDriverAdapter.closeConnection(connection);
+                stmt.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new ConnectException(e.getMessage());
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
         }
+
+
     }
 
     @Override

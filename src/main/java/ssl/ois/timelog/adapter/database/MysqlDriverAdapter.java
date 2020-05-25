@@ -25,7 +25,12 @@ public class MysqlDriverAdapter {
         return DriverManager.getConnection(url, this.user, this.password);
     }
 
-    public void closeConnection(Connection connection) throws SQLException {
-        connection.close();
+    public void closeConnection(Connection connection) {
+        if (connection == null) return;
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            /* No connection */
+        }
     }
 }
