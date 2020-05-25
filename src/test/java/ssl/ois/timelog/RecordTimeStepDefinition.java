@@ -20,7 +20,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class RecordTimeStepDefinition {
-
     @Autowired
     private MockMvc mvc;
 
@@ -52,7 +51,7 @@ public class RecordTimeStepDefinition {
 
     @Given("No activity type has been selected")
     public void no_activity_type_has_been_selected() {
-        //Since no activity time is selected, no operation should be done here
+        // Since no activity time is selected, no operation should be done here
     }
 
     @When("I record the activity to Timelog")
@@ -65,30 +64,29 @@ public class RecordTimeStepDefinition {
             .andReturn();
     }
 
-    @Then("I get the ID of this log")
-    public void i_get_the_ID_of_this_log() throws Exception {
+    @Then("A new log is added")
+    public void a_new_log_is_added() throws Exception{
+        // Write code here that turns the phrase above into concrete actions
         assertEquals(HttpStatus.OK.value(), this.result.getResponse().getStatus());
         assertTrue(this.result.getResponse().getContentAsString().contains("logID"));
         recordResponse = new ObjectMapper().readValue(
-            this.result.getResponse().getContentAsString(), RecordAPIResponseBody.class);
+                this.result.getResponse().getContentAsString(), RecordAPIResponseBody.class);
         assertNotNull(this.recordResponse.getLogID());
-    }
 
-    @Then("I can get the complete log with this log ID")
-    public void i_can_get_the_complete_log_with_this_log_ID() throws Exception{
         GetLogByIdRequestBody getLogByIdRequestBody = new GetLogByIdRequestBody();
         MockHttpServletResponse response;
 
         getLogByIdRequestBody.setLogID(this.recordResponse.getLogID());
         response = this.mvc.perform(MockMvcRequestBuilders
-                    .post("/api/log/get/id")
-                    .content(asJsonString(getLogByIdRequestBody))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andReturn()
-                    .getResponse();
+                .post("/api/log/get/id")
+                .content(asJsonString(getLogByIdRequestBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse();
 
         this.resultLog = new ObjectMapper().readValue(response.getContentAsString(), GetLogByIdResponseBody.class);
+        assertNotNull(this.resultLog);
     }
 
     @Then("This log has title {string}")
