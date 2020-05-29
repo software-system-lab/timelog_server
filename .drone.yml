@@ -76,6 +76,7 @@ steps:
 trigger:
   branch:
   - master
+  - beta
 
 depends_on:
   - Test
@@ -86,7 +87,7 @@ type: docker
 name: Deployment
 
 steps:
-- name: Deploy
+- name: Deploy Production
   image: nightlord851108/kustomize
   environment:
     KUBE_CLUSTER_URL:
@@ -104,9 +105,31 @@ steps:
     - master
     event:
     - push
+    - pull_request
+
+- name: Deploy Beta
+  image: nightlord851108/kustomize
+  environment:
+    KUBE_CLUSTER_URL:
+      from_secret:
+        rancher_kube_cluster_url
+    CLUSTER_TOKEN:
+      from_secret:
+        rancher_cluster_token
+  commands:
+  - cd kustomize/overlays/beta
+  - kustomize edit set image nightlord851108/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
+  - kustomize build . | kubectl apply --server=$${KUBE_CLUSTER_URL}  --token=$${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=ois-beta -f -
+  when:
+    branch:
+    - beta
+    event:
+    - push
+    - pull_request
 
 depends_on:
   - Publish
 trigger:
   branch:
   - master
+  - beta
