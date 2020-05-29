@@ -77,9 +77,6 @@ trigger:
   branch:
   - master
 
-depends_on:
-  - Test
-
 ---
 kind: pipeline
 type: docker
@@ -96,7 +93,7 @@ steps:
       from_secret:
         rancher_cluster_token
   commands:
-  - cd kustomize/overlays/beta
+  - cd kustomize/overlays/production
   - kustomize edit set image nightlord851108/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
   - kustomize build . | kubectl apply --server=$${RANCHER_HOST}  --token=$${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=ois-production -f -
   when:
@@ -107,3 +104,6 @@ steps:
 
 depends_on:
   - Publish
+trigger:
+  branch:
+  - master
