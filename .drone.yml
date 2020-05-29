@@ -104,3 +104,6 @@ steps:
     - master
     event:
     - push
+
+depends_on:
+  - Publish
