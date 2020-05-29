@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: timelog_v2_server
+  name: timelog-v2-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: timelog_v2_server
+      app: timelog-v2-server
   template:
     metadata:
       labels:
-        app: timelog_v2_server
+        app: timelog-v2-server
     spec:
       containers:
-        - name: timelog_v2_server
+        - name: timelog-v2-server
           image: nightlord851108/timelog_server
           imagePullPolicy: Always
           ports:
-            - name: timelog_server-http
+            - name: api-http
               containerPort: 9000
           env:
             - name: MYSQL_HOST
