@@ -48,6 +48,10 @@ steps:
     sonar_host:
       from_secret:
         sonar_url
+    projectKey:
+      software-system-lab:timelog_server
+    projectName:
+      ois-timelog-v2-server-${DRONE_COMMIT_BRANCH}
 
     ver: 1.0
 
