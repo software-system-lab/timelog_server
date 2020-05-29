@@ -26,19 +26,19 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: MYSQL_HOST
-                  name: timelog_server-env-beta
+                  name: timelog-server-env-beta
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
                   key: MYSQL_USER
-                  name: timelog_server-env-beta
+                  name: timelog-server-env-beta
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: MYSQL_PASSWORD
-                  name: timelog_server-env-beta
+                  name: timelog-server-env-beta
             - name: TIMELOG_MYSQL_DB
               valueFrom:
                 secretKeyRef:
                   key: TIMELOG_MYSQL_DB
-                  name: timelog_server-env-beta
+                  name: timelog-server-env-beta
