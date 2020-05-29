@@ -17,6 +17,12 @@ name: sonar_url
 kind: secret
 name: sonar_project_token
 ---
+kind: secret
+name: rancher_host
+---
+kind: secret
+name: rancher_cluster_token
+---
 kind: pipeline
 type: docker
 name: Test
@@ -73,3 +79,28 @@ trigger:
 
 depends_on:
   - Test
+
+---
+kind: pipeline
+type: docker
+name: Deployment
+
+steps:
+- name: Deploy
+  image: nightlord851108/kustomize
+  environment:
+    RANCHER_HOST:
+      from_secret:
+        rancher_host
+    CLUSTER_TOKEN:
+      from_secret:
+        rancher_cluster_token
+  commands:
+  - cd kustomize/overlays/beta
+  - kustomize edit set image nightlord851108/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
+  - kustomize build . | kubectl apply --server=$${RANCHER_HOST}  --token=$${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=ois-production -f -
+  when:
+    branch:
+    - master
+    event:
+    - push

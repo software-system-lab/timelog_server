@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: timelog_server
+spec:
+  type: ClusterIP
+  selector:
+    app: timelog_server
+  ports:
+  - name: http
+    port: 9000
