@@ -77,6 +77,9 @@ trigger:
   branch:
   - master
 
+depends_on:
+  - Test
+
 ---
 kind: pipeline
 type: docker
