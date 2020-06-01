@@ -20,8 +20,6 @@ spec:
             - name: api-http
               containerPort: 9000
           env:
-            - name: NODE_ENV
-              value: production
             - name: MYSQL_HOST
               valueFrom:
                 secretKeyRef:

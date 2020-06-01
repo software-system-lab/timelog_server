@@ -1,4 +1,4 @@
-package ssl.ois.timelog;
+package ssl.ois.timelog.cucumber.log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import org.springframework.mock.web.MockHttpServletResponse;
+import ssl.ois.timelog.cucumber.common.UserIDStepDefinition;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -31,6 +32,12 @@ public class RecordTimeStepDefinition {
 
     private RecordAPIResponseBody recordResponse;
 
+    private UserIDStepDefinition userIDStepDefinition;
+
+    public RecordTimeStepDefinition(UserIDStepDefinition userIDStepDefinition) {
+        this.userIDStepDefinition = userIDStepDefinition;
+    }
+
     public static String asJsonString(final Object obj) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(obj);
     }
@@ -44,11 +51,6 @@ public class RecordTimeStepDefinition {
         this.body.setDescription(description);
     }
 
-    @Given("My user ID is {string}")
-    public void my_user_ID_is(String userID) {
-        this.body.setUserID(userID);
-    }
-
     @Given("No activity type has been selected")
     public void no_activity_type_has_been_selected() {
         // Since no activity time is selected, no operation should be done here
@@ -56,6 +58,7 @@ public class RecordTimeStepDefinition {
 
     @When("I record the activity to Timelog")
     public void i_record_the_activity_to_Timelog() throws Exception {
+        this.body.setUserID(this.userIDStepDefinition.getUserID());
         this.result = this.mvc.perform(MockMvcRequestBuilders
             .post("/api/log/record")
             .content(asJsonString(this.body))

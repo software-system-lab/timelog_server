@@ -1,4 +1,4 @@
-package ssl.ois.timelog;
+package ssl.ois.timelog.cucumber;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

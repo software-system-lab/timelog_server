@@ -1,4 +1,4 @@
-package ssl.ois.timelog;
+package ssl.ois.timelog.cucumber;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
