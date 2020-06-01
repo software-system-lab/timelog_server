@@ -1,37 +1,37 @@
 package ssl.ois.timelog.model.user;
 
-public class Activity {
+public class ActivityType {
     private String name;
     private boolean isEnable;
     private boolean isPrivate;
 
-    Activity(String name) {
+    public ActivityType(String name) {
         this.name = name;
         this.isEnable = true;
         this.isPrivate = false;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    boolean isEnable() {
+    public boolean isEnable() {
         return isEnable;
     }
 
-    void setEnable(boolean enable) {
+    public void setEnable(boolean enable) {
         isEnable = enable;
     }
 
-    boolean isPrivate() {
+    public boolean isPrivate() {
         return isPrivate;
     }
 
-    void setPrivate(boolean aPrivate) {
+    public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
     }
 }

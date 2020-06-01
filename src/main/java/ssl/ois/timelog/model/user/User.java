@@ -6,7 +6,7 @@ import java.util.UUID;
 public class User {
     private UUID userID;
     private String name;
-    private Map<String, Activity> activities;
+    private Map<String, ActivityType> activities;
 
     public User(String name) {
         this.userID = UUID.randomUUID();
@@ -14,7 +14,7 @@ public class User {
     }
 
     public void newActivity(String name) {
-        this.activities.put(name, new Activity(name));
+        this.activities.put(name, new ActivityType(name));
     }
 
     public UUID getUserID() {
