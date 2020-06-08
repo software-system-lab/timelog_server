@@ -55,6 +55,7 @@ trigger:
   branch:
     - master
     - beta
+    - dev
 
 ---
 kind: pipeline
