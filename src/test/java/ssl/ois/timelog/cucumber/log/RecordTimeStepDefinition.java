@@ -51,9 +51,9 @@ public class RecordTimeStepDefinition {
         this.body.setDescription(description);
     }
 
-    @Given("No activity type has been selected")
-    public void no_activity_type_has_been_selected() {
-        // Since no activity time is selected, no operation should be done here
+    @Given("Activity type {string} is selected")
+    public void activity_type_is_selected(String activityName) {
+        this.body.setActivityName(activityName);
     }
 
     @When("I record the activity to Timelog")

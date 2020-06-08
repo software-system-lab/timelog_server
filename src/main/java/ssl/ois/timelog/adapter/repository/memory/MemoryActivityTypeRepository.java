@@ -19,12 +19,7 @@ public class MemoryActivityTypeRepository implements ActivityTypeRepository {
 
     @Override
     public ActivityTypeList findByUserID(String userID) {
-        ActivityTypeList result = this.activityTypeListMap.get(userID);
-        if (result == null) {
-            result = new ActivityTypeList();
-            this.save(result);
-        }
-        return result;
+        return this.activityTypeListMap.get(userID);
     }
 
     @Override

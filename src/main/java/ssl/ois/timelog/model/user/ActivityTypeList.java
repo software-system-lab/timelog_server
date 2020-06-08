@@ -28,4 +28,8 @@ public class ActivityTypeList {
         ActivityType activityType = new ActivityType(activityTypeName);
         this.activityTypeList.add(activityType);
     }
+
+    public boolean removeType(String activityTypeName) {
+        return this.activityTypeList.removeIf(activityType -> activityType.getName().equals(activityTypeName));
+    }
 }
