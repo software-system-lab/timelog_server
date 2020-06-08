@@ -1,20 +1,14 @@
 package ssl.ois.timelog.model.user;
 
-import java.util.Map;
 import java.util.UUID;
 
 public class User {
     private UUID userID;
     private String name;
-    private Map<String, ActivityType> activities;
 
-    public User(String name) {
-        this.userID = UUID.randomUUID();
+    public User(UUID userID, String name) {
+        this.userID = userID;
         this.name = name;
-    }
-
-    public void newActivity(String name) {
-        this.activities.put(name, new ActivityType(name));
     }
 
     public UUID getUserID() {

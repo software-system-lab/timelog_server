@@ -1,6 +1,6 @@
 package ssl.ois.timelog.service.repository;
 
-import ssl.ois.timelog.model.user.ActivityTypeList;
+import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 
 public interface ActivityTypeRepository {
     public void save(ActivityTypeList activityTypeList);

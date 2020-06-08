@@ -1,4 +1,4 @@
-package ssl.ois.timelog.model.user;
+package ssl.ois.timelog.model.activity.type;
 
 public class ActivityType {
     private String name;

@@ -5,8 +5,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeRepository;
 import ssl.ois.timelog.cucumber.common.UserIDStepDefinition;
-import ssl.ois.timelog.model.user.ActivityType;
-import ssl.ois.timelog.model.user.ActivityTypeList;
+import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.service.activity.type.remove.*;
 import ssl.ois.timelog.service.repository.ActivityTypeRepository;
 

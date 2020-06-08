@@ -10,7 +10,7 @@ import org.springframework.web.filter.CorsFilter;
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.adapter.repository.mysql.MysqlLogRepository;
 import ssl.ois.timelog.service.log.LogRepository;
-import ssl.ois.timelog.service.user.UserRepository;
+import ssl.ois.timelog.service.repository.UserRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 
 

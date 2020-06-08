@@ -6,6 +6,8 @@ import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.log.*;
 
+import java.util.UUID;
+
 import static org.junit.Assert.assertEquals;
 
 public class GetLogByIdTest {
@@ -14,7 +16,7 @@ public class GetLogByIdTest {
 
     @Before
     public void setup() {
-        User user = new User("Tim");
+        User user = new User(UUID.randomUUID(), "Tim");
         this.logRepository = new MemoryLogRepository();
 
         String logTitle = "Study for Design Pattern";
