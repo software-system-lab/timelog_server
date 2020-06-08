@@ -1,11 +1,5 @@
+---
 resources:
-- ../../base
+  - ../../base
 patchesStrategicMerge:
-- deployment.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-images:
-- name: nightlord851108/timelog
-  newTag: test
-- name: nightlord851108/timelog_server
-  newTag: master.6b40842f
+  - deployment.yaml
