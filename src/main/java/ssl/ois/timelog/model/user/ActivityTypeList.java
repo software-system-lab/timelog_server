@@ -6,10 +6,10 @@ import java.util.List;
 
 public class ActivityTypeList {
     private String userID;
-    private List<ActivityType> activityTypeList;
+    private List<ActivityType> typeList;
 
     public ActivityTypeList() {
-        this.activityTypeList = new ArrayList<>();
+        this.typeList = new ArrayList<>();
     }
 
     public String getUserID() {
@@ -20,16 +20,16 @@ public class ActivityTypeList {
         this.userID = userID;
     }
 
-    public List<ActivityType> getActivityTypeList() {
-        return Collections.unmodifiableList(activityTypeList);
+    public List<ActivityType> getTypeList() {
+        return Collections.unmodifiableList(typeList);
     }
 
     public void newType(String activityTypeName) {
         ActivityType activityType = new ActivityType(activityTypeName);
-        this.activityTypeList.add(activityType);
+        this.typeList.add(activityType);
     }
 
     public boolean removeType(String activityTypeName) {
-        return this.activityTypeList.removeIf(activityType -> activityType.getName().equals(activityTypeName));
+        return this.typeList.removeIf(activityType -> activityType.getName().equals(activityTypeName));
     }
 }

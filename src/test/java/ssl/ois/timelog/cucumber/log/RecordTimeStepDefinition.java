@@ -30,8 +30,6 @@ public class RecordTimeStepDefinition {
 
     private RecordAPIRequestBody body;
 
-    private RecordAPIResponseBody recordResponse;
-
     private UserIDStepDefinition userIDStepDefinition;
 
     public RecordTimeStepDefinition(UserIDStepDefinition userIDStepDefinition) {
@@ -68,18 +66,18 @@ public class RecordTimeStepDefinition {
     }
 
     @Then("A new log is added")
-    public void a_new_log_is_added() throws Exception{
+    public void a_new_log_is_added() throws Exception {
         // Write code here that turns the phrase above into concrete actions
         assertEquals(HttpStatus.OK.value(), this.result.getResponse().getStatus());
         assertTrue(this.result.getResponse().getContentAsString().contains("logID"));
-        recordResponse = new ObjectMapper().readValue(
+        RecordAPIResponseBody recordResponse = new ObjectMapper().readValue(
                 this.result.getResponse().getContentAsString(), RecordAPIResponseBody.class);
-        assertNotNull(this.recordResponse.getLogID());
+        assertNotNull(recordResponse.getLogID());
 
         GetLogByIdRequestBody getLogByIdRequestBody = new GetLogByIdRequestBody();
         MockHttpServletResponse response;
 
-        getLogByIdRequestBody.setLogID(this.recordResponse.getLogID());
+        getLogByIdRequestBody.setLogID(recordResponse.getLogID());
         response = this.mvc.perform(MockMvcRequestBuilders
                 .post("/api/log/get/id")
                 .content(asJsonString(getLogByIdRequestBody))

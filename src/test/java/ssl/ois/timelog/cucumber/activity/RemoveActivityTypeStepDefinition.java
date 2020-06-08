@@ -13,9 +13,6 @@ import ssl.ois.timelog.service.repository.ActivityTypeRepository;
 import static org.junit.Assert.*;
 
 public class RemoveActivityTypeStepDefinition {
-    
-    private RemoveActivityTypeUseCase removeActivityTypeUseCase;
-    private RemoveActivityTypeUseCaseInput removeActivityTypeUseCaseInput;
     private RemoveActivityTypeUseCaseOutput removeActivityTypeUseCaseOutput;
     private ActivityTypeRepository activityTypeRepository;
     private UserIDStepDefinition userIDStepDefinition;
@@ -39,14 +36,14 @@ public class RemoveActivityTypeStepDefinition {
 
     @When("I want to remove it from my activity type list")
     public void i_want_to_remove_it_from_my_activity_type_list() {
-        this.removeActivityTypeUseCase = new RemoveActivityTypeUseCase(this.activityTypeRepository);
-        this.removeActivityTypeUseCaseInput = new RemoveActivityTypeUseCaseInput();
+        RemoveActivityTypeUseCase removeActivityTypeUseCase = new RemoveActivityTypeUseCase(this.activityTypeRepository);
+        RemoveActivityTypeUseCaseInput removeActivityTypeUseCaseInput = new RemoveActivityTypeUseCaseInput();
         this.removeActivityTypeUseCaseOutput = new RemoveActivityTypeUseCaseOutput();
         
-        this.removeActivityTypeUseCaseInput.setActivityTypeName(this.activityTypeName);
-        this.removeActivityTypeUseCaseInput.setUserID(this.userIDStepDefinition.getUserID());
+        removeActivityTypeUseCaseInput.setActivityTypeName(this.activityTypeName);
+        removeActivityTypeUseCaseInput.setUserID(this.userIDStepDefinition.getUserID());
 
-        this.removeActivityTypeUseCase.execute(this.removeActivityTypeUseCaseInput, this.removeActivityTypeUseCaseOutput);
+        removeActivityTypeUseCase.execute(removeActivityTypeUseCaseInput, this.removeActivityTypeUseCaseOutput);
     }
 
     @Then("I should get the removed activity type name")
@@ -56,7 +53,7 @@ public class RemoveActivityTypeStepDefinition {
 
     @Then("{string} is not in my activity type list")
     public void is_not_in_my_activity_type_list(String activityTypeName) {
-         for(ActivityType activityType : this.activityTypeRepository.findByUserID(this.userIDStepDefinition.getUserID()).getActivityTypeList()) {
+         for(ActivityType activityType : this.activityTypeRepository.findByUserID(this.userIDStepDefinition.getUserID()).getTypeList()) {
              if(activityType.getName().equals(activityTypeName)) {
                  fail("Activity Type is not removed from the repository");
              }

@@ -48,7 +48,7 @@ public class AddActivityTypeStepDefinition {
     public void is_in_my_activity_type_list(String activityTypeName) {
         assertEquals(activityTypeName, this.addActivityTypeUseCaseOutput.getActivityTypeName());
         Boolean found = false;
-        for(ActivityType activityType : this.activityTypeRepository.findByUserID(this.userIDStepDefinition.getUserID()).getActivityTypeList()) {
+        for(ActivityType activityType : this.activityTypeRepository.findByUserID(this.userIDStepDefinition.getUserID()).getTypeList()) {
             if(activityType.getName().equals(activityTypeName)) {
                 found = true;
             }

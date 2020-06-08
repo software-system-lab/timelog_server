@@ -1,6 +1,5 @@
 package ssl.ois.timelog.adapter.repository.memory;
 
-import ssl.ois.timelog.model.user.ActivityType;
 import ssl.ois.timelog.model.user.ActivityTypeList;
 import ssl.ois.timelog.service.repository.ActivityTypeRepository;
 
