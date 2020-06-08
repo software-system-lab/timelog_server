@@ -1,17 +1,16 @@
 package ssl.ois.timelog.cucumber.activity;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeRepository;
 import ssl.ois.timelog.cucumber.common.UserIDStepDefinition;
 import ssl.ois.timelog.model.user.ActivityType;
 import ssl.ois.timelog.model.user.ActivityTypeList;
 import ssl.ois.timelog.service.activity.type.remove.*;
 import ssl.ois.timelog.service.repository.ActivityTypeRepository;
+
+import static org.junit.Assert.*;
 
 public class RemoveActivityTypeStepDefinition {
     
@@ -34,7 +33,8 @@ public class RemoveActivityTypeStepDefinition {
         activityTypeList.setUserID(this.userIDStepDefinition.getUserID());
         activityTypeList.newType(this.activityTypeName);
 
-        activityTypeRepository.save(activityTypeList);
+        this.activityTypeRepository = new MemoryActivityTypeRepository();
+        this.activityTypeRepository.save(activityTypeList);
     }
 
     @When("I want to remove it from my activity type list")
@@ -56,11 +56,10 @@ public class RemoveActivityTypeStepDefinition {
 
     @Then("{string} is not in my activity type list")
     public void is_not_in_my_activity_type_list(String activityTypeName) {
-        // for(ActivityType activityType : this.activityTypeRepository.findByUserID(this.userIDStepDefinition.getUserID()).getActivityTypeList()) {
-        //     if(activityType.getName().equals(activityTypeName)) {
-        //         fail();
-        //     }
-        // }
-        assertTrue(this.activityTypeRepository.findByUserID(this.userIDStepDefinition.getUserID()).getActivityTypeList().contains(new ActivityType(this.activityTypeName)));
+         for(ActivityType activityType : this.activityTypeRepository.findByUserID(this.userIDStepDefinition.getUserID()).getActivityTypeList()) {
+             if(activityType.getName().equals(activityTypeName)) {
+                 fail("Activity Type is not removed from the repository");
+             }
+         }
     }
 }
