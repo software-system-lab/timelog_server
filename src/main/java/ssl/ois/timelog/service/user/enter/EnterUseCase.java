@@ -30,7 +30,9 @@ public class EnterUseCase {
 
             // Create ActivityTypeList for the user.
             activityTypeList = new ActivityTypeList();
+            activityTypeList.newType("Others");
             this.activityTypeRepository.save(activityTypeList);
+            output.setActivityTypeList(activityTypeList);
         }
     }
 }
