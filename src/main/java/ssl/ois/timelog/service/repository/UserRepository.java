@@ -1,10 +1,8 @@
 package ssl.ois.timelog.service.repository;
 
-import ssl.ois.timelog.model.user.User;
-
-import java.util.UUID;
+import ssl.ois.timelog.service.user.dto.UserDTO;
 
 public interface UserRepository {
-    public void save(User user);
-    public User findByUserID(String userID);
+    public void save(UserDTO userDTO);
+    public UserDTO findByUserID(String userID);
 }

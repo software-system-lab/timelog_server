@@ -1,26 +1,25 @@
 package ssl.ois.timelog.adapter.repository.memory;
 
-import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.UserRepository;
+import ssl.ois.timelog.service.user.dto.UserDTO;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class MemoryUserRepository implements UserRepository {
-    private Map<String, User> users;
+    private Map<String, UserDTO> users;
 
     public MemoryUserRepository() {
         this.users = new HashMap<>();
     }
 
     @Override
-    public void save(User user) {
-        this.users.put(user.getUserID().toString(), user);
+    public void save(UserDTO userDTO) {
+        this.users.put(userDTO.getID().toString(), userDTO);
     }
 
     @Override
-    public User findByUserID(String userID) {
+    public UserDTO findByUserID(String userID) {
         return this.users.get(userID);
     }
 }
