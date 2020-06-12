@@ -10,16 +10,13 @@ public class ActivityTypeList {
     private String userID;
     private List<ActivityType> typeList;
 
-    public ActivityTypeList() {
+    public ActivityTypeList(String userID) {
         this.typeList = new ArrayList<>();
+        this.userID = userID;
     }
 
     public String getUserID() {
         return userID;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
     }
 
     public List<ActivityType> getTypeList() {

@@ -33,7 +33,7 @@ public class MysqlLogRepository implements LogRepository {
                 stmt.setString(4, SqlDateTimeConverter.convert(log.getStartTime()));
                 stmt.setString(5, SqlDateTimeConverter.convert(log.getEndTime()));
                 stmt.setString(6, log.getDescription());
-                stmt.setString(7, log.getActivityType());
+                stmt.setString(7, log.getActivityTypeName());
 
                 stmt.executeUpdate();
             }

@@ -12,7 +12,7 @@ public class Log {
     private Date startTime;
     private Date endTime;
     private String description;
-    private String activityType = "Others";
+    private String activityTypeName;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy/MM/dd HH:mm");
 
@@ -20,10 +20,12 @@ public class Log {
                String title,
                String startTime,
                String endTime,
-               String description) {
+               String description,
+               String activityTypeName) {
         this.logID = UUID.randomUUID();
         this.title = title;
         this.userID = userID;
+        this.activityTypeName = activityTypeName;
         this.description = description;
         try {
             this.startTime = dateFormat.parse(startTime);
@@ -84,12 +86,12 @@ public class Log {
         this.description = description;
     }
 
-    public String getActivityType() {
-        return activityType;
+    public String getActivityTypeName() {
+        return activityTypeName;
     }
 
-    public void setActivityType(String activityType) {
-        this.activityType = activityType;
+    public void setActivityTypeName(String activityTypeName) {
+        this.activityTypeName = activityTypeName;
     }
 
     public SimpleDateFormat getDateFormat() {

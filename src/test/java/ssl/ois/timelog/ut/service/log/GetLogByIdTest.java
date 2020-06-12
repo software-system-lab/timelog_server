@@ -23,11 +23,11 @@ public class GetLogByIdTest {
         String startTime = "2020/04/21 15:00";
         String endTime = "2020/04/21 18:00";
         String description = "Composite Pattern";
-        RecordInput inputData = new RecordInput(user.getUserID().toString(),
+        AddLogUseCaseInput inputData = new AddLogUseCaseInput(user.getUserID().toString(),
                 logTitle, startTime, endTime, description);
-        RecordOutput outputData = new RecordOutput();
-        LogRecord logRecord = new LogRecord(this.logRepository);
-        logRecord.execute(inputData, outputData);
+        AddLogUseCaseOutput outputData = new AddLogUseCaseOutput();
+        AddLogUseCase addLogUseCase = new AddLogUseCase(this.logRepository);
+        addLogUseCase.execute(inputData, outputData);
         this.logID = outputData.getLogID();
     }
 

@@ -1,6 +1,6 @@
 package ssl.ois.timelog.service.log;
 
-public class RecordInput {
+public class AddLogUseCaseInput {
     private String userID;
     private String title;
     private String startTime;
@@ -8,10 +8,10 @@ public class RecordInput {
     private String description;
     private String activityName;
 
-    public RecordInput() {
+    public AddLogUseCaseInput() {
     }
 
-    public RecordInput(String userID, String title, String startTime, String endTime, String description) {
+    public AddLogUseCaseInput(String userID, String title, String startTime, String endTime, String description) {
         this.userID = userID;
         this.title = title;
         this.startTime = startTime;

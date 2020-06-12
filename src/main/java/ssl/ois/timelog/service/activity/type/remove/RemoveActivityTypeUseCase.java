@@ -1,19 +1,19 @@
 package ssl.ois.timelog.service.activity.type.remove;
 
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.repository.ActivityTypeRepository;
+import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
 
 public class RemoveActivityTypeUseCase {
-    private ActivityTypeRepository activityTypeRepository;
+    private ActivityTypeListRepository activityTypeListRepository;
 
-    public RemoveActivityTypeUseCase(ActivityTypeRepository activityTypeRepository) {
-        this.activityTypeRepository = activityTypeRepository;
+    public RemoveActivityTypeUseCase(ActivityTypeListRepository activityTypeListRepository) {
+        this.activityTypeListRepository = activityTypeListRepository;
     }
     public void execute(RemoveActivityTypeUseCaseInput input, RemoveActivityTypeUseCaseOutput output) {
-        ActivityTypeList activityTypeList = this.activityTypeRepository.findByUserID(input.getUserID());
+        ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(input.getUserID());
         activityTypeList.removeType(input.getActivityTypeName());
        
-        this.activityTypeRepository.update(activityTypeList);
+        this.activityTypeListRepository.update(activityTypeList);
         output.setActivityTypeName(input.getActivityTypeName());
     }
 }

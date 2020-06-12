@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import org.springframework.mock.web.MockHttpServletResponse;
-import ssl.ois.timelog.cucumber.common.UserIDStepDefinition;
+import ssl.ois.timelog.cucumber.common.UserStepDefinition;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -30,18 +30,18 @@ public class RecordTimeStepDefinition {
 
     private RecordAPIRequestBody body;
 
-    private UserIDStepDefinition userIDStepDefinition;
+    private UserStepDefinition userStepDefinition;
 
-    public RecordTimeStepDefinition(UserIDStepDefinition userIDStepDefinition) {
-        this.userIDStepDefinition = userIDStepDefinition;
+    public RecordTimeStepDefinition(UserStepDefinition userStepDefinition) {
+        this.userStepDefinition = userStepDefinition;
     }
 
     public static String asJsonString(final Object obj) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(obj);
     }
 
-    @Given("I {string} from {string} to {string}, the detail is {string}")
-    public void i_from_to_the_detail_is(String title, String startTime, String endTime, String description) {
+    @Given("I {string} from {string} to {string}, the description is {string}")
+    public void i_from_to_the_description_is(String title, String startTime, String endTime, String description) {
         this.body = new RecordAPIRequestBody();
         this.body.setTitle(title);
         this.body.setStartTime(startTime);
@@ -56,7 +56,7 @@ public class RecordTimeStepDefinition {
 
     @When("I record the activity to Timelog")
     public void i_record_the_activity_to_Timelog() throws Exception {
-        this.body.setUserID(this.userIDStepDefinition.getUserID());
+        this.body.setUserID(this.userStepDefinition.getUserID());
         this.result = this.mvc.perform(MockMvcRequestBuilders
             .post("/api/log/record")
             .content(asJsonString(this.body))
@@ -105,8 +105,8 @@ public class RecordTimeStepDefinition {
         assertEquals(endTime, this.resultLog.getEndTime());
     }
 
-    @Then("This log has detail {string}")
-    public void this_log_has_detail(String description) {
+    @Then("This log has description {string}")
+    public void this_log_has_description(String description) {
         assertEquals(description, this.resultLog.getDescription());
     }
 

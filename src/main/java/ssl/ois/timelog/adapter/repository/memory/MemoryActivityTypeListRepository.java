@@ -1,14 +1,14 @@
 package ssl.ois.timelog.adapter.repository.memory;
 
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.repository.ActivityTypeRepository;
+import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MemoryActivityTypeRepository implements ActivityTypeRepository {
+public class MemoryActivityTypeListRepository implements ActivityTypeListRepository {
     private Map<String, ActivityTypeList> activityTypeListMap;
-    public MemoryActivityTypeRepository(){
+    public MemoryActivityTypeListRepository(){
         this.activityTypeListMap = new HashMap<>();
     }
     @Override

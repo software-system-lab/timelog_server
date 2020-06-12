@@ -1,18 +1,18 @@
 package ssl.ois.timelog.service.activity.type.add;
 
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.repository.ActivityTypeRepository;
+import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
 
 public class AddActivityTypeUseCase {
-    private ActivityTypeRepository activityTypeRepository;
+    private ActivityTypeListRepository activityTypeListRepository;
 
-    public AddActivityTypeUseCase(ActivityTypeRepository activityTypeRepository) {
-        this.activityTypeRepository = activityTypeRepository;
+    public AddActivityTypeUseCase(ActivityTypeListRepository activityTypeListRepository) {
+        this.activityTypeListRepository = activityTypeListRepository;
     }
     public void execute(AddActivityTypeUseCaseInput input, AddActivityTypeUseCaseOutput output) {
-        ActivityTypeList activityTypeList = this.activityTypeRepository.findByUserID(input.getUserID());
+        ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(input.getUserID());
         activityTypeList.newType(input.getActivityTypeName());
-        this.activityTypeRepository.update(activityTypeList);
+        this.activityTypeListRepository.update(activityTypeList);
         output.setActivityTypeName(input.getActivityTypeName());
     }
 }

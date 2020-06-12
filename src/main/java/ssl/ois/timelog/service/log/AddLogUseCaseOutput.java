@@ -1,6 +1,6 @@
 package ssl.ois.timelog.service.log;
 
-public class RecordOutput {
+public class AddLogUseCaseOutput {
     private String logID;
 
     public String getLogID() {

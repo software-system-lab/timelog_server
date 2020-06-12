@@ -13,15 +13,15 @@ import ssl.ois.timelog.service.log.*;
 @RequestMapping("/api/log")
 public class LogRestAdapter {
     @Autowired
-    LogRecord logRecord;
+    AddLogUseCase addLogUseCase;
 
     @Autowired
     GetLogById getLogById;
 
     @PostMapping(value = "/record")
     public ResponseEntity<ResponseOutput> newLog(@RequestBody NewLogRequestInput requestBody) {
-        RecordInput input = new RecordInput();
-        RecordOutput output = new RecordOutput();
+        AddLogUseCaseInput input = new AddLogUseCaseInput();
+        AddLogUseCaseOutput output = new AddLogUseCaseOutput();
 
         input.setUserID(requestBody.getUserID());
         input.setTitle(requestBody.getTitle());
@@ -30,7 +30,7 @@ public class LogRestAdapter {
         input.setDescription(requestBody.getDescription());
         input.setActivityName(requestBody.getActivityName());
 
-        this.logRecord.execute(input, output);
+        this.addLogUseCase.execute(input, output);
 
         ResponseOutput responseOutput = new ResponseOutput();
         responseOutput.setLogID(output.getLogID());

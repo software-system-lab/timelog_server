@@ -20,17 +20,11 @@ public class LogTest {
         UUID userID = UUID.fromString("c61965be-8176-4419-b289-4d52617728fb");
         String title = "Study for Design Pattern";
         String description = "Composite Pattern";
+        String activityType = "Others";
 
         this.startTime = "2020/04/21 15:00";
         this.endTime = "2020/04/21 18:00";
-        this.log = new Log(userID, title, this.startTime, this.endTime, description);
-    }
-    @Test
-    public void testWithoutActivity() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        assertEquals(this.startTime, dateFormat.format(this.log.getStartTime()));
-        assertEquals(this.endTime, dateFormat.format(this.log.getEndTime()));
-        assertEquals("Others", this.log.getActivityType());
+        this.log = new Log(userID, title, this.startTime, this.endTime, description, activityType);
     }
 
     @Test

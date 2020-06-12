@@ -23,7 +23,7 @@ public class GetLogById {
         output.setTitle(log.getTitle());
         output.setStartTime(dateFormat.format(log.getStartTime()));
         output.setEndTime(dateFormat.format(log.getEndTime()));
-        output.setActivityType(log.getActivityType());
+        output.setActivityType(log.getActivityTypeName());
         output.setDescription(log.getDescription());
     }
 }
