@@ -4,13 +4,15 @@ import org.junit.Before;
 import org.junit.Test;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.log.*;
+import ssl.ois.timelog.service.log.LogRepository;
+import ssl.ois.timelog.service.log.add.*;
+import ssl.ois.timelog.service.log.getByID.*;
 
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
-public class GetLogByIdTest {
+public class GetLogByIdUseCaseTest {
     private LogRepository logRepository;
     private String logID;
 
@@ -33,9 +35,9 @@ public class GetLogByIdTest {
 
     @Test
     public void getLogById() {
-        GetByIdInput input = new GetByIdInput();
-        GetByIdOutput output = new GetByIdOutput();
-        GetLogById service = new GetLogById(this.logRepository);
+        GetLogByIdUseCaseInput input = new GetLogByIdUseCaseInput();
+        GetLogByIdUseCaseOutput output = new GetLogByIdUseCaseOutput();
+        GetLogByIdUseCase service = new GetLogByIdUseCase(this.logRepository);
 
         input.setLogID(this.logID);
 

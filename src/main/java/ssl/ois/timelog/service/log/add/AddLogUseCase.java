@@ -1,17 +1,18 @@
-package ssl.ois.timelog.service.log;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ssl.ois.timelog.model.log.Log;
+package ssl.ois.timelog.service.log.add;
 
 import java.net.ConnectException;
 import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import ssl.ois.timelog.model.log.Log;
+import ssl.ois.timelog.service.log.LogRepository;
 
 @Service
 public class AddLogUseCase {
     private LogRepository logRepository;
 
-    public AddLogUseCase(@Autowired LogRepository logRepo) {
+    public AddLogUseCase(LogRepository logRepo) {
         this.logRepository = logRepo;
     }
     public void execute(AddLogUseCaseInput input, AddLogUseCaseOutput output) {

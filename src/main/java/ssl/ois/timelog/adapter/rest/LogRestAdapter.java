@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ssl.ois.timelog.service.log.*;
+import ssl.ois.timelog.service.log.add.*;
+import ssl.ois.timelog.service.log.getByID.*;
 
 @RestController
 @RequestMapping("/api/log")
@@ -16,7 +17,7 @@ public class LogRestAdapter {
     AddLogUseCase addLogUseCase;
 
     @Autowired
-    GetLogById getLogById;
+    GetLogByIdUseCase getLogById;
 
     @PostMapping(value = "/record")
     public ResponseEntity<ResponseOutput> newLog(@RequestBody NewLogRequestInput requestBody) {
@@ -39,8 +40,8 @@ public class LogRestAdapter {
     }
 
     @PostMapping(value = "/get/id")
-    public ResponseEntity<GetByIdOutput> getLogByTitle(@RequestBody GetByIdInput input) {
-        GetByIdOutput output = new GetByIdOutput();
+    public ResponseEntity<GetLogByIdUseCaseOutput> getLogByTitle(@RequestBody GetLogByIdUseCaseInput input) {
+        GetLogByIdUseCaseOutput output = new GetLogByIdUseCaseOutput();
         this.getLogById.execute(input, output);
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }

@@ -1,6 +1,6 @@
-package ssl.ois.timelog.service.log;
+package ssl.ois.timelog.service.log.getByID;
 
-public class GetByIdInput {
+public class GetLogByIdUseCaseInput {
     private String logID;
     
     public void setLogID(String logID) {

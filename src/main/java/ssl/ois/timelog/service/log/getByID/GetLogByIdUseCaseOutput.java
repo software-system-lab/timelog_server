@@ -1,6 +1,6 @@
-package ssl.ois.timelog.service.log;
+package ssl.ois.timelog.service.log.getByID;
 
-public class GetByIdOutput {
+public class GetLogByIdUseCaseOutput {
     private String logId;
     private String title;
     private String startTime;

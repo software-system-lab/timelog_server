@@ -1,4 +1,4 @@
-package ssl.ois.timelog.service.log;
+package ssl.ois.timelog.service.log.add;
 
 public class AddLogUseCaseOutput {
     private String logID;

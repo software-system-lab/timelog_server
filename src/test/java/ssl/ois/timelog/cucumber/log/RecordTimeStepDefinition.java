@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import org.springframework.mock.web.MockHttpServletResponse;
-import ssl.ois.timelog.cucumber.common.UserStepDefinition;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -30,17 +29,13 @@ public class RecordTimeStepDefinition {
 
     private RecordAPIRequestBody body;
 
-    private UserStepDefinition userStepDefinition;
-
-    public RecordTimeStepDefinition(UserStepDefinition userStepDefinition) {
-        this.userStepDefinition = userStepDefinition;
-    }
+    private String userID;
 
     public static String asJsonString(final Object obj) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(obj);
     }
 
-    @Given("I {string} from {string} to {string}, the description is {string}")
+    @Given("mvc I {string} from {string} to {string}, the description is {string}")
     public void i_from_to_the_description_is(String title, String startTime, String endTime, String description) {
         this.body = new RecordAPIRequestBody();
         this.body.setTitle(title);
@@ -49,14 +44,19 @@ public class RecordTimeStepDefinition {
         this.body.setDescription(description);
     }
 
-    @Given("Activity type {string} is selected")
+    @Given("mvc My user ID is {string}")
+    public void mvc_My_user_ID_is(String userID) {
+        this.userID = userID;
+    }
+
+    @Given("mvc Activity type {string} is selected")
     public void activity_type_is_selected(String activityName) {
         this.body.setActivityName(activityName);
     }
 
-    @When("I record the activity to Timelog")
+    @When("mvc I record the activity to Timelog")
     public void i_record_the_activity_to_Timelog() throws Exception {
-        this.body.setUserID(this.userStepDefinition.getUserID());
+        this.body.setUserID(this.userID);
         this.result = this.mvc.perform(MockMvcRequestBuilders
             .post("/api/log/record")
             .content(asJsonString(this.body))
@@ -65,7 +65,7 @@ public class RecordTimeStepDefinition {
             .andReturn();
     }
 
-    @Then("A new log is added")
+    @Then("mvc A new log is added")
     public void a_new_log_is_added() throws Exception {
         // Write code here that turns the phrase above into concrete actions
         assertEquals(HttpStatus.OK.value(), this.result.getResponse().getStatus());
@@ -90,27 +90,27 @@ public class RecordTimeStepDefinition {
         assertNotNull(this.resultLog);
     }
 
-    @Then("This log has title {string}")
+    @Then("mvc This log has title {string}")
     public void this_log_has_title(String title) {
         assertEquals(title, this.resultLog.getTitle());
     }
 
-    @Then("This log has start time with {string}")
+    @Then("mvc This log has start time with {string}")
     public void this_log_has_start_time_with(String startTime) {
         assertEquals(startTime, this.resultLog.getStartTime());
     }
 
-    @Then("This log has end time with {string}")
+    @Then("mvc This log has end time with {string}")
     public void this_log_has_end_time_with(String endTime) {
         assertEquals(endTime, this.resultLog.getEndTime());
     }
 
-    @Then("This log has description {string}")
+    @Then("mvc This log has description {string}")
     public void this_log_has_description(String description) {
         assertEquals(description, this.resultLog.getDescription());
     }
 
-    @Then("This log has activity type {string}")
+    @Then("mvc This log has activity type {string}")
     public void this_log_has_activity_type(String activityType) {
         assertEquals(activityType, this.resultLog.getActivityType());
     }
