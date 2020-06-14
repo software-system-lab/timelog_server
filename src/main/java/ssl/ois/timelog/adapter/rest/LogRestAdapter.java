@@ -29,7 +29,7 @@ public class LogRestAdapter {
         input.setStartTime(requestBody.getStartTime());
         input.setEndTime(requestBody.getEndTime());
         input.setDescription(requestBody.getDescription());
-        input.setActivityName(requestBody.getActivityName());
+        input.setActivityTypeName(requestBody.getActivityName());
 
         this.addLogUseCase.execute(input, output);
 

@@ -17,7 +17,7 @@ public class AddLogUseCase {
     }
     public void execute(AddLogUseCaseInput input, AddLogUseCaseOutput output) {
         UUID userID = UUID.fromString(input.getUserID());
-        Log log = new Log(userID, input.getTitle(), input.getStartTime(), input.getEndTime(), input.getDescription(), input.getActivityName());
+        Log log = new Log(userID, input.getTitle(), input.getStartTime(), input.getEndTime(), input.getDescription(), input.getActivityTypeName());
         try {
             logRepository.save(log);
         } catch (ConnectException e) {

@@ -6,7 +6,7 @@ public class AddLogUseCaseInput {
     private String startTime;
     private String endTime;
     private String description;
-    private String activityName;
+    private String activityTypeName;
 
     public AddLogUseCaseInput() {
     }
@@ -17,7 +17,16 @@ public class AddLogUseCaseInput {
         this.startTime = startTime;
         this.endTime = endTime;
         this.description = description;
-        this.activityName = "Others";
+        this.activityTypeName = "Others";
+    }
+
+    public AddLogUseCaseInput(String userID, String title, String startTime, String endTime, String description, String activityTypeName) {
+        this.userID = userID;
+        this.title = title;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.description = description;
+        this.activityTypeName = activityTypeName;
     }
 
     public String getUserID() {
@@ -60,11 +69,11 @@ public class AddLogUseCaseInput {
         this.description = description;
     }
 
-    public String getActivityName() {
-        return activityName;
+    public String getActivityTypeName() {
+        return activityTypeName;
     }
 
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
+    public void setActivityTypeName(String activityTypeName) {
+        this.activityTypeName = activityTypeName;
     }
 }

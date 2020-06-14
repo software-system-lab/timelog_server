@@ -10,6 +10,8 @@ import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class MysqlLogRepository implements LogRepository {
@@ -49,5 +51,10 @@ public class MysqlLogRepository implements LogRepository {
     @Override
     public Log getByID(UUID id) {
         return null;
+    }
+
+    @Override
+    public List<Log> getByUserID(String userID) {
+        return new ArrayList<Log>();
     }
 }
