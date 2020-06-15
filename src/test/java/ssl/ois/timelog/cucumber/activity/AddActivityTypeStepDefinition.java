@@ -3,6 +3,7 @@ package ssl.ois.timelog.cucumber.activity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -20,26 +21,35 @@ public class AddActivityTypeStepDefinition {
     private AddActivityTypeUseCaseOutput addActivityTypeUseCaseOutput;
     private ActivityTypeListRepository activityTypeListRepository;
     private UserStepDefinition userStepDefinition;
+    private String activityTypeName;
 
     public AddActivityTypeStepDefinition(UserStepDefinition userStepDefinition) {
         this.userStepDefinition = userStepDefinition;
     }
 
+    @Before
+    public void setup() {
+        this.activityTypeListRepository = new MemoryActivityTypeListRepository();
+    }
+
     @Given("I have {string} course in this semester")
     public void i_have_course_in_this_semester(String activityTypeName) {
         ActivityTypeList activityTypeList = new ActivityTypeList(this.userStepDefinition.getUserID());
-        this.activityTypeListRepository = new MemoryActivityTypeListRepository();
         this.activityTypeListRepository.save(activityTypeList);
 
+        this.activityTypeName = activityTypeName;
         this.addActivityTypeUseCaseInput = new AddActivityTypeUseCaseInput();
         this.addActivityTypeUseCaseInput.setActivityTypeName(activityTypeName);
     }
 
-    @When("I want to add it to my activity type list")
-    public void i_want_to_add_it_to_my_activity_type_list() {
-        this.addActivityTypeUseCaseInput.setUserID(this.userStepDefinition.getUserID());
-        this.addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
+    @When("I add it to my activity type list")
+    public void i_add_it_to_my_activity_type_list() {
         AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(activityTypeListRepository);
+        AddActivityTypeUseCaseInput addActivityTypeUseCaseInput = new AddActivityTypeUseCaseInput();
+        addActivityTypeUseCaseInput.setUserID(this.userStepDefinition.getUserID());
+        addActivityTypeUseCaseInput.setActivityTypeName(this.activityTypeName);
+        this.addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
+
         addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
     }
 

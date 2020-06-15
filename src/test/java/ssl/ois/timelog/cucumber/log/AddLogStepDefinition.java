@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.UUID;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
@@ -26,6 +27,10 @@ public class AddLogStepDefinition {
 
     public AddLogStepDefinition(UserStepDefinition userStepDefinition) {
         this.userStepDefinition = userStepDefinition;
+    }
+
+    @Before
+    public void setup() {
         this.logRepository = new MemoryLogRepository();
     }
 
@@ -37,8 +42,8 @@ public class AddLogStepDefinition {
         this.description = description;
     }
 
-    @When("I record the activity with activity type {string} to Timelog")
-    public void i_record_the_activity_with_activity_type_to_Timelog(String activityTypeName) {
+    @When("I add a log with activity type {string} to Timelog")
+    public void i_add_a_log_with_activity_type_to_Timelog(String activityTypeName) {
         AddLogUseCase usecase = new AddLogUseCase(this.logRepository);
         AddLogUseCaseInput addLogUseCaseInput = new AddLogUseCaseInput();
         this.addLogUseCaseOutput= new AddLogUseCaseOutput();
@@ -53,39 +58,37 @@ public class AddLogStepDefinition {
         usecase.execute(addLogUseCaseInput, this.addLogUseCaseOutput);
     }
 
-    @Then("A new log is added")
-    public void a_new_log_is_added() {
+    @Then("The log should be stored in the Timelog")
+    public void the_log_should_be_stored_in_the_Timelog() {
         String logID = this.addLogUseCaseOutput.getLogID();
 
-        assertNotNull(logID);
-
-        this.log = this.logRepository.getByID(UUID.fromString(logID));
+        this.log = this.logRepository.findByID(UUID.fromString(logID));
 
         assertNotNull(this.log);
     }
 
-    @Then("This log has title {string}")
-    public void this_log_has_title(String title) {
+    @Then("The log has title {string}")
+    public void the_log_has_title(String title) {
         assertEquals(title, this.log.getTitle());
     }
 
-    @Then("This log has start time with {string}")
-    public void this_log_has_start_time_with(String startTime) {
+    @Then("The log has start time with {string}")
+    public void the_log_has_start_time_with(String startTime) {
         assertEquals(startTime, this.log.getDateFormat().format(this.log.getStartTime()));
     }
 
-    @Then("This log has end time with {string}")
-    public void this_log_has_end_time_with(String endTime) {
+    @Then("The log has end time with {string}")
+    public void the_log_has_end_time_with(String endTime) {
         assertEquals(endTime, this.log.getDateFormat().format(this.log.getEndTime()));
     }
 
-    @Then("This log has description {string}")
-    public void this_log_has_description(String description) {
+    @Then("The log has description {string}")
+    public void the_log_has_description(String description) {
         assertEquals(description, this.log.getDescription());
     }
 
-    @Then("This log has activity type {string}")
-    public void this_log_has_activity_type(String activityTypeName) {
+    @Then("The log has activity type {string}")
+    public void the_log_has_activity_type(String activityTypeName) {
         assertEquals(activityTypeName, this.log.getActivityTypeName());
     }
 }

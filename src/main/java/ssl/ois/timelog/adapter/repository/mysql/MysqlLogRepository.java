@@ -49,12 +49,17 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public Log getByID(UUID id) {
+    public Log findByID(UUID id) {
         return null;
     }
 
     @Override
     public List<Log> getByUserID(String userID) {
         return new ArrayList<Log>();
+    }
+
+    @Override
+    public Boolean removeByID(UUID id) {
+        return false;
     }
 }

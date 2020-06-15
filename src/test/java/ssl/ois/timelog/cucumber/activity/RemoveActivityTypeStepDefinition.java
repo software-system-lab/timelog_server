@@ -1,5 +1,6 @@
 package ssl.ois.timelog.cucumber.activity;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -22,6 +23,11 @@ public class RemoveActivityTypeStepDefinition {
         this.userStepDefinition = userStepDefinition;
     }
 
+    @Before
+    public void setup() {
+        this.activityTypeListRepository = new MemoryActivityTypeListRepository();
+    }
+
     @Given("I have already had {string} in my activity type list")
     public void i_have_already_had_in_my_activity_type_list(String activityTypeName) {
         this.activityTypeName = activityTypeName;
@@ -29,12 +35,11 @@ public class RemoveActivityTypeStepDefinition {
         ActivityTypeList activityTypeList = new ActivityTypeList(this.userStepDefinition.getUserID());
         activityTypeList.newType(this.activityTypeName);
 
-        this.activityTypeListRepository = new MemoryActivityTypeListRepository();
         this.activityTypeListRepository.save(activityTypeList);
     }
 
-    @When("I want to remove it from my activity type list")
-    public void i_want_to_remove_it_from_my_activity_type_list() {
+    @When("I remove it from my activity type list")
+    public void i_remove_it_from_my_activity_type_list() {
         RemoveActivityTypeUseCase removeActivityTypeUseCase = new RemoveActivityTypeUseCase(this.activityTypeListRepository);
         RemoveActivityTypeUseCaseInput removeActivityTypeUseCaseInput = new RemoveActivityTypeUseCaseInput();
         this.removeActivityTypeUseCaseOutput = new RemoveActivityTypeUseCaseOutput();
@@ -43,11 +48,6 @@ public class RemoveActivityTypeStepDefinition {
         removeActivityTypeUseCaseInput.setUserID(this.userStepDefinition.getUserID());
 
         removeActivityTypeUseCase.execute(removeActivityTypeUseCaseInput, this.removeActivityTypeUseCaseOutput);
-    }
-
-    @Then("I should get the removed activity type name")
-    public void i_should_get_the_removed_activity_type_name() {
-        assertEquals(this.activityTypeName, this.removeActivityTypeUseCaseOutput.getActivityTypeName());
     }
 
     @Then("{string} is not in my activity type list")

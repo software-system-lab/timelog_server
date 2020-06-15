@@ -17,14 +17,22 @@ public class MemoryLogRepository implements LogRepository {
         this.logs = new HashMap<>();
     }
 
+    @Override
     public void save(Log log) {
         this.logs.put(log.getID(), log);
     }
 
-    public Log getByID(UUID id) {
+    @Override
+    public Log findByID(UUID id) {
         return this.logs.get(id);
     }
 
+    @Override
+    public Boolean removeByID(UUID id) {
+        return this.logs.remove(id) != null;
+    }
+
+    @Override
     public List<Log> getByUserID(String userID) {
         List<Log> logs = new ArrayList<Log>();
         for(Log log: this.logs.values()) {
