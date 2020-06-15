@@ -4,23 +4,14 @@ import io.cucumber.java.en.Given;
 
 public class UserStepDefinition {
     private String userID;
-    private String userName;
     
-    @Given("My user ID is {string}")
-    public void my_user_ID_is(String userID) {
+    @Given("I log in to Timelog with user ID {string}")
+    public void i_log_in_to_Timelog_with_user_ID(String userID) {
         this.userID = userID;
-    }
-
-    @Given("My name is {string}")
-    public void my_name_is(String userName) {
-        this.userName = userName;
     }
 
     public String getUserID() {
         return userID;
     }
 
-    public String getUserName() {
-        return userName;
-    }
 }

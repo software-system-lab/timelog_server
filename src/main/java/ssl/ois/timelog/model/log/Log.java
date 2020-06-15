@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Log {
-    private UUID logID;
+    private UUID id;
     private UUID userID;
     private String title;
     private Date startTime;
@@ -22,7 +22,7 @@ public class Log {
                String endTime,
                String description,
                String activityTypeName) {
-        this.logID = UUID.randomUUID();
+        this.id = UUID.randomUUID();
         this.title = title;
         this.userID = userID;
         this.activityTypeName = activityTypeName;
@@ -50,8 +50,8 @@ public class Log {
         return (double)time / (60 * 60 * 1000);
     }
 
-    public UUID getLogID() {
-        return logID;
+    public UUID getID() {
+        return id;
     }
 
     public String getTitle() {

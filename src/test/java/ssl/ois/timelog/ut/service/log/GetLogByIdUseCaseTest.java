@@ -18,14 +18,14 @@ public class GetLogByIdUseCaseTest {
 
     @Before
     public void setup() {
-        User user = new User(UUID.randomUUID(), "Tim");
+        User user = new User(UUID.randomUUID());
         this.logRepository = new MemoryLogRepository();
 
         String logTitle = "Study for Design Pattern";
         String startTime = "2020/04/21 15:00";
         String endTime = "2020/04/21 18:00";
         String description = "Composite Pattern";
-        AddLogUseCaseInput inputData = new AddLogUseCaseInput(user.getUserID().toString(),
+        AddLogUseCaseInput inputData = new AddLogUseCaseInput(user.getID().toString(),
                 logTitle, startTime, endTime, description);
         AddLogUseCaseOutput outputData = new AddLogUseCaseOutput();
         AddLogUseCase addLogUseCase = new AddLogUseCase(this.logRepository);

@@ -32,7 +32,7 @@ public class EnterUseCase {
             // First time login to Timelog
 
             // Create User
-            User user = new User(UUID.fromString(userID), input.getUserName());
+            User user = new User(UUID.fromString(userID));
             this.userRepository.save(UserDTOConverter.toDTO(user));
 
             // Create ActivityTypeList for the user.

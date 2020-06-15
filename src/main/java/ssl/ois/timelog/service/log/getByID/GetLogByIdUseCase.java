@@ -19,7 +19,7 @@ public class GetLogByIdUseCase {
     public void execute(GetLogByIdUseCaseInput input, GetLogByIdUseCaseOutput output) {
         Log log = this.logRepository.getByID(UUID.fromString(input.getLogID()));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        output.setLogId(log.getLogID().toString());
+        output.setLogId(log.getID().toString());
         output.setTitle(log.getTitle());
         output.setStartTime(dateFormat.format(log.getStartTime()));
         output.setEndTime(dateFormat.format(log.getEndTime()));

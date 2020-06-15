@@ -29,7 +29,7 @@ public class MysqlLogRepository implements LogRepository {
                             "(`id`, `user_id`, `title`, `start_time`, `end_time`, `description`, `activity_type`) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 
-                stmt.setString(1, log.getLogID().toString());
+                stmt.setString(1, log.getID().toString());
                 stmt.setString(2, log.getUserID().toString());
                 stmt.setString(3, log.getTitle());
                 stmt.setString(4, SqlDateTimeConverter.convert(log.getStartTime()));

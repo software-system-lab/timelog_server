@@ -18,7 +18,7 @@ public class MemoryLogRepository implements LogRepository {
     }
 
     public void save(Log log) {
-        this.logs.put(log.getLogID(), log);
+        this.logs.put(log.getID(), log);
     }
 
     public Log getByID(UUID id) {

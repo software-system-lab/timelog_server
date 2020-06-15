@@ -11,11 +11,11 @@ public class UserDTOConverter {
     }
 
     public static UserDTO toDTO(User user) {
-        return new UserDTO(user.getUserID().toString(), user.getName());
+        return new UserDTO(user.getID().toString());
     }
 
     public static User toEntity(UserDTO userDTO) {
-        return new User(UUID.fromString(userDTO.getID()), userDTO.getName());
+        return new User(UUID.fromString(userDTO.getID()));
     }
     
 }

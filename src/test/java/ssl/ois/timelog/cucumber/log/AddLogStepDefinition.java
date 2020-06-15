@@ -20,13 +20,13 @@ public class AddLogStepDefinition {
     private String startTime;
     private String endTime;
     private String description;
-    private String activityTypeName;
     private LogRepository logRepository;
     private AddLogUseCaseOutput addLogUseCaseOutput;
     private Log log;
 
     public AddLogStepDefinition(UserStepDefinition userStepDefinition) {
         this.userStepDefinition = userStepDefinition;
+        this.logRepository = new MemoryLogRepository();
     }
 
     @Given("I {string} from {string} to {string}, the description is {string}")
@@ -37,14 +37,8 @@ public class AddLogStepDefinition {
         this.description = description;
     }
 
-    @Given("Activity type {string} is selected")
-    public void activity_type_is_selected(String activityTypeName) {
-        this.activityTypeName = activityTypeName;
-    }
-
-    @When("I record the activity to Timelog")
-    public void i_record_the_activity_to_Timelog() {
-        this.logRepository = new MemoryLogRepository();
+    @When("I record the activity with activity type {string} to Timelog")
+    public void i_record_the_activity_with_activity_type_to_Timelog(String activityTypeName) {
         AddLogUseCase usecase = new AddLogUseCase(this.logRepository);
         AddLogUseCaseInput addLogUseCaseInput = new AddLogUseCaseInput();
         this.addLogUseCaseOutput= new AddLogUseCaseOutput();
@@ -54,7 +48,7 @@ public class AddLogStepDefinition {
         addLogUseCaseInput.setStartTime(this.startTime);
         addLogUseCaseInput.setEndTime(this.endTime);
         addLogUseCaseInput.setDescription(this.description);
-        addLogUseCaseInput.setActivityTypeName(this.activityTypeName);
+        addLogUseCaseInput.setActivityTypeName(activityTypeName);
 
         usecase.execute(addLogUseCaseInput, this.addLogUseCaseOutput);
     }

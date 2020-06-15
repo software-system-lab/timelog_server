@@ -23,6 +23,6 @@ public class AddLogUseCase {
         } catch (ConnectException e) {
             return;
         }
-        output.setLogID(log.getLogID().toString());
+        output.setLogID(log.getID().toString());
     }
 }
