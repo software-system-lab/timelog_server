@@ -1,4 +1,4 @@
-package ssl.ois.timelog.service.log.getByID;
+package ssl.ois.timelog.service.log.get;
 
 import java.text.SimpleDateFormat;
 import java.util.UUID;
