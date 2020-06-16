@@ -9,6 +9,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
+import ssl.ois.timelog.cucumber.common.PrepareLogStepDefinition;
 import ssl.ois.timelog.cucumber.common.UserStepDefinition;
 import ssl.ois.timelog.service.log.LogRepository;
 import ssl.ois.timelog.service.log.add.AddLogUseCase;
@@ -21,33 +22,19 @@ import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseOutput;
 public class RemoveLogStepDefinition {
     
     private UserStepDefinition userStepDefinition;
+    private PrepareLogStepDefinition prepareLogStepDefinition;
     private LogRepository logRepository;
-    private String logID;
 
-    public RemoveLogStepDefinition(UserStepDefinition userStepDefinition) {
+    public RemoveLogStepDefinition(UserStepDefinition userStepDefinition, PrepareLogStepDefinition prepareLogStepDefinition) {
         this.userStepDefinition = userStepDefinition;
+        this.prepareLogStepDefinition = prepareLogStepDefinition;
+        this.prepareLogStepDefinition.setUserStepDefinition(userStepDefinition);
     }
 
     @Before
     public void setup() {
         this.logRepository = new MemoryLogRepository();
-    }
-
-    @Given("I have added a log with title {string} and start time {string} and end time {string} and description {string} and activity type {string} before")
-    public void i_have_added_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type_before(String title, String startTime, String endTime, String description, String activityTypeName) {
-        AddLogUseCase addLogUseCase = new AddLogUseCase(this.logRepository);
-        AddLogUseCaseInput addLogUseCaseInput = new AddLogUseCaseInput();
-        AddLogUseCaseOutput addLogUseCaseOutput = new AddLogUseCaseOutput();
-        addLogUseCaseInput.setUserID(this.userStepDefinition.getUserID());
-        addLogUseCaseInput.setTitle(title);
-        addLogUseCaseInput.setStartTime(startTime);
-        addLogUseCaseInput.setEndTime(endTime);
-        addLogUseCaseInput.setDescription(description);
-        addLogUseCaseInput.setActivityTypeName(activityTypeName);
-
-        addLogUseCase.execute(addLogUseCaseInput, addLogUseCaseOutput);
-
-        this.logID = addLogUseCaseOutput.getLogID();
+        this.prepareLogStepDefinition.setLogRepository(this.logRepository);
     }
 
     @When("I remove the log from my log history")
@@ -56,13 +43,13 @@ public class RemoveLogStepDefinition {
         RemoveLogUseCaseInput removeLogUseCaseInput = new RemoveLogUseCaseInput();
         RemoveLogUseCaseOutput removeLogUseCaseOutput = new RemoveLogUseCaseOutput();
 
-        removeLogUseCaseInput.setLogID(this.logID);
+        removeLogUseCaseInput.setLogID(this.prepareLogStepDefinition.getLogID());
 
         removeLogUseCase.execute(removeLogUseCaseInput, removeLogUseCaseOutput);
     }
 
     @Then("The log should be removed from my log history")
     public void the_log_should_be_removed_from_my_log_history() {
-        assertNull(this.logRepository.findByID(UUID.fromString(this.logID)));
+        assertNull(this.logRepository.findByID(UUID.fromString(this.prepareLogStepDefinition.getLogID())));
     }
 }

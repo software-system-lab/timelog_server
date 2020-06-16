@@ -6,7 +6,7 @@ import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.log.LogRepository;
 import ssl.ois.timelog.service.log.add.*;
-import ssl.ois.timelog.service.log.getByID.*;
+import ssl.ois.timelog.service.log.get.*;
 
 import java.util.UUID;
 

@@ -12,6 +12,7 @@ import io.cucumber.java.en.Then;
 import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeListRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
+import ssl.ois.timelog.cucumber.common.PrepareLogStepDefinition;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.log.add.AddLogUseCase;
@@ -30,6 +31,7 @@ import ssl.ois.timelog.service.user.enter.EnterUseCaseOutput;
 
 public class UserReEnterStepDefinition {
     private String userID;
+    private PrepareLogStepDefinition prepareLogStepDefinition;
     private UserRepository userRepository;
     private ActivityTypeListRepository activityTypeListRepository;
     private LogRepository logRepository;
@@ -37,11 +39,16 @@ public class UserReEnterStepDefinition {
     private List<ActivityType> activityTypeList;
     private List<Log> logList;
 
+    public UserReEnterStepDefinition(PrepareLogStepDefinition prepareLogStepDefinition) {
+        this.prepareLogStepDefinition = prepareLogStepDefinition;
+    }
+
     @Before
     public void setup() {
         this.userRepository = new MemoryUserRepository();
         this.activityTypeListRepository = new MemoryActivityTypeListRepository();
         this.logRepository = new MemoryLogRepository();
+        this.prepareLogStepDefinition.setLogRepository(this.logRepository);
     }
 
     @Given("I have entered the Timelog with user ID {string} before")
@@ -54,6 +61,8 @@ public class UserReEnterStepDefinition {
         enterUseCaseInput.setUserID(userID);
 
         enterUseCase.execute(enterUseCaseInput, new EnterUseCaseOutput());
+
+        this.prepareLogStepDefinition.setUserID(userID);
     }
 
     @Given("I have added a new activity type {string}")
@@ -66,22 +75,6 @@ public class UserReEnterStepDefinition {
         addActivityTypeUseCaseInput.setActivityTypeName(activityTypeName);
 
         addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
-    }
-
-    @Given("I have added a log with title {string} and start time {string} and end time {string} and description {string} and activity type {string}")
-    public void i_have_added_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type(String title, String startTime, String endTime, String description, String activityTypeName) {
-        AddLogUseCase addLogUseCase = new AddLogUseCase(logRepository);
-        AddLogUseCaseInput addLogUseCaseInput = new AddLogUseCaseInput();
-        AddLogUseCaseOutput addLogUseCaseOutput = new AddLogUseCaseOutput();
-
-        addLogUseCaseInput.setUserID(this.userID);
-        addLogUseCaseInput.setTitle(title);
-        addLogUseCaseInput.setStartTime(startTime);
-        addLogUseCaseInput.setEndTime(endTime);
-        addLogUseCaseInput.setDescription(description);
-        addLogUseCaseInput.setActivityTypeName(activityTypeName);
-
-        addLogUseCase.execute(addLogUseCaseInput, addLogUseCaseOutput);
     }
 
     @When("I enter the Timelog with same user ID again")
