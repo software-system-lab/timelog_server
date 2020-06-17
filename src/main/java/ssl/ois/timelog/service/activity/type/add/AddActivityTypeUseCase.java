@@ -15,7 +15,7 @@ public class AddActivityTypeUseCase {
         
         for(ActivityType activityType: activityTypeList.getTypeList()) {
             if(activityType.getName().equals(input.getActivityTypeName())) {
-                return;
+                throw new RuntimeException("Duplicate activity type");
             }
         }
         

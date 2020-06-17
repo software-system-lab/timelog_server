@@ -49,7 +49,7 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public Log findByID(UUID id) {
+    public Log findByID(String id) {
         return null;
     }
 
@@ -59,7 +59,7 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public Boolean removeByID(UUID id) {
+    public Boolean removeByID(String id) {
         return false;
     }
 }

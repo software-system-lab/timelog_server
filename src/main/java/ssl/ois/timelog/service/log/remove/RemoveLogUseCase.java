@@ -12,7 +12,7 @@ public class RemoveLogUseCase {
     }
 
     public void execute(RemoveLogUseCaseInput input, RemoveLogUseCaseOutput output) {
-        Boolean succeed = this.logRepository.removeByID(UUID.fromString(input.getLogID()));
+        Boolean succeed = this.logRepository.removeByID(input.getLogID());
         output.setResult(succeed);
     }
 }

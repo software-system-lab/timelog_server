@@ -8,10 +8,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class MemoryLogRepository implements LogRepository {
-    private Map<UUID, Log> logs;
+    private Map<String, Log> logs;
 
     public MemoryLogRepository() {
         this.logs = new HashMap<>();
@@ -19,16 +18,16 @@ public class MemoryLogRepository implements LogRepository {
 
     @Override
     public void save(Log log) {
-        this.logs.put(log.getID(), log);
+        this.logs.put(log.getID().toString(), log);
     }
 
     @Override
-    public Log findByID(UUID id) {
+    public Log findByID(String id) {
         return this.logs.get(id);
     }
 
     @Override
-    public Boolean removeByID(UUID id) {
+    public Boolean removeByID(String id) {
         return this.logs.remove(id) != null;
     }
 

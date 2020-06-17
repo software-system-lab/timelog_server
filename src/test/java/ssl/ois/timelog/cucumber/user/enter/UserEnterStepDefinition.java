@@ -2,25 +2,22 @@ package ssl.ois.timelog.cucumber.user.enter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.net.ConnectException;
 import java.util.List;
+import java.util.UUID;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeListRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
-import ssl.ois.timelog.cucumber.common.PrepareLogStepDefinition;
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.log.Log;
-import ssl.ois.timelog.service.log.add.AddLogUseCase;
-import ssl.ois.timelog.service.log.add.AddLogUseCaseInput;
-import ssl.ois.timelog.service.log.add.AddLogUseCaseOutput;
-import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCase;
-import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseInput;
-import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseOutput;
 import ssl.ois.timelog.service.log.LogRepository;
 import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.UserRepository;
@@ -28,10 +25,8 @@ import ssl.ois.timelog.service.user.enter.EnterUseCase;
 import ssl.ois.timelog.service.user.enter.EnterUseCaseInput;
 import ssl.ois.timelog.service.user.enter.EnterUseCaseOutput;
 
-
-public class UserReEnterStepDefinition {
+public class UserEnterStepDefinition {
     private String userID;
-    private PrepareLogStepDefinition prepareLogStepDefinition;
     private UserRepository userRepository;
     private ActivityTypeListRepository activityTypeListRepository;
     private LogRepository logRepository;
@@ -39,42 +34,76 @@ public class UserReEnterStepDefinition {
     private List<ActivityType> activityTypeList;
     private List<Log> logList;
 
-    public UserReEnterStepDefinition(PrepareLogStepDefinition prepareLogStepDefinition) {
-        this.prepareLogStepDefinition = prepareLogStepDefinition;
-    }
-
     @Before
     public void setup() {
         this.userRepository = new MemoryUserRepository();
         this.activityTypeListRepository = new MemoryActivityTypeListRepository();
         this.logRepository = new MemoryLogRepository();
-        this.prepareLogStepDefinition.setLogRepository(this.logRepository);
+    }
+
+    @Given("My user ID is {string}")
+    public void my_user_ID_is(String userID) {
+        this.userID = userID;
+    }
+
+    @When("I first time enter Timelog")
+    public void i_first_time_enter_Timelog() {
+        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeListRepository, this.logRepository);
+        EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
+        enterUseCaseInput.setUserID(this.userID);
+        this.enterUseCaseOutput = new EnterUseCaseOutput();
+
+        enterUseCase.execute(enterUseCaseInput, enterUseCaseOutput);
+    }
+
+    @Then("I will get my activity type list that only contains {string}")
+    public void i_will_get_my_activity_type_list_that_only_contains(String activityTypeName) {
+        // assertion for output of use case
+        List<ActivityType> activityTypeListFromOutput = this.enterUseCaseOutput.getActivityTypeList();
+        assertEquals(1, activityTypeListFromOutput.size());
+        assertEquals(activityTypeName, activityTypeListFromOutput.get(0).getName());
+
+        // verify that the activity type is actually stored
+        List<ActivityType> activityTypeListFromRepo = this.activityTypeListRepository.findByUserID(this.userID).getTypeList();
+        assertEquals(1, activityTypeListFromRepo.size());
+        assertEquals(activityTypeName, activityTypeListFromRepo.get(0).getName());
+    }
+
+    @Then("I will get my log list that contains nothing")
+    public void i_will_get_my_log_list_that_contains_nothing() {
+        List<Log> logs = this.enterUseCaseOutput.getLogList();
+        assertTrue(logs.isEmpty(), "The log list is not empty");
     }
 
     @Given("I have entered the Timelog with user ID {string} before")
     public void i_have_entered_the_Timelog_with_user_ID_before(String userID) {
         EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeListRepository, this.logRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
+        EnterUseCaseOutput enterUseCaseOutput = new EnterUseCaseOutput();
 
         this.userID = userID;
 
         enterUseCaseInput.setUserID(userID);
 
-        enterUseCase.execute(enterUseCaseInput, new EnterUseCaseOutput());
-
-        this.prepareLogStepDefinition.setUserID(userID);
+        enterUseCase.execute(enterUseCaseInput, enterUseCaseOutput);
     }
 
-    @Given("I have added a new activity type {string}")
-    public void i_have_added_a_new_activity_type(String activityTypeName) {
-        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.activityTypeListRepository);
-        AddActivityTypeUseCaseInput addActivityTypeUseCaseInput = new AddActivityTypeUseCaseInput();
-        AddActivityTypeUseCaseOutput addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
+    @Given("There is an activity type {string} in my activity type list")
+    public void there_is_an_activity_type_in_my_activity_type_list(String activityTypeName) {
+        ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(this.userID);
+        activityTypeList.newType(activityTypeName);
+        this.activityTypeListRepository.update(activityTypeList);
+    }
 
-        addActivityTypeUseCaseInput.setUserID(this.userID);
-        addActivityTypeUseCaseInput.setActivityTypeName(activityTypeName);
-
-        addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
+    @Given("There is a log with title {string} and start time {string} and end time {string} and description {string} and activity type {string} in my log history")
+    public void there_is_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type_in_my_log_history(String title, String startTime, String endTime, String description, String activityTypeName) {
+        try {
+            this.logRepository.save(
+                new Log(UUID.fromString(this.userID), title, startTime, endTime, description, activityTypeName)
+            );
+        } catch (ConnectException e) {
+            fail(e.getMessage());
+        }
     }
 
     @When("I enter the Timelog with same user ID again")
