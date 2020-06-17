@@ -9,7 +9,6 @@ import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.UserRepository;
-import ssl.ois.timelog.service.user.dto.UserDTOConverter;
 
 public class UserStepDefinition {
     private String userID;
@@ -24,7 +23,7 @@ public class UserStepDefinition {
     @Given("I log in to Timelog with user ID {string}")
     public void i_log_in_to_Timelog_with_user_ID(String userID) {
         if (this.userRepository.findByUserID(userID) == null) {
-            this.userRepository.save(UserDTOConverter.toDTO(new User(UUID.fromString(userID))));
+            this.userRepository.save(new User(UUID.fromString(userID)));
 
             ActivityTypeList activityTypeList = new ActivityTypeList(userID);
             activityTypeList.newType("Others");

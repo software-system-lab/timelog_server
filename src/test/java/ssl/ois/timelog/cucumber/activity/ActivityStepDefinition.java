@@ -25,7 +25,6 @@ import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseInp
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOutput;
 import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.UserRepository;
-import ssl.ois.timelog.service.user.dto.UserDTOConverter;
 import io.cucumber.java.en.Then;
 
 public class ActivityStepDefinition {
@@ -48,7 +47,7 @@ public class ActivityStepDefinition {
     @Given("[Activity] I log in to Timelog with user ID {string}")
     public void activity_i_log_in_to_Timelog_with_user_ID(String userID) {
         if (this.userRepository.findByUserID(userID) == null) {
-            this.userRepository.save(UserDTOConverter.toDTO(new User(UUID.fromString(userID))));
+            this.userRepository.save(new User(UUID.fromString(userID)));
 
             ActivityTypeList activityTypeList = new ActivityTypeList(userID);
             activityTypeList.newType("Others");
@@ -172,11 +171,5 @@ public class ActivityStepDefinition {
         
         assertFalse(oldFound);
         assertTrue(newFound);
-    }
-
-    @Then("the activity type is disabled and private")
-    public void the_activity_type_is_disabled_and_private() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
     }
 }

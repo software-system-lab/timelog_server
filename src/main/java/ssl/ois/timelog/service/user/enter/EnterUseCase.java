@@ -6,8 +6,6 @@ import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.log.LogRepository;
 import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.UserRepository;
-import ssl.ois.timelog.service.user.dto.UserDTO;
-import ssl.ois.timelog.service.user.dto.UserDTOConverter;
 
 import java.util.UUID;
 import java.util.ArrayList;
@@ -25,15 +23,14 @@ public class EnterUseCase {
 
     public void execute(EnterUseCaseInput input, EnterUseCaseOutput output) {
         String userID = input.getUserID();
-        UserDTO userDTO = this.userRepository.findByUserID(userID);
+        User user = this.userRepository.findByUserID(userID);
 
         ActivityTypeList activityTypeList;
-        if (userDTO == null) {
+        if (user == null) {
             // First time login to Timelog
 
             // Create User
-            User user = new User(UUID.fromString(userID));
-            this.userRepository.save(UserDTOConverter.toDTO(user));
+            this.userRepository.save(new User(UUID.fromString(userID)));
 
             // Create ActivityTypeList for the user.
             activityTypeList = new ActivityTypeList(userID);
