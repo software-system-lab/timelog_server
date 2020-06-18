@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.common.SqlDateTimeConverter;
 import ssl.ois.timelog.model.log.Log;
+import ssl.ois.timelog.service.exception.log.GetLogErrorException;
+import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 
 import java.net.ConnectException;
@@ -22,15 +24,14 @@ public class MysqlLogRepository implements LogRepository {
     private MysqlDriverAdapter mysqlDriverAdapter;
 
     @Override
-    public void save(Log log) throws ConnectException {
+    public void save(Log log) throws SaveLogErrorException {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
 
-            try (PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO `log`" +
-                            "(`id`, `user_id`, `title`, `start_time`, `end_time`, `description`, `activity_type`) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+            try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO `log`"
+                    + "(`id`, `user_id`, `title`, `start_time`, `end_time`, `description`, `activity_type`) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 
                 stmt.setString(1, log.getID().toString());
                 stmt.setString(2, log.getUserID().toString());
@@ -43,14 +44,14 @@ public class MysqlLogRepository implements LogRepository {
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new ConnectException(e.getMessage());
+            throw new SaveLogErrorException(log.getTitle());
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
         }
     }
 
     @Override
-    public Log findByID(String id) {
+    public Log findByID(String id) throws GetLogErrorException {
         Connection connection = null;
         Log log = null;
         try {
@@ -61,7 +62,7 @@ public class MysqlLogRepository implements LogRepository {
                 stmt.setString(1, id);
 
                 ResultSet rs = stmt.executeQuery();
-                
+
                 rs.next();
 
                 UUID logID = UUID.fromString(rs.getString("id"));
@@ -74,7 +75,7 @@ public class MysqlLogRepository implements LogRepository {
                 log = new Log(logID, userID, title, startTime, endTime, description, activityTypeName);
             }
         } catch (SQLException e) {
-            
+            throw new GetLogErrorException(id);
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
         }
@@ -82,12 +83,12 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public List<Log> getByUserID(String userID) {
-        return new ArrayList<Log>();
+    public List<Log> getByUserID(String userID) throws GetLogErrorException {
+        return new ArrayList<>();
     }
 
     @Override
-    public Boolean removeByID(String id) {
+    public Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException {
         return false;
     }
 }

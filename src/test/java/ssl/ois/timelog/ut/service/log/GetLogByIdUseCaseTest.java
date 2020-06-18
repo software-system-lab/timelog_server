@@ -5,12 +5,15 @@ import org.junit.Test;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.log.LogRepository;
+import ssl.ois.timelog.service.exception.log.GetLogErrorException;
+import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.get.*;
 
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class GetLogByIdUseCaseTest {
     private LogRepository logRepository;
@@ -25,11 +28,15 @@ public class GetLogByIdUseCaseTest {
         String startTime = "2020/04/21 15:00";
         String endTime = "2020/04/21 18:00";
         String description = "Composite Pattern";
-        AddLogUseCaseInput inputData = new AddLogUseCaseInput(user.getID().toString(),
-                logTitle, startTime, endTime, description);
+        AddLogUseCaseInput inputData = new AddLogUseCaseInput(user.getID().toString(), logTitle, startTime, endTime,
+                description);
         AddLogUseCaseOutput outputData = new AddLogUseCaseOutput();
         AddLogUseCase addLogUseCase = new AddLogUseCase(this.logRepository);
-        addLogUseCase.execute(inputData, outputData);
+        try {
+            addLogUseCase.execute(inputData, outputData);
+        } catch (SaveLogErrorException e) {
+            fail(e.getMessage());
+        }
         this.logID = outputData.getLogID();
     }
 
@@ -41,7 +48,11 @@ public class GetLogByIdUseCaseTest {
 
         input.setLogID(this.logID);
 
-        service.execute(input, output);
+        try {
+            service.execute(input, output);
+        } catch (GetLogErrorException e) {
+            fail(e.getMessage());
+        }
 
         assertEquals(this.logID, output.getLogId());
         assertEquals("Study for Design Pattern", output.getTitle());

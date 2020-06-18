@@ -17,12 +17,15 @@ import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseOutput;
+import ssl.ois.timelog.service.activity.type.add.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCaseOutput;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOutput;
+import ssl.ois.timelog.service.exception.activityType.GetActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
 import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import io.cucumber.java.en.Then;
@@ -51,7 +54,11 @@ public class ActivityStepDefinition {
 
             ActivityTypeList activityTypeList = new ActivityTypeList(userID);
             activityTypeList.newType("Others");
-            this.activityTypeListRepository.save(activityTypeList);
+            try {
+                this.activityTypeListRepository.save(activityTypeList);
+            } catch (SaveActivityTypeErrorException e) {
+                fail(e.getMessage());
+            }
         }
 
         this.userID = userID;
@@ -71,18 +78,27 @@ public class ActivityStepDefinition {
         addActivityTypeUseCaseInput.setUserID(this.userID);
         addActivityTypeUseCaseInput.setActivityTypeName(this.activityTypeName);
 
-        addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
+        try {
+            addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
+        } catch (GetActivityTypeErrorException | DuplicateActivityTypeException | SaveActivityTypeErrorException e) {
+            fail(e.getMessage());
+        }
     }
 
     @Then("{string} is in my activity type list")
     public void is_in_my_activity_type_list(String activityTypeName) {
         Boolean found = false;
-        for(ActivityType activityType : this.activityTypeListRepository.findByUserID(this.userID).getTypeList()) {
-            if(activityType.getName().equals(activityTypeName)) {
-                found = true;
+        try {
+            for(ActivityType activityType : this.activityTypeListRepository.findByUserID(this.userID).getTypeList()) {
+                if(activityType.getName().equals(activityTypeName)) {
+                    found = true;
+                }
             }
+            assertTrue(found);
+        } catch (GetActivityTypeErrorException e) {
+            fail(e.getMessage());
         }
-        assertTrue(found);
+        
     }
 
     @Given("I have already had {string} in my activity type list")
@@ -94,7 +110,11 @@ public class ActivityStepDefinition {
         addActivityTypeUseCaseInput.setUserID(this.userID);
         addActivityTypeUseCaseInput.setActivityTypeName(activityTypeName);
 
-        addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
+        try {
+            addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
+        } catch (GetActivityTypeErrorException | DuplicateActivityTypeException | SaveActivityTypeErrorException e) {
+            fail(e.getMessage());
+        }
 
         this.activityTypeName = addActivityTypeUseCaseOutput.getActivityTypeName();
     }
@@ -110,7 +130,9 @@ public class ActivityStepDefinition {
 
         try {
             addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
-        } catch (RuntimeException e) {
+        } catch (GetActivityTypeErrorException | SaveActivityTypeErrorException e) {
+            fail(e.getMessage());
+        } catch (DuplicateActivityTypeException e) {
             this.errorOccurred = true;
         }
     }
@@ -129,16 +151,24 @@ public class ActivityStepDefinition {
         removeActivityTypeUseCaseInput.setActivityTypeName(this.activityTypeName);
         removeActivityTypeUseCaseInput.setUserID(this.userID);
 
-        removeActivityTypeUseCase.execute(removeActivityTypeUseCaseInput, removeActivityTypeUseCaseOutput);
+        try {
+            removeActivityTypeUseCase.execute(removeActivityTypeUseCaseInput, removeActivityTypeUseCaseOutput);
+        } catch (GetActivityTypeErrorException | SaveActivityTypeErrorException e) {
+            fail("Fail to remove activity");
+        }
     }
 
     @Then("{string} is not in my activity type list")
     public void is_not_in_my_activity_type_list(String activityTypeName) {
-         for(ActivityType activityType : this.activityTypeListRepository.findByUserID(this.userID).getTypeList()) {
-             if(activityType.getName().equals(activityTypeName)) {
-                 fail("Activity Type is not removed from the repository");
-             }
-         }
+        try {
+            for(ActivityType activityType : this.activityTypeListRepository.findByUserID(this.userID).getTypeList()) {
+                if(activityType.getName().equals(activityTypeName)) {
+                    fail("Activity Type is not removed from the repository");
+                }
+            }
+        } catch (GetActivityTypeErrorException e) {
+            fail(e.getMessage());
+        }
     }
 
     @When("I change the activity name to {string} and set its state to disabled and private")
@@ -153,23 +183,30 @@ public class ActivityStepDefinition {
         editActivityTypeUseCaseInput.setIsEnable(false);
         editActivityTypeUseCaseInput.setIsPrivate(true);
 
-        editActivityTypeUseCase.execute(editActivityTypeUseCaseInput, editActivityTypeUseCaseOutput);
+        try {
+            editActivityTypeUseCase.execute(editActivityTypeUseCaseInput, editActivityTypeUseCaseOutput);
+        } catch (GetActivityTypeErrorException | SaveActivityTypeErrorException e) {
+            fail("Fail to edit the activity type");
+        }
     }
 
     @Then("The activity type {string} should change its name to {string} and become disabled and private")
     public void the_activity_type_should_change_its_name_to(String oldActivityTypeName, String newActivityTypeName) {
         Boolean oldFound = false;
         Boolean newFound = false;
-        for (ActivityType activityType: this.activityTypeListRepository.findByUserID(this.userID).getTypeList()) {
-            System.out.println(activityType.getName());
-            if (activityType.getName().equals(oldActivityTypeName)) {
-                oldFound = true;
+        try {
+            for (ActivityType activityType: this.activityTypeListRepository.findByUserID(this.userID).getTypeList()) {
+                if (activityType.getName().equals(oldActivityTypeName)) {
+                    oldFound = true;
+                }
+                if (activityType.getName().equals(newActivityTypeName) &&
+                    activityType.isEnable() == false &&
+                    activityType.isPrivate() == true) {
+                        newFound = true;
+                }
             }
-            if (activityType.getName().equals(newActivityTypeName) &&
-                activityType.isEnable() == false &&
-                activityType.isPrivate() == true) {
-                    newFound = true;
-            }
+        } catch (GetActivityTypeErrorException e) {
+            fail(e.getMessage());
         }
         
         assertFalse(oldFound);

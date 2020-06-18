@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import ssl.ois.timelog.service.exception.log.GetLogErrorException;
+import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.get.*;
 
@@ -31,18 +34,25 @@ public class LogRestAdapter {
         input.setDescription(requestBody.getDescription());
         input.setActivityTypeName(requestBody.getActivityName());
 
-        this.addLogUseCase.execute(input, output);
+        try {
+            this.addLogUseCase.execute(input, output);
+        } catch (SaveLogErrorException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseOutput());
+        }
 
         ResponseOutput responseOutput = new ResponseOutput();
         responseOutput.setLogID(output.getLogID());
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(responseOutput);
+        return ResponseEntity.status(HttpStatus.OK).body(responseOutput);
     }
 
     @PostMapping(value = "/get/id")
     public ResponseEntity<GetLogByIdUseCaseOutput> getLogByTitle(@RequestBody GetLogByIdUseCaseInput input) {
         GetLogByIdUseCaseOutput output = new GetLogByIdUseCaseOutput();
-        this.getLogById.execute(input, output);
+        try {
+            this.getLogById.execute(input, output);
+        } catch (GetLogErrorException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }
 

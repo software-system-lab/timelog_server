@@ -19,6 +19,9 @@ import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.repository.log.LogRepository;
+import ssl.ois.timelog.service.exception.activityType.GetActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import ssl.ois.timelog.service.user.enter.EnterUseCase;
@@ -48,12 +51,16 @@ public class UserEnterStepDefinition {
 
     @When("I first time enter Timelog")
     public void i_first_time_enter_Timelog() {
-        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeListRepository, this.logRepository);
+        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeListRepository,
+                this.logRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         enterUseCaseInput.setUserID(this.userID);
         this.enterUseCaseOutput = new EnterUseCaseOutput();
-
-        enterUseCase.execute(enterUseCaseInput, enterUseCaseOutput);
+        try {
+            enterUseCase.execute(enterUseCaseInput, enterUseCaseOutput);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
     }
 
     @Then("I will get my activity type list that only contains {string}")
@@ -64,9 +71,14 @@ public class UserEnterStepDefinition {
         assertEquals(activityTypeName, activityTypeListFromOutput.get(0).getName());
 
         // verify that the activity type is actually stored
-        List<ActivityType> activityTypeListFromRepo = this.activityTypeListRepository.findByUserID(this.userID).getTypeList();
-        assertEquals(1, activityTypeListFromRepo.size());
-        assertEquals(activityTypeName, activityTypeListFromRepo.get(0).getName());
+        try {
+            List<ActivityType> activityTypeListFromRepo = this.activityTypeListRepository.findByUserID(this.userID)
+                    .getTypeList();
+            assertEquals(1, activityTypeListFromRepo.size());
+            assertEquals(activityTypeName, activityTypeListFromRepo.get(0).getName());
+        } catch (GetActivityTypeErrorException e) {
+            fail(e.getMessage());
+        }
     }
 
     @Then("I will get my log list that contains nothing")
@@ -77,7 +89,8 @@ public class UserEnterStepDefinition {
 
     @Given("I have entered the Timelog with user ID {string} before")
     public void i_have_entered_the_Timelog_with_user_ID_before(String userID) {
-        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeListRepository, this.logRepository);
+        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeListRepository,
+                this.logRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         EnterUseCaseOutput enterUseCaseOutput = new EnterUseCaseOutput();
 
@@ -85,14 +98,22 @@ public class UserEnterStepDefinition {
 
         enterUseCaseInput.setUserID(userID);
 
-        enterUseCase.execute(enterUseCaseInput, enterUseCaseOutput);
+        try {
+            enterUseCase.execute(enterUseCaseInput, enterUseCaseOutput);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
     }
 
     @Given("There is an activity type {string} in my activity type list")
     public void there_is_an_activity_type_in_my_activity_type_list(String activityTypeName) {
-        ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(this.userID);
-        activityTypeList.newType(activityTypeName);
-        this.activityTypeListRepository.update(activityTypeList);
+        try {
+            ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(this.userID);
+            activityTypeList.newType(activityTypeName);
+            this.activityTypeListRepository.update(activityTypeList);
+        } catch (GetActivityTypeErrorException | SaveActivityTypeErrorException e) {
+            fail(e.getMessage());
+        }
     }
 
     @Given("There is a log with title {string} and start time {string} and end time {string} and description {string} and activity type {string} in my log history")
@@ -101,7 +122,7 @@ public class UserEnterStepDefinition {
             this.logRepository.save(
                 new Log(UUID.fromString(this.userID), title, startTime, endTime, description, activityTypeName)
             );
-        } catch (ConnectException e) {
+        } catch (SaveLogErrorException e) {
             fail(e.getMessage());
         }
     }
@@ -114,7 +135,11 @@ public class UserEnterStepDefinition {
 
         enterUseCaseInput.setUserID(this.userID);
 
-        enterUseCase.execute(enterUseCaseInput, this.enterUseCaseOutput);
+        try {
+            enterUseCase.execute(enterUseCaseInput, enterUseCaseOutput);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
     }
 
     @Then("I will get my activity type list and log list")

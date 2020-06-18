@@ -1,5 +1,7 @@
 package ssl.ois.timelog.cucumber.common;
 
+import static org.junit.Assert.fail;
+
 import java.util.UUID;
 
 import io.cucumber.java.en.Given;
@@ -7,6 +9,7 @@ import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeListRepositor
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.user.User;
+import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
 import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
@@ -27,7 +30,11 @@ public class UserStepDefinition {
 
             ActivityTypeList activityTypeList = new ActivityTypeList(userID);
             activityTypeList.newType("Others");
-            this.activityTypeListRepository.save(activityTypeList);
+            try {
+                this.activityTypeListRepository.save(activityTypeList);
+            } catch (SaveActivityTypeErrorException e) {
+                fail(e.getMessage());
+            }
         }
 
         this.userID = userID;

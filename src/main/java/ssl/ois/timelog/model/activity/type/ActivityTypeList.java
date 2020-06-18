@@ -1,7 +1,6 @@
 package ssl.ois.timelog.model.activity.type;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeNotExistException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,11 +23,9 @@ public class ActivityTypeList {
         return Collections.unmodifiableList(typeList);
     }
 
-    public void updateType(String activityTypeName, ActivityType activityType) throws ActivityTypeNotExistException {
+    public void updateType(String activityTypeName, ActivityType activityType) {
         if (this.typeList.removeIf(type -> type.getName().equals(activityTypeName))) {
             this.typeList.add(activityType);
-        } else {
-            throw new ActivityTypeNotExistException(activityTypeName);
         }
     }
 

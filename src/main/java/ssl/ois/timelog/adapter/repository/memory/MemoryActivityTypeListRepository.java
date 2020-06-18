@@ -11,6 +11,7 @@ public class MemoryActivityTypeListRepository implements ActivityTypeListReposit
     public MemoryActivityTypeListRepository(){
         this.activityTypeListMap = new HashMap<>();
     }
+    
     @Override
     public void save(ActivityTypeList activityTypeList) {
         this.activityTypeListMap.put(activityTypeList.getUserID(), activityTypeList);

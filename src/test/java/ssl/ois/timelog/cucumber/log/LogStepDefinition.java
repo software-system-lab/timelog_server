@@ -18,6 +18,9 @@ import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.log.LogRepository;
+import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.log.GetLogErrorException;
+import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCase;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseInput;
@@ -38,7 +41,6 @@ public class LogStepDefinition {
     private String logID;
     private String userID;
 
-
     @Before
     public void setup() {
         this.userRepository = new MemoryUserRepository();
@@ -53,7 +55,11 @@ public class LogStepDefinition {
 
             ActivityTypeList activityTypeList = new ActivityTypeList(userID);
             activityTypeList.newType("Others");
-            this.activityTypeListRepository.save(activityTypeList);
+            try {
+                this.activityTypeListRepository.save(activityTypeList);
+            } catch (SaveActivityTypeErrorException e) {
+                fail(e.getMessage());
+            }
         }
 
         this.userID = userID;
@@ -72,7 +78,7 @@ public class LogStepDefinition {
         AddLogUseCase usecase = new AddLogUseCase(this.logRepository);
         AddLogUseCaseInput addLogUseCaseInput = new AddLogUseCaseInput();
         AddLogUseCaseOutput addLogUseCaseOutput = new AddLogUseCaseOutput();
-        
+
         addLogUseCaseInput.setUserID(this.userID);
         addLogUseCaseInput.setTitle(this.title);
         addLogUseCaseInput.setStartTime(this.startTime);
@@ -80,14 +86,22 @@ public class LogStepDefinition {
         addLogUseCaseInput.setDescription(this.description);
         addLogUseCaseInput.setActivityTypeName(activityTypeName);
 
-        usecase.execute(addLogUseCaseInput, addLogUseCaseOutput);
+        try {
+            usecase.execute(addLogUseCaseInput, addLogUseCaseOutput);
+        } catch (SaveLogErrorException e) {
+            fail(e.getMessage());
+        }
 
         this.logID = addLogUseCaseOutput.getLogID();
     }
 
     @Then("The log should be stored in the Timelog")
     public void the_log_should_be_stored_in_the_Timelog() {
-        this.log = this.logRepository.findByID(this.logID);
+        try {
+            this.log = this.logRepository.findByID(this.logID);
+        } catch (GetLogErrorException e) {
+            fail(e.getMessage());
+        }
         assertNotNull(this.log);
     }
 
@@ -117,12 +131,12 @@ public class LogStepDefinition {
     }
 
     @Given("I have added a log with title {string} and start time {string} and end time {string} and description {string} and activity type {string} before")
-    public void i_have_added_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type_before(String title, String startTime, String endTime, String description, String activityTypeName) {
+    public void i_have_added_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type_before(
+            String title, String startTime, String endTime, String description, String activityTypeName) {
         try {
             this.logRepository.save(
-                new Log(UUID.fromString(this.userID), title, startTime, endTime, description, activityTypeName)
-            );
-        } catch (ConnectException e) {
+                    new Log(UUID.fromString(this.userID), title, startTime, endTime, description, activityTypeName));
+        } catch (SaveLogErrorException e) {
             fail(e.getMessage());
         }
     }
@@ -135,11 +149,19 @@ public class LogStepDefinition {
 
         removeLogUseCaseInput.setLogID(this.logID);
 
-        removeLogUseCase.execute(removeLogUseCaseInput, removeLogUseCaseOutput);
+        try {
+            removeLogUseCase.execute(removeLogUseCaseInput, removeLogUseCaseOutput);
+        } catch (GetLogErrorException | SaveLogErrorException e) {
+            fail(e.getMessage());
+        }
     }
 
     @Then("The log should be removed from my log history")
     public void the_log_should_be_removed_from_my_log_history() {
-        assertNull(this.logRepository.findByID(this.logID));
+        try {
+            assertNull(this.logRepository.findByID(this.logID));
+        } catch (GetLogErrorException e) {
+            fail(e.getMessage());
+        }
     }
 }
