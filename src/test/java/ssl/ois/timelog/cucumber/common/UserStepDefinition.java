@@ -9,8 +9,8 @@ import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeListRepositor
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
+import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
 public class UserStepDefinition {
@@ -45,7 +45,6 @@ public class UserStepDefinition {
     }
 
     public ActivityTypeListRepository getAcivityTypeListRepository() {
-        System.out.println(this.activityTypeListRepository);
         return this.activityTypeListRepository;
     }
 

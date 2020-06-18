@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.exception.activityType.GetActivityTypeErrorException;
-import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
+import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
 
 public class MysqlActivityTypeListRepository implements ActivityTypeListRepository{
     @Autowired

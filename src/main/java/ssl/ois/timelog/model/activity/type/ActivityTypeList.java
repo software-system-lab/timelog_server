@@ -1,7 +1,5 @@
 package ssl.ois.timelog.model.activity.type;
 
-import ssl.ois.timelog.model.activity.type.ActivityType;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

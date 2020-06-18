@@ -1,8 +1,8 @@
-package ssl.ois.timelog.service.repository.activityType;
+package ssl.ois.timelog.service.repository.activity;
 
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.exception.activityType.GetActivityTypeErrorException;
-import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
 
 public interface ActivityTypeListRepository {
     public void save(ActivityTypeList activityTypeList) throws SaveActivityTypeErrorException;

@@ -24,9 +24,9 @@ import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCaseOutput;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOutput;
-import ssl.ois.timelog.service.exception.activityType.GetActivityTypeErrorException;
-import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
+import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import io.cucumber.java.en.Then;
 
@@ -200,8 +200,8 @@ public class ActivityStepDefinition {
                     oldFound = true;
                 }
                 if (activityType.getName().equals(newActivityTypeName) &&
-                    activityType.isEnable() == false &&
-                    activityType.isPrivate() == true) {
+                    !activityType.isEnable() &&
+                    activityType.isPrivate()) {
                         newFound = true;
                 }
             }

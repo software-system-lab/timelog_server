@@ -4,12 +4,12 @@ import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.exception.activityType.GetActivityTypeErrorException;
-import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.user.InitUserDataErrorException;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
 import java.util.UUID;

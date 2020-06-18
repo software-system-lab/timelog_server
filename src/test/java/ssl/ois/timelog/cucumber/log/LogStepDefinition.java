@@ -17,15 +17,15 @@ import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCase;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseInput;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseOutput;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import io.cucumber.java.en.Then;
 
