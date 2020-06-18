@@ -1,7 +1,7 @@
 package ssl.ois.timelog.adapter.repository.memory;
 
 import ssl.ois.timelog.model.log.Log;
-import ssl.ois.timelog.service.log.LogRepository;
+import ssl.ois.timelog.service.repository.log.LogRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;

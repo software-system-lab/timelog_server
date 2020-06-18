@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import ssl.ois.timelog.model.log.Log;
-import ssl.ois.timelog.service.log.LogRepository;
+import ssl.ois.timelog.service.repository.log.LogRepository;
 
 @Service
 public class AddLogUseCase {

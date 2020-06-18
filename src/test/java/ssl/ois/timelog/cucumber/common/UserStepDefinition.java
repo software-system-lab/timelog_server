@@ -7,8 +7,8 @@ import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeListRepositor
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
-import ssl.ois.timelog.service.repository.UserRepository;
+import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
+import ssl.ois.timelog.service.repository.user.UserRepository;
 
 public class UserStepDefinition {
     private String userID;

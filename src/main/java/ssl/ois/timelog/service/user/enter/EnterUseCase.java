@@ -3,9 +3,9 @@ package ssl.ois.timelog.service.user.enter;
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.log.LogRepository;
-import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
-import ssl.ois.timelog.service.repository.UserRepository;
+import ssl.ois.timelog.service.repository.log.LogRepository;
+import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
+import ssl.ois.timelog.service.repository.user.UserRepository;
 
 import java.util.UUID;
 import java.util.ArrayList;

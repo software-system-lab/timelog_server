@@ -2,7 +2,7 @@ package ssl.ois.timelog.service.activity.type.add;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
+import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
 
 public class AddActivityTypeUseCase {
     private ActivityTypeListRepository activityTypeListRepository;

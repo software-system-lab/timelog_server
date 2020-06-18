@@ -1,8 +1,6 @@
 package ssl.ois.timelog.service.log.remove;
 
-import java.util.UUID;
-
-import ssl.ois.timelog.service.log.LogRepository;
+import ssl.ois.timelog.service.repository.log.LogRepository;
 
 public class RemoveLogUseCase {
     private LogRepository logRepository;

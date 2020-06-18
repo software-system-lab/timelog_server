@@ -1,7 +1,7 @@
 package ssl.ois.timelog.adapter.repository.memory;
 
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
+import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
 
 import java.util.HashMap;
 import java.util.Map;

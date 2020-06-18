@@ -1,4 +1,4 @@
-package ssl.ois.timelog.service.log;
+package ssl.ois.timelog.service.repository.log;
 
 import ssl.ois.timelog.model.log.Log;
 

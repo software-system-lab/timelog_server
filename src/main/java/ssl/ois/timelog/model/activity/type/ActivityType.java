@@ -11,6 +11,12 @@ public class ActivityType {
         this.isPrivate = false;
     }
 
+    public ActivityType(String name, Boolean isEnable, Boolean isPrivate) {
+        this.name = name;
+        this.isEnable = isEnable;
+        this.isPrivate = isPrivate;
+    }
+
     public String getName() {
         return name;
     }

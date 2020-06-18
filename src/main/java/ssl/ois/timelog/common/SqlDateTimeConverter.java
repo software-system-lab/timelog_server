@@ -1,15 +1,25 @@
 package ssl.ois.timelog.common;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SqlDateTimeConverter {
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
     private SqlDateTimeConverter() {
         throw new IllegalStateException("Utility class");
     }
 
-    public static String convert(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static String toString(Date date) {
         return sdf.format(date);
+    }
+
+    public static Date toDate(String dateString) throws ParseException {
+        try {
+            return sdf.parse(dateString);
+        } catch (ParseException e) {
+            throw e;
+        }
     }
 }

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.repository.UserRepository;
+import ssl.ois.timelog.service.repository.user.UserRepository;
 
 public class MysqlUserRepository implements UserRepository {
     @Autowired

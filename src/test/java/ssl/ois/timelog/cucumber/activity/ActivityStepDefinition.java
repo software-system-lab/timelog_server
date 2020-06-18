@@ -23,8 +23,8 @@ import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCaseOutput;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOutput;
-import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
-import ssl.ois.timelog.service.repository.UserRepository;
+import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
+import ssl.ois.timelog.service.repository.user.UserRepository;
 import io.cucumber.java.en.Then;
 
 public class ActivityStepDefinition {
@@ -142,12 +142,14 @@ public class ActivityStepDefinition {
     }
 
     @When("I change the activity name to {string} and set its state to disabled and private")
-    public void i_change_the_activity_name_to_and_set_its_state_to_disabled_and_private(String activityTypeName) {
+    public void i_change_the_activity_name_to_and_set_its_state_to_disabled_and_private(String newActivityTypeName) {
         EditActivityTypeUseCase editActivityTypeUseCase = new EditActivityTypeUseCase(this.activityTypeListRepository);
         EditActivityTypeUseCaseInput editActivityTypeUseCaseInput = new EditActivityTypeUseCaseInput();
         EditActivityTypeUseCaseOutput editActivityTypeUseCaseOutput = new EditActivityTypeUseCaseOutput();
 
-        editActivityTypeUseCaseInput.setActivtiyTypeName(activityTypeName);
+        editActivityTypeUseCaseInput.setUserID(this.userID);
+        editActivityTypeUseCaseInput.setOldActivityTypeName(this.activityTypeName);
+        editActivityTypeUseCaseInput.setNewActivtiyTypeName(newActivityTypeName);
         editActivityTypeUseCaseInput.setIsEnable(false);
         editActivityTypeUseCaseInput.setIsPrivate(true);
 
@@ -159,6 +161,7 @@ public class ActivityStepDefinition {
         Boolean oldFound = false;
         Boolean newFound = false;
         for (ActivityType activityType: this.activityTypeListRepository.findByUserID(this.userID).getTypeList()) {
+            System.out.println(activityType.getName());
             if (activityType.getName().equals(oldActivityTypeName)) {
                 oldFound = true;
             }

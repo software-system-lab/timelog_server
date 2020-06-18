@@ -1,16 +1,26 @@
 package ssl.ois.timelog.service.activity.type.edit;
 
 public class EditActivityTypeUseCaseInput {
-    private String activityTypeName;
+    private String oldActivityTypeName;
+    private String newActivityTypeName;
     private Boolean isEnable;
     private Boolean isPrivate;
+    private String userID;
 
-    public String getActivityTypeName() {
-        return this.activityTypeName;
+    public String getOldActivityTypeName() {
+        return this.oldActivityTypeName;
     }
 
-    public void setActivtiyTypeName(String activityTypeName) {
-        this.activityTypeName = activityTypeName;
+    public void setOldActivityTypeName(String oldActivityTypeName) {
+        this.oldActivityTypeName = oldActivityTypeName;
+    }
+
+    public String getNewActivityTypeName() {
+        return this.newActivityTypeName;
+    }
+
+    public void setNewActivtiyTypeName(String newActivityTypeName) {
+        this.newActivityTypeName = newActivityTypeName;
     }
 
     public Boolean getIsEnable() {
@@ -27,5 +37,13 @@ public class EditActivityTypeUseCaseInput {
 
     public void setIsPrivate(Boolean isPrivate) {
         this.isPrivate = isPrivate;
+    }
+
+    public String getUserID() {
+        return this.userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }

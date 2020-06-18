@@ -1,7 +1,7 @@
 package ssl.ois.timelog.service.activity.type.remove;
 
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.repository.ActivityTypeListRepository;
+import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
 
 public class RemoveActivityTypeUseCase {
     private ActivityTypeListRepository activityTypeListRepository;

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.log.LogRepository;
+import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.get.*;
 

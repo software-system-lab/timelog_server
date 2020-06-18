@@ -1,7 +1,7 @@
 package ssl.ois.timelog.adapter.repository.memory;
 
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.repository.UserRepository;
+import ssl.ois.timelog.service.repository.user.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;

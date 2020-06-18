@@ -1,4 +1,4 @@
-package ssl.ois.timelog.service.repository;
+package ssl.ois.timelog.service.repository.user;
 
 import ssl.ois.timelog.model.user.User;
 

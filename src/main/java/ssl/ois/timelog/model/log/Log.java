@@ -16,6 +16,30 @@ public class Log {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy/MM/dd HH:mm");
 
+    public Log(UUID logID,
+               UUID userID,
+               String title,
+               String startTime,
+               String endTime,
+               String description,
+               String activityTypeName) {
+        this.id = logID;
+        this.title = title;
+        this.userID = userID;
+        this.activityTypeName = activityTypeName;
+        this.description = description;
+        try {
+            this.startTime = dateFormat.parse(startTime);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid Start Time: " + startTime);
+        }
+        try {
+            this.endTime = dateFormat.parse(endTime);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid End Time format: " + endTime);
+        }
+    }
+
     public Log(UUID userID,
                String title,
                String startTime,
@@ -37,7 +61,6 @@ public class Log {
         } catch (ParseException e) {
             throw new IllegalArgumentException("Invalid End Time format: " + endTime);
         }
-
     }
 
     public int getMinutes() {

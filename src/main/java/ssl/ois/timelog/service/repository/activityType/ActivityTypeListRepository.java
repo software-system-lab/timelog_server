@@ -1,4 +1,4 @@
-package ssl.ois.timelog.service.repository;
+package ssl.ois.timelog.service.repository.activityType;
 
 import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 
