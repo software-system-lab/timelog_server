@@ -97,7 +97,7 @@ public class MysqlLogRepository implements LogRepository {
         try {
             connection = this.mysqlDriverAdapter.getConnection();
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM `log` " +
-                    "WHERE `UserID` = ? AND `StartTime` >= ? AND `EndTime` <= ? ");
+                    "WHERE `user_id` = ? AND `start_time` >= ? AND `end_time` < ? ");
             stmt.setString(1, userID);
             stmt.setString(2, startDate);
             stmt.setString(3, endDate);
@@ -107,12 +107,14 @@ public class MysqlLogRepository implements LogRepository {
                 UUID logID = UUID.fromString(result.getString("id"));
                 UUID uid = UUID.fromString(result.getString("user_id"));
                 String title = result.getString("title");
-                String startTime = result.getString("start_time");
-                String endTime = result.getString("end_time");
+                String startTime = result.getString("start_time").replace("-", "/");
+                String endTime = result.getString("end_time").replace("-", "/");
                 String description = result.getString("description");
                 String activityType = result.getString("activity_type");
 
-                Log log = new Log(logID, uid, title, startTime, endTime, description, activityType);
+
+                Log log = new Log(logID, uid, title, startTime.substring(0, startTime.lastIndexOf(':')),
+                        endTime.substring(0, endTime.lastIndexOf(':')), description, activityType);
                 logList.add(log);
             }
         } catch (SQLException e) {

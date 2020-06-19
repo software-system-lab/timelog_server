@@ -34,7 +34,7 @@ public class HistoryLogUseCase {
         List<Log> logList = this.logRepository.findByPeriod(input.getUserID(),
                 input.getStartDate(), dateFormat.format(endDate));
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.dateFormatString);
 
         List<LogDTO> logDTOList = new ArrayList<>();
         for (Log log: logList) {

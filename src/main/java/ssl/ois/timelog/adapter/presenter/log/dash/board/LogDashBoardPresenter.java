@@ -1,6 +1,7 @@
 package ssl.ois.timelog.adapter.presenter.log.dash.board;
 
 import ssl.ois.timelog.adapter.view.model.log.dash.board.LogDashBoardViewModel;
+import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.log.LogDTO;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseOutputBound;
 
@@ -14,36 +15,40 @@ public class LogDashBoardPresenter extends HistoryLogUseCaseOutputBound {
     public LogDashBoardViewModel build() {
         LogDashBoardViewModel viewModel = new LogDashBoardViewModel();
         long totalTime = 0;
-        List<LogDashBoardViewModel.Data> dataList = new ArrayList<>();
         try {
             for (LogDTO log : this.getLogDTOList()) {
                 LogDashBoardViewModel.Data data = new LogDashBoardViewModel.Data();
-
-                data.setActivityTypeName(log.getActivityTypeName());
-
-                Date startTime = LogDTO.dateFormat.parse(log.getStartTime());
-                Date endTime = LogDTO.dateFormat.parse(log.getEndTime());
+                SimpleDateFormat dateFormat = new SimpleDateFormat(Log.dateFormatString);
+                Date startTime = dateFormat.parse(log.getStartTime());
+                Date endTime = dateFormat.parse(log.getEndTime());
 
                 long timeLength = endTime.getTime() - startTime.getTime();
                 data.setTimeLength(timeLength);
                 totalTime += timeLength;
 
-                int hour = (int)(timeLength / (1000 * 60 * 60));
-                int minute = (int)(timeLength / (1000 * 60) % 60);
+                int hour = this.getHour(timeLength);
+                int minute = this.getMinute(timeLength);
 
                 data.setHour(hour);
                 data.setMinute(minute);
-                dataList.add(data);
+                viewModel.add(log.getActivityTypeName(), data);
             }
         } catch (ParseException e) {
             throw new RuntimeException(e.getMessage());
         }
 
-        SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
-
-        viewModel.setTotalTime(hourFormat.format(new Date(totalTime)));
-        viewModel.setData(dataList);
+        int hour = this.getHour(totalTime);
+        int minute = this.getMinute(totalTime);
+        viewModel.setTotalTime(String.format("%02d:%02d", hour, minute));
 
         return viewModel;
+    }
+
+    private int getHour(long timestamp) {
+        return (int)(timestamp / (1000 * 60 * 60));
+    }
+
+    private int getMinute(long timestamp) {
+        return (int)(timestamp / (1000 * 60) % 60);
     }
 }

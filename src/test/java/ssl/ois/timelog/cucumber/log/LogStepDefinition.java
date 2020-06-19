@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import io.cucumber.java.Before;
@@ -111,12 +112,14 @@ public class LogStepDefinition {
 
     @Then("The log has start time with {string}")
     public void the_log_has_start_time_with(String startTime) {
-        assertEquals(startTime, this.log.getDateFormat().format(this.log.getStartTime()));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.dateFormatString);
+        assertEquals(startTime, simpleDateFormat.format(this.log.getStartTime()));
     }
 
     @Then("The log has end time with {string}")
     public void the_log_has_end_time_with(String endTime) {
-        assertEquals(endTime, this.log.getDateFormat().format(this.log.getEndTime()));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.dateFormatString);
+        assertEquals(endTime, simpleDateFormat.format(this.log.getEndTime()));
     }
 
     @Then("The log has description {string}")

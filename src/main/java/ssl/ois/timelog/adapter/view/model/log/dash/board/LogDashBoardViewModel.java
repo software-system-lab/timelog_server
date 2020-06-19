@@ -1,14 +1,15 @@
 package ssl.ois.timelog.adapter.view.model.log.dash.board;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LogDashBoardViewModel {
     private String totalTime;
-    private List<Data> data;
+    private Map<String, Data> dataMap;
 
     public LogDashBoardViewModel() {
-        this.data = new ArrayList<>();
+        this.dataMap = new HashMap<>();
     }
 
     public String getTotalTime() {
@@ -19,27 +20,29 @@ public class LogDashBoardViewModel {
         this.totalTime = totalTime;
     }
 
-    public List<Data> getData() {
-        return data;
+    public Map<String, Data> getDataMap() {
+        return dataMap;
     }
 
-    public void setData(List<Data> data) {
-        this.data = data;
+    public void setDataMap(Map<String, Data> dataMap) {
+        this.dataMap = dataMap;
+    }
+
+    public void add(String activityTypeName, Data data) {
+        Data d = this.dataMap.get(activityTypeName);
+        if (d == null) {
+            this.dataMap.put(activityTypeName, data);
+        } else {
+            d.setTimeLength(d.getTimeLength() + data.getTimeLength());
+            d.setHour(d.getHour() + data.getHour());
+            d.setMinute(d.getMinute() + data.getMinute());
+        }
     }
 
     public static class Data {
-        private String activityTypeName;
         private long timeLength;
         private int hour;
         private int minute;
-
-        public String getActivityTypeName() {
-            return activityTypeName;
-        }
-
-        public void setActivityTypeName(String activityTypeName) {
-            this.activityTypeName = activityTypeName;
-        }
 
         public long getTimeLength() {
             return timeLength;

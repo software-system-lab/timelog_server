@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.UUID;
 
@@ -168,9 +169,10 @@ public class UserEnterStepDefinition {
     public void the_log_list_contains_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type(String title, String startTime, String endTime, String description, String activityTypeName) {
         Boolean found = false;
         for(Log log: this.logList) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(Log.dateFormatString);
             if(log.getTitle().equals(title) &&
-               log.getDateFormat().format(log.getStartTime()).equals(startTime) &&
-               log.getDateFormat().format(log.getEndTime()).equals(endTime) &&
+               dateFormat.format(log.getStartTime()).equals(startTime) &&
+               dateFormat.format(log.getEndTime()).equals(endTime) &&
                log.getDescription().equals(description) &&
                log.getActivityTypeName().equals(activityTypeName)) {
                 found = true;

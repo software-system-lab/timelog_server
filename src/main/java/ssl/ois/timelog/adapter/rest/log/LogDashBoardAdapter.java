@@ -24,6 +24,7 @@ public class LogDashBoardAdapter {
         HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository);
 
         LogDashBoardPresenter presenter = new LogDashBoardPresenter();
+        useCase.execute(input, presenter);
 
         return ResponseEntity.status(HttpStatus.OK).body(presenter.build());
     }

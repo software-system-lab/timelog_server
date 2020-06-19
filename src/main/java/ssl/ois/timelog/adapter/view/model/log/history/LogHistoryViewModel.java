@@ -1,16 +1,21 @@
 package ssl.ois.timelog.adapter.view.model.log.history;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LogHistoryViewModel {
     private List<LogItem> logItemList;
+
+    public LogHistoryViewModel() {
+        this.logItemList = new ArrayList<>();
+    }
 
     public List<LogItem> getLogItemList() {
         return logItemList;
     }
 
     public void addItem(LogItem logItem) {
-        logItemList.add(logItem);
+        this.logItemList.add(logItem);
     }
 
     public static class LogItem {

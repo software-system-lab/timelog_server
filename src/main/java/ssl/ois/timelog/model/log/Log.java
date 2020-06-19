@@ -14,7 +14,7 @@ public class Log {
     private String description;
     private String activityTypeName;
 
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy/MM/dd HH:mm");
+    public static final String dateFormatString = "yyyy/MM/dd HH:mm";
 
     public Log(UUID logID,
                UUID userID,
@@ -28,6 +28,7 @@ public class Log {
         this.userID = userID;
         this.activityTypeName = activityTypeName;
         this.description = description;
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
         try {
             this.startTime = dateFormat.parse(startTime);
         } catch (ParseException e) {
@@ -51,6 +52,7 @@ public class Log {
         this.userID = userID;
         this.activityTypeName = activityTypeName;
         this.description = description;
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
         try {
             this.startTime = dateFormat.parse(startTime);
         } catch (ParseException e) {
@@ -115,10 +117,6 @@ public class Log {
 
     public void setActivityTypeName(String activityTypeName) {
         this.activityTypeName = activityTypeName;
-    }
-
-    public SimpleDateFormat getDateFormat() {
-        return dateFormat;
     }
 
     public UUID getUserID() {

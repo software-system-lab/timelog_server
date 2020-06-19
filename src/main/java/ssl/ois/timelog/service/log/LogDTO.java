@@ -12,7 +12,6 @@ public class LogDTO {
     private String endTime;
     private String description;
     private String activityTypeName;
-    public static final SimpleDateFormat dateFormat = Log.dateFormat;
 
     public String getId() {
         return id;
