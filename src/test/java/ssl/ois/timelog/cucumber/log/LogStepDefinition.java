@@ -5,33 +5,32 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.net.ConnectException;
 import java.util.UUID;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeListRepository;
+import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
-import ssl.ois.timelog.model.activity.type.ActivityTypeList;
+import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
+import ssl.ois.timelog.service.repository.activityType.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.exception.activityType.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.activity.type.add.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCase;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseInput;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseOutput;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeListRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import io.cucumber.java.en.Then;
 
 public class LogStepDefinition {
     private UserRepository userRepository;
-    private ActivityTypeListRepository activityTypeListRepository;
+    private ActivityTypeRepository activityTypeRepository;
     private LogRepository logRepository;
     private String title;
     private String startTime;
@@ -44,7 +43,7 @@ public class LogStepDefinition {
     @Before
     public void setup() {
         this.userRepository = new MemoryUserRepository();
-        this.activityTypeListRepository = new MemoryActivityTypeListRepository();
+        this.activityTypeRepository = new MemoryActivityTypeRepository();
         this.logRepository = new MemoryLogRepository();
     }
 
@@ -53,11 +52,10 @@ public class LogStepDefinition {
         if (this.userRepository.findByUserID(userID) == null) {
             this.userRepository.save(new User(UUID.fromString(userID)));
 
-            ActivityTypeList activityTypeList = new ActivityTypeList(userID);
-            activityTypeList.newType("Others");
+            ActivityType activityType = new ActivityType("Other");
             try {
-                this.activityTypeListRepository.save(activityTypeList);
-            } catch (SaveActivityTypeErrorException e) {
+                this.activityTypeRepository.addActivityType(userID, activityType);
+            } catch (DuplicateActivityTypeException e) {
                 fail(e.getMessage());
             }
         }
