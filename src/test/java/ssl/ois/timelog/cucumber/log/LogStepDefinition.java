@@ -10,15 +10,15 @@ import java.util.UUID;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeListRepository;
+import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
-import ssl.ois.timelog.model.activity.type.ActivityTypeList;
+import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.add.*;
@@ -30,7 +30,7 @@ import io.cucumber.java.en.Then;
 
 public class LogStepDefinition {
     private UserRepository userRepository;
-    private ActivityTypeListRepository activityTypeListRepository;
+    private ActivityTypeRepository activityTypeRepository;
     private LogRepository logRepository;
     private String title;
     private String startTime;
@@ -43,25 +43,25 @@ public class LogStepDefinition {
     @Before
     public void setup() {
         this.userRepository = new MemoryUserRepository();
-        this.activityTypeListRepository = new MemoryActivityTypeListRepository();
+        this.activityTypeRepository = new MemoryActivityTypeRepository();
         this.logRepository = new MemoryLogRepository();
     }
 
     @Given("[Log] I log in to Timelog with user ID {string}")
     public void log_i_log_in_to_Timelog_with_user_ID(String userID) {
-        if (this.userRepository.findByUserID(userID) == null) {
-            this.userRepository.save(new User(UUID.fromString(userID)));
-
-            ActivityTypeList activityTypeList = new ActivityTypeList(userID);
-            activityTypeList.newType("Others");
-            try {
-                this.activityTypeListRepository.save(activityTypeList);
-            } catch (SaveActivityTypeErrorException e) {
-                fail(e.getMessage());
+        try {
+            if (this.userRepository.findByUserID(userID) == null) {
+                this.userRepository.save(new User(UUID.fromString(userID)));
+    
+                ActivityType activityType = new ActivityType("Other");
+                this.activityTypeRepository.addActivityType(userID, activityType);
             }
+    
+            this.userID = userID;
+        } catch (Exception e) {
+            fail(e.getMessage());
         }
 
-        this.userID = userID;
     }
 
     @Given("I {string} from {string} to {string}, the description is {string}")

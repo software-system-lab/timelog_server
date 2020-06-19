@@ -1,6 +1,5 @@
 package ssl.ois.timelog.service.log.add;
 
-import java.net.ConnectException;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;

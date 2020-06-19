@@ -1,23 +1,33 @@
 package ssl.ois.timelog.service.activity.type.remove;
 
-import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
-import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
+import org.springframework.stereotype.Service;
 
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
+
+@Service
 public class RemoveActivityTypeUseCase {
-    private ActivityTypeListRepository activityTypeListRepository;
 
-    public RemoveActivityTypeUseCase(ActivityTypeListRepository activityTypeListRepository) {
-        this.activityTypeListRepository = activityTypeListRepository;
+    private ActivityTypeRepository activityTypeRepository;
+
+    public RemoveActivityTypeUseCase(ActivityTypeRepository activityTypeRepository) {
+        this.activityTypeRepository = activityTypeRepository;
     }
 
     public void execute(RemoveActivityTypeUseCaseInput input, RemoveActivityTypeUseCaseOutput output)
-            throws GetActivityTypeErrorException, SaveActivityTypeErrorException {
-        ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(input.getUserID());
-        activityTypeList.removeType(input.getActivityTypeName());
-       
-        this.activityTypeListRepository.update(activityTypeList);
+            throws ActivityTypeNotExistException, DatabaseErrorException {
+        this.activityTypeRepository.removeActivityType(input.getUserID(), input.getActivityTypeName());
+
         output.setActivityTypeName(input.getActivityTypeName());
     }
+
+    // public void execute(RemoveActivityTypeUseCaseInput input, RemoveActivityTypeUseCaseOutput output)
+    //         throws GetActivityTypeErrorException, SaveActivityTypeErrorException {
+    //     ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(input.getUserID());
+    //     activityTypeList.removeType(input.getActivityTypeName());
+
+    //     this.activityTypeListRepository.update(activityTypeList);
+    //     output.setActivityTypeName(input.getActivityTypeName());
+    // }
 }

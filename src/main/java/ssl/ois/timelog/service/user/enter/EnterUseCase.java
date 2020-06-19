@@ -1,60 +1,68 @@
 package ssl.ois.timelog.service.user.enter;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
-import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
+import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.user.InitUserDataErrorException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
 import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class EnterUseCase {
     private UserRepository userRepository;
-    private ActivityTypeListRepository activityTypeListRepository;
+    private ActivityTypeRepository activityTypeRepository;
     private LogRepository logRepository;
 
-    public EnterUseCase(UserRepository userRepository, ActivityTypeListRepository activityTypeListRepository,
+    public EnterUseCase(UserRepository userRepository, ActivityTypeRepository activityTypeRepository,
             LogRepository logRepository) {
         this.userRepository = userRepository;
-        this.activityTypeListRepository = activityTypeListRepository;
+        this.activityTypeRepository = activityTypeRepository;
         this.logRepository = logRepository;
     }
 
-    public void execute(EnterUseCaseInput input, EnterUseCaseOutput output)
-            throws SaveActivityTypeErrorException, InitUserDataErrorException {
-        String userID = input.getUserID();
-        User user = this.userRepository.findByUserID(userID);
-
-        ActivityTypeList activityTypeList;
-        if (user == null) {
-            // First time login to Timelog
-
-            // Create User
-            this.userRepository.save(new User(UUID.fromString(userID)));
-
-            // Create ActivityTypeList for the user.
-            activityTypeList = new ActivityTypeList(userID);
-            activityTypeList.newType("Others");
-            this.activityTypeListRepository.save(activityTypeList);
-            output.setActivityTypeList(activityTypeList.getTypeList());
-
-            output.setLogList(new ArrayList<Log>());
-        } else {
-            try {
-                List<ActivityType> activities = this.activityTypeListRepository.findByUserID(userID).getTypeList();
-                output.setActivityTypeList(activities);
-                output.setLogList(this.logRepository.getByUserID(userID));
-            } catch (GetActivityTypeErrorException | GetLogErrorException e) {
-                throw new InitUserDataErrorException(userID);
+    public void execute(EnterUseCaseInput input, EnterUseCaseOutput output) throws DuplicateActivityTypeException,
+            InitUserDataErrorException {
+        try {
+            String userID = input.getUserID();
+            User user = this.userRepository.findByUserID(userID);
+    
+            if (user == null) {
+                // First time login to Timelog
+    
+                // Create User
+                user = new User(UUID.fromString(userID));
+                this.userRepository.save(user);
+    
+                // Create ActivityTypeList for the user.
+                ActivityType activityType = new ActivityType("Other");
+                this.activityTypeRepository.addActivityType(user.getID().toString(), activityType);
+    
+                List<ActivityType> activityTypeList = new ArrayList<>();
+                activityTypeList.add(activityType);
+                output.setActivityTypeList(activityTypeList);
+    
+                output.setLogList(new ArrayList<Log>());
+            } else {
+                output.setActivityTypeList(this.activityTypeRepository.getActivityTypeList(userID));
+                try {
+                    output.setLogList(this.logRepository.getByUserID(userID));
+                } catch (GetLogErrorException e) {
+                    throw new InitUserDataErrorException(userID);
+                }
             }
+        } catch (DatabaseErrorException e) {
+            throw new InitUserDataErrorException(input.getUserID());
         }
     }
 }

@@ -1,29 +1,28 @@
 package ssl.ois.timelog.service.activity.type.edit;
 
-import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
-import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
+import org.springframework.stereotype.Service;
 
+import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
+
+@Service
 public class EditActivityTypeUseCase {
 
-    private ActivityTypeListRepository activityTypeListRepository;
+    private ActivityTypeRepository activityTypeRepository;
 
-    public EditActivityTypeUseCase(ActivityTypeListRepository activityTypeListRepository) {
-        this.activityTypeListRepository = activityTypeListRepository;
+    public EditActivityTypeUseCase(ActivityTypeRepository activityTypeRepository) {
+        this.activityTypeRepository = activityTypeRepository;
     }
 
     public void execute(EditActivityTypeUseCaseInput input, EditActivityTypeUseCaseOutput output)
-            throws GetActivityTypeErrorException, SaveActivityTypeErrorException {
+            throws ActivityTypeNotExistException, DatabaseErrorException {
         ActivityType activityType = new ActivityType(input.getNewActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
-        
-        ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(input.getUserID());
-        activityTypeList.updateType(input.getOldActivityTypeName(), activityType);
 
-        this.activityTypeListRepository.update(activityTypeList);
+        this.activityTypeRepository.updateActivityType(input.getUserID(),
+            input.getOldActivityTypeName(), activityType);
 
         output.setActivityTypeName(activityType.getName());
     }
-
 }

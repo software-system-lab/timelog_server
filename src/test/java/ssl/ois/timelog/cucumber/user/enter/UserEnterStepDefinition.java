@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.net.ConnectException;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,16 +11,16 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeListRepository;
+import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.repository.mysql.MysqlActivityTypeRepository;
+import ssl.ois.timelog.adapter.repository.mysql.MysqlUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.activity.type.ActivityTypeList;
 import ssl.ois.timelog.model.log.Log;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
-import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import ssl.ois.timelog.service.user.enter.EnterUseCase;
@@ -31,7 +30,7 @@ import ssl.ois.timelog.service.user.enter.EnterUseCaseOutput;
 public class UserEnterStepDefinition {
     private String userID;
     private UserRepository userRepository;
-    private ActivityTypeListRepository activityTypeListRepository;
+    private ActivityTypeRepository activityTypeRepository;
     private LogRepository logRepository;
     private EnterUseCaseOutput enterUseCaseOutput;
     private List<ActivityType> activityTypeList;
@@ -40,7 +39,7 @@ public class UserEnterStepDefinition {
     @Before
     public void setup() {
         this.userRepository = new MemoryUserRepository();
-        this.activityTypeListRepository = new MemoryActivityTypeListRepository();
+        this.activityTypeRepository = new MemoryActivityTypeRepository();
         this.logRepository = new MemoryLogRepository();
     }
 
@@ -51,7 +50,7 @@ public class UserEnterStepDefinition {
 
     @When("I first time enter Timelog")
     public void i_first_time_enter_Timelog() {
-        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeListRepository,
+        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeRepository,
                 this.logRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         enterUseCaseInput.setUserID(this.userID);
@@ -72,13 +71,13 @@ public class UserEnterStepDefinition {
 
         // verify that the activity type is actually stored
         try {
-            List<ActivityType> activityTypeListFromRepo = this.activityTypeListRepository.findByUserID(this.userID)
-                    .getTypeList();
+            List<ActivityType> activityTypeListFromRepo = this.activityTypeRepository.getActivityTypeList(this.userID);
             assertEquals(1, activityTypeListFromRepo.size());
             assertEquals(activityTypeName, activityTypeListFromRepo.get(0).getName());
-        } catch (GetActivityTypeErrorException e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
+
     }
 
     @Then("I will get my log list that contains nothing")
@@ -89,7 +88,7 @@ public class UserEnterStepDefinition {
 
     @Given("I have entered the Timelog with user ID {string} before")
     public void i_have_entered_the_Timelog_with_user_ID_before(String userID) {
-        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeListRepository,
+        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeRepository,
                 this.logRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         EnterUseCaseOutput enterUseCaseOutput = new EnterUseCaseOutput();
@@ -107,11 +106,10 @@ public class UserEnterStepDefinition {
 
     @Given("There is an activity type {string} in my activity type list")
     public void there_is_an_activity_type_in_my_activity_type_list(String activityTypeName) {
+        ActivityType activityType = new ActivityType(activityTypeName);
         try {
-            ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(this.userID);
-            activityTypeList.newType(activityTypeName);
-            this.activityTypeListRepository.update(activityTypeList);
-        } catch (GetActivityTypeErrorException | SaveActivityTypeErrorException e) {
+            this.activityTypeRepository.addActivityType(this.userID, activityType);
+        } catch (Exception e) {
             fail(e.getMessage());
         }
     }
@@ -129,7 +127,7 @@ public class UserEnterStepDefinition {
 
     @When("I enter the Timelog with same user ID again")
     public void i_enter_the_Timelog_with_same_user_ID_again() {
-        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeListRepository, this.logRepository);
+        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeRepository, this.logRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         this.enterUseCaseOutput = new EnterUseCaseOutput();
 
@@ -170,7 +168,7 @@ public class UserEnterStepDefinition {
     public void the_log_list_contains_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type(String title, String startTime, String endTime, String description, String activityTypeName) {
         Boolean found = false;
         for(Log log: this.logList) {
-            if(log.getTitle().equals(title) && 
+            if(log.getTitle().equals(title) &&
                log.getDateFormat().format(log.getStartTime()).equals(startTime) &&
                log.getDateFormat().format(log.getEndTime()).equals(endTime) &&
                log.getDescription().equals(description) &&

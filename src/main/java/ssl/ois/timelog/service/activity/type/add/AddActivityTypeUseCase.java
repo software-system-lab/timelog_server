@@ -1,30 +1,25 @@
 package ssl.ois.timelog.service.activity.type.add;
 
+import org.springframework.stereotype.Service;
+
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.activity.type.ActivityTypeList;
-import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
-import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeListRepository;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
+import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 
+@Service
 public class AddActivityTypeUseCase {
-    private ActivityTypeListRepository activityTypeListRepository;
+    private ActivityTypeRepository activityTypeRepository;
 
-    public AddActivityTypeUseCase(ActivityTypeListRepository activityTypeListRepository) {
-        this.activityTypeListRepository = activityTypeListRepository;
+    public AddActivityTypeUseCase(ActivityTypeRepository activityTypeRepository) {
+        this.activityTypeRepository = activityTypeRepository;
     }
 
     public void execute(AddActivityTypeUseCaseInput input, AddActivityTypeUseCaseOutput output)
-            throws GetActivityTypeErrorException, DuplicateActivityTypeException, SaveActivityTypeErrorException {
-        ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(input.getUserID());
-        
-        for(ActivityType activityType: activityTypeList.getTypeList()) {
-            if(activityType.getName().equals(input.getActivityTypeName())) {
-                throw new DuplicateActivityTypeException();
-            }
-        }
-        
-        activityTypeList.newType(input.getActivityTypeName());
-        this.activityTypeListRepository.update(activityTypeList);
-        output.setActivityTypeName(input.getActivityTypeName());
+            throws DuplicateActivityTypeException, DatabaseErrorException {
+        ActivityType activityType = new ActivityType(input.getActivityTypeName());
+
+        this.activityTypeRepository.addActivityType(input.getUserID(), activityType);
+        output.setActivityTypeName(activityType.getName());
     }
 }
