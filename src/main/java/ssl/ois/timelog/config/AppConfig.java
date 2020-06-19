@@ -14,7 +14,6 @@ import ssl.ois.timelog.adapter.repository.mysql.MysqlUserRepository;
 import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
-import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 
 
 import java.util.Arrays;

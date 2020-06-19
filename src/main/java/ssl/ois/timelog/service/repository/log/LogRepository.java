@@ -8,8 +8,9 @@ import java.net.ConnectException;
 import java.util.List;
 
 public interface LogRepository {
-    public void save(Log log) throws SaveLogErrorException;
-    public Log findByID(String id) throws GetLogErrorException;
-    public List<Log> getByUserID(String userID) throws GetLogErrorException;
-    public Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException;
+    void save(Log log) throws SaveLogErrorException;
+    Log findByID(String id) throws GetLogErrorException;
+    List<Log> getByUserID(String userID) throws GetLogErrorException;
+    Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException;
+    List<Log> findByPeriod(String userID, String startDate, String endDate);
 }
