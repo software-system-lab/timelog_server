@@ -5,7 +5,6 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.net.ConnectException;
 import java.util.UUID;
 
 import io.cucumber.java.Before;

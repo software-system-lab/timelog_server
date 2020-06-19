@@ -88,4 +88,38 @@ public class MysqlLogRepository implements LogRepository {
     public Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException {
         return false;
     }
+
+    @Override
+    public List<Log> findByPeriod(String userID, String startDate, String endDate) {
+        Connection connection = null;
+        List<Log> logList = new ArrayList<>();
+
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM `log` " +
+                    "WHERE `UserID` = ? AND `StartTime` >= ? AND `EndTime` <= ? ");
+            stmt.setString(1, userID);
+            stmt.setString(2, startDate);
+            stmt.setString(3, endDate);
+            ResultSet result = stmt.executeQuery();
+
+            while (result.next()) {
+                UUID logID = UUID.fromString(result.getString("id"));
+                UUID uid = UUID.fromString(result.getString("user_id"));
+                String title = result.getString("title");
+                String startTime = result.getString("start_time");
+                String endTime = result.getString("end_time");
+                String description = result.getString("description");
+                String activityType = result.getString("activity_type");
+
+                Log log = new Log(logID, uid, title, startTime, endTime, description, activityType);
+                logList.add(log);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+        return logList;
+    }
 }

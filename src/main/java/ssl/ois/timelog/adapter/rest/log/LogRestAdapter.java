@@ -1,4 +1,4 @@
-package ssl.ois.timelog.adapter.rest;
+package ssl.ois.timelog.adapter.rest.log;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
