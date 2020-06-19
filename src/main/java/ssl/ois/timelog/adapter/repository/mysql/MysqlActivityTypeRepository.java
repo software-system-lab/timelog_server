@@ -29,7 +29,7 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository {
             connection = this.mysqlDriverAdapter.getConnection();
 
             try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT COUNT(*) FROM activity_type_mapper WHERE user_id = ? AND activity_type_name = ?"
+                "SELECT COUNT(*) FROM activity_user_mapper WHERE user_id = ? AND activity_type_name = ?"
             )) {
                 stmt.setString(1, userID);
                 stmt.setString(2, activityType.getName());
@@ -85,7 +85,7 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository {
                 ResultSet rs = stmt.executeQuery();
 
                 while(rs.next()) {
-                    String activityTypeName = rs.getString("name");
+                    String activityTypeName = rs.getString("activity_type_name");
                     boolean isEnable = rs.getInt("is_enable") == 1;
                     boolean isPrivate = rs.getInt("is_private") == 1;
 

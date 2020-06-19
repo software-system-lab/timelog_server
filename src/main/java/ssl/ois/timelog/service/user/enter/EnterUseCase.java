@@ -36,7 +36,6 @@ public class EnterUseCase {
         try {
             String userID = input.getUserID();
             User user = this.userRepository.findByUserID(userID);
-    
             if (user == null) {
                 // First time login to Timelog
     

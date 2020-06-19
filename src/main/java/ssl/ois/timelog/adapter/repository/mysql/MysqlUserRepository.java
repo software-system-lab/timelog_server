@@ -51,9 +51,9 @@ public class MysqlUserRepository implements UserRepository {
 
                 ResultSet rs = stmt.executeQuery();
 
-                rs.next();
-
-                user = new User(UUID.fromString(rs.getString("id")));
+                if(rs.next()) {
+                    user = new User(UUID.fromString(rs.getString("id")));
+                }
             }
         } catch (SQLException e) {
             throw new DatabaseErrorException();

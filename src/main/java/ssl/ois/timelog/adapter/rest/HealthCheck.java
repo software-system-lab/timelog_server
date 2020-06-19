@@ -31,10 +31,9 @@ public class HealthCheck {
         try {
             this.enterUseCase.execute(input, output);
         } catch (DuplicateActivityTypeException | InitUserDataErrorException e) {
-            System.out.println("Exception raised");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
-        
+
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }
 

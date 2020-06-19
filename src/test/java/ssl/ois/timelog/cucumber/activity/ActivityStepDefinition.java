@@ -131,7 +131,6 @@ public class ActivityStepDefinition {
         try {
             addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
         } catch (DuplicateActivityTypeException e) {
-            System.out.println("duplicate activity type");
             this.errorOccurred = true;
         } catch (DatabaseErrorException e) {
             fail(e.getMessage());
