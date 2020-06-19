@@ -7,11 +7,6 @@ public class HistoryLogUseCaseInput {
     private String userID;
     private String startDate;
     private String endDate;
-    private List<String> filter;
-
-    public HistoryLogUseCaseInput() {
-        filter = new ArrayList<>();
-    }
 
     public String getUserID() {
         return userID;
@@ -35,13 +30,5 @@ public class HistoryLogUseCaseInput {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
-    }
-
-    public List<String> getFilter() {
-        return filter;
-    }
-
-    public void setFilter(List<String> filter) {
-        this.filter = filter;
     }
 }

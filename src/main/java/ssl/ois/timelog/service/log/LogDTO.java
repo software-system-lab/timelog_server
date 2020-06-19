@@ -1,5 +1,9 @@
 package ssl.ois.timelog.service.log;
 
+import ssl.ois.timelog.model.log.Log;
+
+import java.text.SimpleDateFormat;
+
 public class LogDTO {
     private String id;
     private String userID;
@@ -8,6 +12,7 @@ public class LogDTO {
     private String endTime;
     private String description;
     private String activityTypeName;
+    public static final SimpleDateFormat dateFormat = Log.dateFormat;
 
     public String getId() {
         return id;

@@ -2,29 +2,16 @@ package ssl.ois.timelog.adapter.presenter.log.history;
 
 import ssl.ois.timelog.adapter.view.model.log.history.LogHistoryViewModel;
 import ssl.ois.timelog.service.log.LogDTO;
-import ssl.ois.timelog.service.log.history.HistoryLogUseCaseOutput;
+import ssl.ois.timelog.service.log.history.HistoryLogUseCaseOutputBound;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogHistoryPresenter implements HistoryLogUseCaseOutput {
-    private List<LogDTO> logDTOList;
-
-    public LogHistoryPresenter() {
-        this.logDTOList = new ArrayList<>();
-    }
-
-    public List<LogDTO> getLogDTOList() {
-        return logDTOList;
-    }
-
-    public void setLogDTOList(List<LogDTO> logDTOList) {
-        this.logDTOList = logDTOList;
-    }
+public class LogHistoryPresenter extends HistoryLogUseCaseOutputBound {
 
     public LogHistoryViewModel build() {
         LogHistoryViewModel viewModel = new LogHistoryViewModel();
-        for (LogDTO log: this.logDTOList) {
+        for (LogDTO log: this.getLogDTOList()) {
             LogHistoryViewModel.LogItem logItem = new LogHistoryViewModel.LogItem();
             logItem.setActivityTypeName(log.getActivityTypeName());
             logItem.setTitle(log.getTitle());

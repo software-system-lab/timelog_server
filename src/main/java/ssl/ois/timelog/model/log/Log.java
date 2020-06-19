@@ -14,7 +14,7 @@ public class Log {
     private String description;
     private String activityTypeName;
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy/MM/dd HH:mm");
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy/MM/dd HH:mm");
 
     public Log(UUID logID,
                UUID userID,

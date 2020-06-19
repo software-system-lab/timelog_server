@@ -8,5 +8,5 @@ Feature: History of logs.
     Scenario: I want to get my log history.
         When [History] I request for the history between "2020/06/20" and "2020/06/21"
         Then [History] I should get a list of logs with size of 2
-         And [History] the first log of the list should contains title "Study DDD" and activity type "SA" and start time "2020/06/21 13:00" and end time "2020/06/21 14:00"
-         And [History] the second log of the list should contains title "Study clean architecture" and activity type "SA" and start time "2020/06/20 11:00" and end time "2020/06/20 12:00"
+         And [History] the first log of the list should contains title "Study clean architecture" and activity type "SA" and start time "2020/06/20 11:00" and end time "2020/06/20 12:00"
+         And [History] the second log of the list should contains title "Study DDD" and activity type "SA" and start time "2020/06/21 13:00" and end time "2020/06/21 14:00"
