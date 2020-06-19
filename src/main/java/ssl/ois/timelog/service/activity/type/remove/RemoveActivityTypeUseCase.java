@@ -21,13 +21,4 @@ public class RemoveActivityTypeUseCase {
 
         output.setActivityTypeName(input.getActivityTypeName());
     }
-
-    // public void execute(RemoveActivityTypeUseCaseInput input, RemoveActivityTypeUseCaseOutput output)
-    //         throws GetActivityTypeErrorException, SaveActivityTypeErrorException {
-    //     ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(input.getUserID());
-    //     activityTypeList.removeType(input.getActivityTypeName());
-
-    //     this.activityTypeListRepository.update(activityTypeList);
-    //     output.setActivityTypeName(input.getActivityTypeName());
-    // }
 }

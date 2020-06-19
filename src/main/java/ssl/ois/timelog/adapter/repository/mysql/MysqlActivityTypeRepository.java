@@ -123,13 +123,21 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository {
 
                 rs.next();
                 int count = rs.getInt(1);
-                if(count > 0) {
+                if(count == 0) {
                     throw new ActivityTypeNotExistException(targetActivityTypeName);
                 }
             }
 
             try (PreparedStatement stmt = connection.prepareStatement(
-                "UPDATE `acitvity_user_mapper` " + 
+                "INSERT IGNORE INTO `activity_type` (`name`) VALUES (?)"
+            )) {
+                stmt.setString(1, newActivityType.getName());
+
+                stmt.executeUpdate();
+            }
+
+            try (PreparedStatement stmt = connection.prepareStatement(
+                "UPDATE `activity_user_mapper` " + 
                 "SET `activity_type_name`= ?, `is_enable`= ?,`is_private`= ? " + 
                 "WHERE activity_user_mapper.activity_type_name = ?" +
                 "AND activity_user_mapper.user_id = ?"
@@ -158,7 +166,7 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository {
             connection = this.mysqlDriverAdapter.getConnection();
 
             try(PreparedStatement stmt = connection.prepareStatement(
-                "DELETE FROM `acitvity_user_mapper` " +
+                "DELETE FROM `activity_user_mapper` " +
                 "WHERE activity_user_mapper.user_id = ? " +
                 "AND activity_user_mapper.activity_type_name = ?"
             )) {
