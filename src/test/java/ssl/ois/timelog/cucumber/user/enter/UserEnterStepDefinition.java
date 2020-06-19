@@ -14,11 +14,13 @@ import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.repository.mysql.MysqlActivityTypeRepository;
+import ssl.ois.timelog.adapter.repository.mysql.MysqlUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.activity.type.add.DuplicateActivityTypeException;
+import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import ssl.ois.timelog.service.user.enter.EnterUseCase;
@@ -68,9 +70,13 @@ public class UserEnterStepDefinition {
         assertEquals(activityTypeName, activityTypeListFromOutput.get(0).getName());
 
         // verify that the activity type is actually stored
-        List<ActivityType> activityTypeListFromRepo = this.activityTypeRepository.getActivityTypeList(this.userID);
-        assertEquals(1, activityTypeListFromRepo.size());
-        assertEquals(activityTypeName, activityTypeListFromRepo.get(0).getName());
+        try {
+            List<ActivityType> activityTypeListFromRepo = this.activityTypeRepository.getActivityTypeList(this.userID);
+            assertEquals(1, activityTypeListFromRepo.size());
+            assertEquals(activityTypeName, activityTypeListFromRepo.get(0).getName());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 
     }
 
@@ -103,7 +109,7 @@ public class UserEnterStepDefinition {
         ActivityType activityType = new ActivityType(activityTypeName);
         try {
             this.activityTypeRepository.addActivityType(this.userID, activityType);
-        } catch (DuplicateActivityTypeException e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
     }

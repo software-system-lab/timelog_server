@@ -16,14 +16,15 @@ import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseOutput;
-import ssl.ois.timelog.service.activity.type.add.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCaseOutput;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOutput;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
+import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import io.cucumber.java.en.Then;
@@ -46,15 +47,19 @@ public class ActivityStepDefinition {
 
     @Given("[Activity] I log in to Timelog with user ID {string}")
     public void activity_i_log_in_to_Timelog_with_user_ID(String userID) {
-        if (this.userRepository.findByUserID(userID) == null) {
-            this.userRepository.save(new User(UUID.fromString(userID)));
+        try {
+            if (this.userRepository.findByUserID(userID) == null) {
+                this.userRepository.save(new User(UUID.fromString(userID)));
 
-            ActivityType activityType = new ActivityType("Other");
-            try {
-                this.activityTypeRepository.addActivityType(userID, activityType);
-            } catch (DuplicateActivityTypeException e) {
-                fail(e.getMessage());
+                ActivityType activityType = new ActivityType("Other");
+                try {
+                    this.activityTypeRepository.addActivityType(userID, activityType);
+                } catch (DuplicateActivityTypeException e) {
+                    fail(e.getMessage());
+                }
             }
+        } catch (Exception e) {
+            fail(e.getMessage());
         }
 
         this.userID = userID;
@@ -76,20 +81,24 @@ public class ActivityStepDefinition {
 
         try {
             addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
-        } catch (DuplicateActivityTypeException e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
     }
 
     @Then("{string} is in my activity type list")
     public void is_in_my_activity_type_list(String activityTypeName) {
-        boolean found = false;
-        for (ActivityType activityType : this.activityTypeRepository.getActivityTypeList(userID)) {
-            if (activityType.getName().equals(activityTypeName)) {
-                found = true;
+        try {
+            boolean found = false;
+            for (ActivityType activityType : this.activityTypeRepository.getActivityTypeList(userID)) {
+                if (activityType.getName().equals(activityTypeName)) {
+                    found = true;
+                }
             }
+            assertTrue(found);
+        } catch (Exception e) {
+            fail(e.getMessage());
         }
-        assertTrue(found);
     }
 
     @Given("I have already had {string} in my activity type list")
@@ -103,7 +112,7 @@ public class ActivityStepDefinition {
 
         try {
             addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
-        } catch (DuplicateActivityTypeException e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
 
@@ -124,6 +133,8 @@ public class ActivityStepDefinition {
         } catch (DuplicateActivityTypeException e) {
             System.out.println("duplicate activity type");
             this.errorOccurred = true;
+        } catch (DatabaseErrorException e) {
+            fail(e.getMessage());
         }
     }
 
@@ -144,18 +155,21 @@ public class ActivityStepDefinition {
 
         try {
             removeActivityTypeUseCase.execute(removeActivityTypeUseCaseInput, removeActivityTypeUseCaseOutput);
-        } catch (ActivityTypeNotExistException e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
     }
 
     @Then("{string} is not in my activity type list")
     public void is_not_in_my_activity_type_list(String activityTypeName) {
-
-        for(ActivityType activityType: this.activityTypeRepository.getActivityTypeList(this.userID)) {
-            if(activityType.getName().equals(activityTypeName)) {
-                fail("Activity type is not removed from the repository");
+        try {
+            for(ActivityType activityType: this.activityTypeRepository.getActivityTypeList(this.userID)) {
+                if(activityType.getName().equals(activityTypeName)) {
+                    fail("Activity type is not removed from the repository");
+                }
             }
+        } catch (Exception e) {
+            fail(e.getMessage());
         }
     }
 
@@ -173,28 +187,32 @@ public class ActivityStepDefinition {
 
         try {
             editActivityTypeUseCase.execute(editActivityTypeUseCaseInput, editActivityTypeUseCaseOutput);
-        } catch (ActivityTypeNotExistException e) {
-            fail("Fail to edit the activity type");
+        } catch (Exception e) {
+            fail(e.getMessage());
         }
     }
 
     @Then("The activity type {string} should change its name to {string} and become disabled and private")
     public void the_activity_type_should_change_its_name_to(String oldActivityTypeName, String newActivityTypeName) {
-        Boolean oldFound = false;
-        Boolean newFound = false;
-
-        for (ActivityType activityType: this.activityTypeRepository.getActivityTypeList(this.userID)) {
-            if (activityType.getName().equals(oldActivityTypeName)) {
-                oldFound = true;
+        try {
+            Boolean oldFound = false;
+            Boolean newFound = false;
+    
+            for (ActivityType activityType: this.activityTypeRepository.getActivityTypeList(this.userID)) {
+                if (activityType.getName().equals(oldActivityTypeName)) {
+                    oldFound = true;
+                }
+                if (activityType.getName().equals(newActivityTypeName) &&
+                    activityType.isEnable() == false &&
+                    activityType.isPrivate() == true) {
+                        newFound = true;
+                }
             }
-            if (activityType.getName().equals(newActivityTypeName) &&
-                activityType.isEnable() == false &&
-                activityType.isPrivate() == true) {
-                    newFound = true;
-            }
+    
+            assertFalse(oldFound);
+            assertTrue(newFound);
+        } catch (Exception e) {
+            fail(e.getMessage());
         }
-
-        assertFalse(oldFound);
-        assertTrue(newFound);
     }
 }

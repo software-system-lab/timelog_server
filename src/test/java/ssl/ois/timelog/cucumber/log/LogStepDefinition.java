@@ -18,7 +18,7 @@ import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.activity.type.add.DuplicateActivityTypeException;
+import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.add.*;
@@ -49,18 +49,19 @@ public class LogStepDefinition {
 
     @Given("[Log] I log in to Timelog with user ID {string}")
     public void log_i_log_in_to_Timelog_with_user_ID(String userID) {
-        if (this.userRepository.findByUserID(userID) == null) {
-            this.userRepository.save(new User(UUID.fromString(userID)));
-
-            ActivityType activityType = new ActivityType("Other");
-            try {
+        try {
+            if (this.userRepository.findByUserID(userID) == null) {
+                this.userRepository.save(new User(UUID.fromString(userID)));
+    
+                ActivityType activityType = new ActivityType("Other");
                 this.activityTypeRepository.addActivityType(userID, activityType);
-            } catch (DuplicateActivityTypeException e) {
-                fail(e.getMessage());
             }
+    
+            this.userID = userID;
+        } catch (Exception e) {
+            fail(e.getMessage());
         }
 
-        this.userID = userID;
     }
 
     @Given("I {string} from {string} to {string}, the description is {string}")
