@@ -1,7 +1,7 @@
 package ssl.ois.timelog.service.activity.type.remove;
 
-import ssl.ois.timelog.service.exception.activityType.ActivityTypeNotExistException;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeRepository;
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 
 public class RemoveActivityTypeUseCase {
 
@@ -22,7 +22,7 @@ public class RemoveActivityTypeUseCase {
     //         throws GetActivityTypeErrorException, SaveActivityTypeErrorException {
     //     ActivityTypeList activityTypeList = this.activityTypeListRepository.findByUserID(input.getUserID());
     //     activityTypeList.removeType(input.getActivityTypeName());
-       
+
     //     this.activityTypeListRepository.update(activityTypeList);
     //     output.setActivityTypeName(input.getActivityTypeName());
     // }

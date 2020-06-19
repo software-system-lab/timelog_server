@@ -1,11 +1,11 @@
-package ssl.ois.timelog.service.repository.activityType;
+package ssl.ois.timelog.service.repository.activity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.service.activity.type.add.DuplicateActivityTypeException;
-import ssl.ois.timelog.service.exception.activityType.ActivityTypeNotExistException;
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 
 public interface ActivityTypeRepository {
     void addActivityType(String userID, ActivityType activityType) throws DuplicateActivityTypeException;

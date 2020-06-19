@@ -16,10 +16,6 @@ public class SqlDateTimeConverter {
     }
 
     public static Date toDate(String dateString) throws ParseException {
-        try {
-            return sdf.parse(dateString);
-        } catch (ParseException e) {
-            throw e;
-        }
+        return sdf.parse(dateString);
     }
 }

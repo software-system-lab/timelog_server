@@ -1,7 +1,5 @@
 package ssl.ois.timelog.model.activity.type;
 
-import java.util.UUID;
-
 public class ActivityType {
     private String name;
     private boolean isEnable;

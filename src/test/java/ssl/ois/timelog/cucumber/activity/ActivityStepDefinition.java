@@ -23,8 +23,8 @@ import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCaseOutput;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOutput;
-import ssl.ois.timelog.service.exception.activityType.ActivityTypeNotExistException;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeRepository;
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import io.cucumber.java.en.Then;
 
@@ -193,7 +193,7 @@ public class ActivityStepDefinition {
                     newFound = true;
             }
         }
-        
+
         assertFalse(oldFound);
         assertTrue(newFound);
     }

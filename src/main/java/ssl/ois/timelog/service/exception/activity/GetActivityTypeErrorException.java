@@ -1,4 +1,4 @@
-package ssl.ois.timelog.service.exception.activityType;
+package ssl.ois.timelog.service.exception.activity;
 
 public class GetActivityTypeErrorException extends Exception {
     public GetActivityTypeErrorException() {

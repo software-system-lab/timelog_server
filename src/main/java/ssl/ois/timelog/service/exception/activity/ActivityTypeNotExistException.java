@@ -1,4 +1,4 @@
-package ssl.ois.timelog.service.exception.activityType;
+package ssl.ois.timelog.service.exception.activity;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
 

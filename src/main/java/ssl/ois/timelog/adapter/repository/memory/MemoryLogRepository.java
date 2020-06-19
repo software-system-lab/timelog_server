@@ -33,12 +33,12 @@ public class MemoryLogRepository implements LogRepository {
 
     @Override
     public List<Log> getByUserID(String userID) {
-        List<Log> logs = new ArrayList<Log>();
+        List<Log> foundLogs = new ArrayList<>();
         for(Log log: this.logs.values()) {
             if(log.getUserID().toString().equals(userID)) {
-                logs.add(log);
+                foundLogs.add(log);
             }
         }
-        return Collections.unmodifiableList(logs);
+        return Collections.unmodifiableList(foundLogs);
     }
 }

@@ -7,10 +7,10 @@ import java.util.Map;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.service.activity.type.add.DuplicateActivityTypeException;
-import ssl.ois.timelog.service.exception.activityType.ActivityTypeNotExistException;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeRepository;
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 
-public class MemoryActivityTypeRepository implements ActivityTypeRepository{
+public class MemoryActivityTypeRepository implements ActivityTypeRepository {
     private Map<String, List<ActivityType>> activityMap; 
 
     public MemoryActivityTypeRepository() {

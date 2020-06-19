@@ -16,7 +16,7 @@ import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.log.Log;
-import ssl.ois.timelog.service.repository.activityType.ActivityTypeRepository;
+import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.activity.type.add.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
@@ -162,7 +162,7 @@ public class UserEnterStepDefinition {
     public void the_log_list_contains_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type(String title, String startTime, String endTime, String description, String activityTypeName) {
         Boolean found = false;
         for(Log log: this.logList) {
-            if(log.getTitle().equals(title) && 
+            if(log.getTitle().equals(title) &&
                log.getDateFormat().format(log.getStartTime()).equals(startTime) &&
                log.getDateFormat().format(log.getEndTime()).equals(endTime) &&
                log.getDescription().equals(description) &&
