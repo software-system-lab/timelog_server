@@ -1,10 +1,13 @@
 package ssl.ois.timelog.service.activity.type.add;
 
+import org.springframework.stereotype.Service;
+
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 
+@Service
 public class AddActivityTypeUseCase {
     private ActivityTypeRepository activityTypeRepository;
 
