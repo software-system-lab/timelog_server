@@ -1,6 +1,7 @@
 package ssl.ois.timelog.service.log.history;
 
 import ssl.ois.timelog.model.log.Log;
+import ssl.ois.timelog.service.log.LogDTO;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 
 import java.text.ParseException;
@@ -35,9 +36,9 @@ public class HistoryLogUseCase {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
-        List<HistoryLogUseCaseOutput.LogDTO> logDTOList = new ArrayList<>();
+        List<LogDTO> logDTOList = new ArrayList<>();
         for (Log log: logList) {
-            HistoryLogUseCaseOutput.LogDTO logDTO = new HistoryLogUseCaseOutput.LogDTO();
+            LogDTO logDTO = new LogDTO();
             logDTO.setActivityTypeName(log.getActivityTypeName());
             logDTO.setTitle(log.getTitle());
             logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
