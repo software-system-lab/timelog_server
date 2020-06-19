@@ -4,10 +4,12 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import ssl.ois.timelog.adapter.presenter.log.history.LogHistoryPresenter;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
+import ssl.ois.timelog.service.log.LogDTO;
 import ssl.ois.timelog.service.log.add.AddLogUseCase;
 import ssl.ois.timelog.service.log.add.AddLogUseCaseInput;
 import ssl.ois.timelog.service.log.add.AddLogUseCaseOutput;
@@ -62,7 +64,7 @@ public class HistoryStepDefinition {
     public void i_request_for_the_history_between_and(String startDate, String endDate) {
         HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository);
         HistoryLogUseCaseInput input = new HistoryLogUseCaseInput();
-        this.output = new HistoryLogUseCaseOutput();
+        this.output = new LogHistoryPresenter();
 
         input.setUserID(this.userID);
         input.setStartDate(startDate);
@@ -79,7 +81,7 @@ public class HistoryStepDefinition {
     @Then("[History] the first log of the list should contains title {string} and activity type {string} and start time {string} and end time {string}")
     public void the_first_log_of_the_list_should_contains_title_and_activity_type_and_start_time_and_end_time(
             String title, String activityTypeName, String startTime, String endTime) {
-        HistoryLogUseCaseOutput.LogDTO logDTO = this.output.getLogDTOList().get(0);
+        LogDTO logDTO = this.output.getLogDTOList().get(0);
         assertEquals(title, logDTO.getTitle());
         assertEquals(activityTypeName, logDTO.getActivityTypeName());
         assertEquals(startTime, logDTO.getStartTime());
@@ -89,7 +91,7 @@ public class HistoryStepDefinition {
     @Then("[History] the second log of the list should contains title {string} and activity type {string} and start time {string} and end time {string}")
     public void the_second_log_of_the_list_should_contains_title_and_activity_type_and_start_time_and_end_time(
             String title, String activityTypeName, String startTime, String endTime) {
-        HistoryLogUseCaseOutput.LogDTO logDTO = this.output.getLogDTOList().get(1);
+        LogDTO logDTO = this.output.getLogDTOList().get(1);
         assertEquals(title, logDTO.getTitle());
         assertEquals(activityTypeName, logDTO.getActivityTypeName());
         assertEquals(startTime, logDTO.getStartTime());

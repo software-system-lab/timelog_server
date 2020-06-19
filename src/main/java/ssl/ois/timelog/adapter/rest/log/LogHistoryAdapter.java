@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ssl.ois.timelog.adapter.presenter.log.history.LogHistoryPresenter;
+import ssl.ois.timelog.adapter.view.model.log.history.LogHistoryViewModel;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCase;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseInput;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseOutput;
@@ -19,12 +21,12 @@ public class LogHistoryAdapter {
     private LogRepository logRepository;
 
     @PostMapping(value = "/")
-    public ResponseEntity<HistoryLogUseCaseOutput> history(@RequestBody HistoryLogUseCaseInput input) {
+    public ResponseEntity<LogHistoryViewModel> history(@RequestBody HistoryLogUseCaseInput input) {
         HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository);
-        HistoryLogUseCaseOutput output = new HistoryLogUseCaseOutput();
+        LogHistoryPresenter output = new LogHistoryPresenter();
 
         useCase.execute(input, output);
 
-        return ResponseEntity.status(HttpStatus.OK).body(output);
+        return ResponseEntity.status(HttpStatus.OK).body(output.build());
     }
 }
