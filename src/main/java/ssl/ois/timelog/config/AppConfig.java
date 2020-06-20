@@ -8,10 +8,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
-import ssl.ois.timelog.adapter.repository.mysql.MysqlActivityTypeRepository;
 import ssl.ois.timelog.adapter.repository.mysql.MysqlLogRepository;
 import ssl.ois.timelog.adapter.repository.mysql.MysqlUserRepository;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
@@ -40,11 +38,6 @@ public class AppConfig {
     @Bean
     public UserRepository getUserRepository() {
         return new MysqlUserRepository();
-    }
-
-    @Bean
-    public ActivityTypeRepository getActivityTypeRepository() {
-        return new MysqlActivityTypeRepository();
     }
 
     @Bean

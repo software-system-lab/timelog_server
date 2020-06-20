@@ -9,7 +9,6 @@ import java.util.UUID;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.user.User;
@@ -25,14 +24,13 @@ import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOut
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import io.cucumber.java.en.Then;
 
 public class ActivityStepDefinition {
 
     private UserRepository userRepository;
-    private ActivityTypeRepository activityTypeRepository;
+    private User user;
     private String userID;
     private String activityTypeName;
     private boolean errorOccurred;
@@ -40,7 +38,6 @@ public class ActivityStepDefinition {
     @Before
     public void setup() {
         this.userRepository = new MemoryUserRepository();
-        this.activityTypeRepository = new MemoryActivityTypeRepository();
 
         this.errorOccurred = false;
     }
@@ -48,15 +45,14 @@ public class ActivityStepDefinition {
     @Given("[Activity] I log in to Timelog with user ID {string}")
     public void activity_i_log_in_to_Timelog_with_user_ID(String userID) {
         try {
-            if (this.userRepository.findByUserID(userID) == null) {
-                this.userRepository.save(new User(UUID.fromString(userID)));
+            this.user = this.userRepository.findByUserID(userID);
+            if (this.user == null) {
+                this.user = new User(UUID.fromString(userID));
+                this.userRepository.save(this.user);
 
                 ActivityType activityType = new ActivityType("Other", true, false);
-                try {
-                    this.activityTypeRepository.addActivityType(userID, activityType);
-                } catch (DuplicateActivityTypeException e) {
-                    fail(e.getMessage());
-                }
+                this.user.addActivityType(activityType);
+                this.userRepository.save(this.user);
             }
         } catch (Exception e) {
             fail(e.getMessage());
@@ -78,6 +74,8 @@ public class ActivityStepDefinition {
 
         addActivityTypeUseCaseInput.setUserID(this.userID);
         addActivityTypeUseCaseInput.setActivityTypeName(this.activityTypeName);
+        addActivityTypeUseCaseInput.setIsEnable(true);
+        addActivityTypeUseCaseInput.setIsPrivate(false);
 
         try {
             addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
@@ -90,8 +88,8 @@ public class ActivityStepDefinition {
     public void is_in_my_activity_type_list(String activityTypeName) {
         try {
             boolean found = false;
-            for (ActivityType activityType : this.activityTypeRepository.getActivityTypeList(userID)) {
-                if (activityType.getName().equals(activityTypeName)) {
+            for (ActivityType activityType: this.userRepository.findByUserID(this.userID).getActivityTypeList()) {
+                if(activityType.getName().equals(activityTypeName)) {
                     found = true;
                 }
             }
@@ -108,6 +106,8 @@ public class ActivityStepDefinition {
         AddActivityTypeUseCaseOutput addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
 
         addActivityTypeUseCaseInput.setUserID(this.userID);
+        addActivityTypeUseCaseInput.setIsEnable(true);
+        addActivityTypeUseCaseInput.setIsPrivate(false);
         addActivityTypeUseCaseInput.setActivityTypeName(activityTypeName);
 
         try {
@@ -126,13 +126,15 @@ public class ActivityStepDefinition {
         AddActivityTypeUseCaseOutput addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
 
         addActivityTypeUseCaseInput.setUserID(this.userID);
+        addActivityTypeUseCaseInput.setIsEnable(true);
+        addActivityTypeUseCaseInput.setIsPrivate(false);
         addActivityTypeUseCaseInput.setActivityTypeName(this.activityTypeName);
 
         try {
             addActivityTypeUseCase.execute(addActivityTypeUseCaseInput, addActivityTypeUseCaseOutput);
         } catch (DuplicateActivityTypeException e) {
             this.errorOccurred = true;
-        } catch (DatabaseErrorException e) {
+        } catch (DatabaseErrorException | ActivityTypeNotExistException e) {
             fail(e.getMessage());
         }
     }
@@ -145,7 +147,7 @@ public class ActivityStepDefinition {
     @When("I remove it from my activity type list")
     public void i_remove_it_from_my_activity_type_list() {
         RemoveActivityTypeUseCase removeActivityTypeUseCase = new RemoveActivityTypeUseCase(
-                this.activityTypeRepository);
+                this.userRepository);
         RemoveActivityTypeUseCaseInput removeActivityTypeUseCaseInput = new RemoveActivityTypeUseCaseInput();
         RemoveActivityTypeUseCaseOutput removeActivityTypeUseCaseOutput = new RemoveActivityTypeUseCaseOutput();
 
@@ -155,6 +157,7 @@ public class ActivityStepDefinition {
         try {
             removeActivityTypeUseCase.execute(removeActivityTypeUseCaseInput, removeActivityTypeUseCaseOutput);
         } catch (Exception e) {
+            e.printStackTrace();
             fail(e.getMessage());
         }
     }
@@ -162,9 +165,9 @@ public class ActivityStepDefinition {
     @Then("{string} is not in my activity type list")
     public void is_not_in_my_activity_type_list(String activityTypeName) {
         try {
-            for(ActivityType activityType: this.activityTypeRepository.getActivityTypeList(this.userID)) {
+            for(ActivityType activityType: this.user.getActivityTypeList()) {
                 if(activityType.getName().equals(activityTypeName)) {
-                    fail("Activity type is not removed from the repository");
+                    fail("Activity type should be removed from the repository");
                 }
             }
         } catch (Exception e) {
@@ -174,13 +177,13 @@ public class ActivityStepDefinition {
 
     @When("I change the activity name to {string} and set its state to disabled and private")
     public void i_change_the_activity_name_to_and_set_its_state_to_disabled_and_private(String newActivityTypeName) {
-        EditActivityTypeUseCase editActivityTypeUseCase = new EditActivityTypeUseCase(this.activityTypeRepository);
+        EditActivityTypeUseCase editActivityTypeUseCase = new EditActivityTypeUseCase(this.userRepository);
         EditActivityTypeUseCaseInput editActivityTypeUseCaseInput = new EditActivityTypeUseCaseInput();
         EditActivityTypeUseCaseOutput editActivityTypeUseCaseOutput = new EditActivityTypeUseCaseOutput();
 
         editActivityTypeUseCaseInput.setUserID(this.userID);
-        editActivityTypeUseCaseInput.setOldActivityTypeName(this.activityTypeName);
-        editActivityTypeUseCaseInput.setNewActivtiyTypeName(newActivityTypeName);
+        editActivityTypeUseCaseInput.setTargetActivityTypeName(this.activityTypeName);
+        editActivityTypeUseCaseInput.setActivtiyTypeName(newActivityTypeName);
         editActivityTypeUseCaseInput.setIsEnable(false);
         editActivityTypeUseCaseInput.setIsPrivate(true);
 
@@ -197,7 +200,7 @@ public class ActivityStepDefinition {
             Boolean oldFound = false;
             Boolean newFound = false;
     
-            for (ActivityType activityType: this.activityTypeRepository.getActivityTypeList(this.userID)) {
+            for (ActivityType activityType: this.user.getActivityTypeList()) {
                 if (activityType.getName().equals(oldActivityTypeName)) {
                     oldFound = true;
                 }
@@ -211,6 +214,7 @@ public class ActivityStepDefinition {
             assertFalse(oldFound);
             assertTrue(newFound);
         } catch (Exception e) {
+            e.printStackTrace();
             fail(e.getMessage());
         }
     }

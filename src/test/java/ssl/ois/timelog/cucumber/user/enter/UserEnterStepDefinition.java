@@ -12,16 +12,12 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
-import ssl.ois.timelog.adapter.repository.mysql.MysqlActivityTypeRepository;
-import ssl.ois.timelog.adapter.repository.mysql.MysqlUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.log.Log;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
+import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import ssl.ois.timelog.service.user.enter.EnterUseCase;
@@ -31,7 +27,6 @@ import ssl.ois.timelog.service.user.enter.EnterUseCaseOutput;
 public class UserEnterStepDefinition {
     private String userID;
     private UserRepository userRepository;
-    private ActivityTypeRepository activityTypeRepository;
     private LogRepository logRepository;
     private EnterUseCaseOutput enterUseCaseOutput;
     private List<ActivityType> activityTypeList;
@@ -40,7 +35,6 @@ public class UserEnterStepDefinition {
     @Before
     public void setup() {
         this.userRepository = new MemoryUserRepository();
-        this.activityTypeRepository = new MemoryActivityTypeRepository();
         this.logRepository = new MemoryLogRepository();
     }
 
@@ -51,8 +45,7 @@ public class UserEnterStepDefinition {
 
     @When("I first time enter Timelog")
     public void i_first_time_enter_Timelog() {
-        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeRepository,
-                this.logRepository);
+        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.logRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         enterUseCaseInput.setUserID(this.userID);
         this.enterUseCaseOutput = new EnterUseCaseOutput();
@@ -72,7 +65,7 @@ public class UserEnterStepDefinition {
 
         // verify that the activity type is actually stored
         try {
-            List<ActivityType> activityTypeListFromRepo = this.activityTypeRepository.getActivityTypeList(this.userID);
+            List<ActivityType> activityTypeListFromRepo = this.userRepository.findByUserID(this.userID).getActivityTypeList();
             assertEquals(1, activityTypeListFromRepo.size());
             assertEquals(activityTypeName, activityTypeListFromRepo.get(0).getName());
         } catch (Exception e) {
@@ -89,8 +82,7 @@ public class UserEnterStepDefinition {
 
     @Given("I have entered the Timelog with user ID {string} before")
     public void i_have_entered_the_Timelog_with_user_ID_before(String userID) {
-        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeRepository,
-                this.logRepository);
+        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.logRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         EnterUseCaseOutput enterUseCaseOutput = new EnterUseCaseOutput();
 
@@ -109,7 +101,9 @@ public class UserEnterStepDefinition {
     public void there_is_an_activity_type_in_my_activity_type_list(String activityTypeName) {
         ActivityType activityType = new ActivityType(activityTypeName, true, false);
         try {
-            this.activityTypeRepository.addActivityType(this.userID, activityType);
+            User user = this.userRepository.findByUserID(this.userID);
+            user.addActivityType(activityType);
+            this.userRepository.save(user);
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -128,7 +122,7 @@ public class UserEnterStepDefinition {
 
     @When("I enter the Timelog with same user ID again")
     public void i_enter_the_Timelog_with_same_user_ID_again() {
-        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.activityTypeRepository, this.logRepository);
+        EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.logRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         this.enterUseCaseOutput = new EnterUseCaseOutput();
 

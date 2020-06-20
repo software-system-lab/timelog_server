@@ -11,13 +11,11 @@ import java.util.UUID;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import ssl.ois.timelog.adapter.repository.memory.MemoryActivityTypeRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
@@ -31,7 +29,6 @@ import io.cucumber.java.en.Then;
 
 public class LogStepDefinition {
     private UserRepository userRepository;
-    private ActivityTypeRepository activityTypeRepository;
     private LogRepository logRepository;
     private String title;
     private String startTime;
@@ -44,18 +41,21 @@ public class LogStepDefinition {
     @Before
     public void setup() {
         this.userRepository = new MemoryUserRepository();
-        this.activityTypeRepository = new MemoryActivityTypeRepository();
         this.logRepository = new MemoryLogRepository();
     }
 
     @Given("[Log] I log in to Timelog with user ID {string}")
     public void log_i_log_in_to_Timelog_with_user_ID(String userID) {
         try {
-            if (this.userRepository.findByUserID(userID) == null) {
-                this.userRepository.save(new User(UUID.fromString(userID)));
-    
+            User user = this.userRepository.findByUserID(userID);
+            if (user == null) {
+                user = new User(UUID.fromString(userID));
+                this.userRepository.save(user);
+
                 ActivityType activityType = new ActivityType("Other", true, false);
-                this.activityTypeRepository.addActivityType(userID, activityType);
+                user.addActivityType(activityType);
+
+                this.userRepository.save(user);
             }
     
             this.userID = userID;

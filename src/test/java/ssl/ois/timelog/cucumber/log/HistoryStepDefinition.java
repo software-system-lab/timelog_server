@@ -21,6 +21,7 @@ import ssl.ois.timelog.service.repository.user.UserRepository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HistoryStepDefinition {
     private UserRepository userRepository;
@@ -78,24 +79,25 @@ public class HistoryStepDefinition {
         assertEquals(size.intValue(), this.output.getLogDTOList().size());
     }
 
-    @Then("[History] the first log of the list should contains title {string} and activity type {string} and start time {string} and end time {string}")
-    public void the_first_log_of_the_list_should_contains_title_and_activity_type_and_start_time_and_end_time(
+    @Then("[History] it should contain a log with title {string} and activity type {string} and start time {string} and end time {string}")
+    public void it_should_contain_a_log_with_title_and_activity_type_and_start_time_and_end_time(
             String title, String activityTypeName, String startTime, String endTime) {
-        LogDTO logDTO = this.output.getLogDTOList().get(0);
-        assertEquals(title, logDTO.getTitle());
-        assertEquals(activityTypeName, logDTO.getActivityTypeName());
-        assertEquals(startTime, logDTO.getStartTime());
-        assertEquals(endTime, logDTO.getEndTime());
-    }
+        // LogDTO logDTO = this.output.getLogDTOList().get(0);
+        // assertEquals(title, logDTO.getTitle());
+        // assertEquals(activityTypeName, logDTO.getActivityTypeName());
+        // assertEquals(startTime, logDTO.getStartTime());
+        // assertEquals(endTime, logDTO.getEndTime());
 
-    @Then("[History] the second log of the list should contains title {string} and activity type {string} and start time {string} and end time {string}")
-    public void the_second_log_of_the_list_should_contains_title_and_activity_type_and_start_time_and_end_time(
-            String title, String activityTypeName, String startTime, String endTime) {
-        LogDTO logDTO = this.output.getLogDTOList().get(1);
-        assertEquals(title, logDTO.getTitle());
-        assertEquals(activityTypeName, logDTO.getActivityTypeName());
-        assertEquals(startTime, logDTO.getStartTime());
-        assertEquals(endTime, logDTO.getEndTime());
+        boolean found = false;
+        for(LogDTO logDTO: this.output.getLogDTOList()) {
+            if(logDTO.getTitle().equals(title) &&
+               logDTO.getActivityTypeName().equals(activityTypeName) &&
+               logDTO.getStartTime().equals(startTime) &&
+               logDTO.getEndTime().equals(endTime)) {
+                found = true;
+            }
+        }
+        assertTrue(found);
     }
 
     private void addLog(String title, String startTime, String endTime, String description, String activityTypeName) {

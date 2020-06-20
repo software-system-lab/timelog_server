@@ -47,11 +47,13 @@ public class ActivityRestAdapter {
         AddActivityTypeUseCaseOutput output = new AddActivityTypeUseCaseOutput();
 
         input.setUserID(requestBody.getUserID());
+        input.setIsEnable(requestBody.getIsEnable());
+        input.setIsPrivate(requestBody.getIsPrivate());
         input.setActivityTypeName(requestBody.getActivityTypeName());
 
         try {
             addActivityTypeUseCase.execute(input, output);
-        } catch (DuplicateActivityTypeException | DatabaseErrorException e) {
+        } catch (DuplicateActivityTypeException | DatabaseErrorException | ActivityTypeNotExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
@@ -79,14 +81,14 @@ public class ActivityRestAdapter {
         EditActivityTypeUseCaseOutput output = new EditActivityTypeUseCaseOutput();
 
         input.setUserID(requestBody.getUserID());
-        input.setOldActivityTypeName(requestBody.getOldActivityTypeName());
-        input.setNewActivtiyTypeName(requestBody.getNewActivityTypeName());
+        input.setTargetActivityTypeName(requestBody.getTargetActivityTypeName());
+        input.setActivtiyTypeName(requestBody.getActivityTypeName());
         input.setIsEnable(requestBody.getIsEnable());
         input.setIsPrivate(requestBody.getIsPrivate());
 
         try {
             editActivityTypeUseCase.execute(input, output);
-        } catch (ActivityTypeNotExistException | DatabaseErrorException e) {
+        } catch (ActivityTypeNotExistException | DatabaseErrorException | DuplicateActivityTypeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);        
@@ -102,7 +104,7 @@ public class ActivityRestAdapter {
 
         try {
             removeActivityTypeUseCase.execute(input, output);
-        } catch (ActivityTypeNotExistException | DatabaseErrorException e) {
+        } catch (ActivityTypeNotExistException | DatabaseErrorException | DuplicateActivityTypeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);

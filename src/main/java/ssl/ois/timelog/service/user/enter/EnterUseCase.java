@@ -3,7 +3,6 @@ package ssl.ois.timelog.service.user.enter;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.repository.activity.ActivityTypeRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
@@ -21,13 +20,10 @@ import java.util.List;
 @Service
 public class EnterUseCase {
     private UserRepository userRepository;
-    private ActivityTypeRepository activityTypeRepository;
     private LogRepository logRepository;
 
-    public EnterUseCase(UserRepository userRepository, ActivityTypeRepository activityTypeRepository,
-            LogRepository logRepository) {
+    public EnterUseCase(UserRepository userRepository, LogRepository logRepository) {
         this.userRepository = userRepository;
-        this.activityTypeRepository = activityTypeRepository;
         this.logRepository = logRepository;
     }
 
@@ -43,26 +39,25 @@ public class EnterUseCase {
                 user = new User(UUID.fromString(userID));
                 this.userRepository.save(user);
     
-                // Create ActivityTypeList for the user.
+                // Create default activity type "Other" for the user.
                 ActivityType activityType = new ActivityType("Other", true, false);
-                this.activityTypeRepository.addActivityType(user.getID().toString(), activityType);
-    
-                List<ActivityType> activityTypeList = new ArrayList<>();
-                activityTypeList.add(activityType);
-                output.setActivityTypeList(activityTypeList);
-    
+                user.addActivityType(activityType);
+                this.userRepository.save(user);
+                
+                output.setActivityTypeList(user.getActivityTypeList());
                 output.setLogList(new ArrayList<Log>());
             } else {
-                this.userRepository.save(user);
-                output.setActivityTypeList(this.activityTypeRepository.getActivityTypeList(userID));
+                output.setActivityTypeList(user.getActivityTypeList());
                 try {
-                    output.setLogList(this.logRepository.getByUserID(userID));
+                    output.setLogList(this.logRepository.getByUserID(input.getUserID()));
                 } catch (GetLogErrorException e) {
                     throw new InitUserDataErrorException(userID);
                 }
             }
         } catch (DatabaseErrorException e) {
             throw new InitUserDataErrorException(input.getUserID());
+        } catch(Exception e) {
+            e.printStackTrace();
         }
     }
 }
