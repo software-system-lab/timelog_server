@@ -107,7 +107,7 @@ public class UserEnterStepDefinition {
 
     @Given("There is an activity type {string} in my activity type list")
     public void there_is_an_activity_type_in_my_activity_type_list(String activityTypeName) {
-        ActivityType activityType = new ActivityType(activityTypeName);
+        ActivityType activityType = new ActivityType(activityTypeName, true, false);
         try {
             this.activityTypeRepository.addActivityType(this.userID, activityType);
         } catch (Exception e) {

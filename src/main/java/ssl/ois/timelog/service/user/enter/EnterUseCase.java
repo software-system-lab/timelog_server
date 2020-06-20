@@ -44,7 +44,7 @@ public class EnterUseCase {
                 this.userRepository.save(user);
     
                 // Create ActivityTypeList for the user.
-                ActivityType activityType = new ActivityType("Other");
+                ActivityType activityType = new ActivityType("Other", true, false);
                 this.activityTypeRepository.addActivityType(user.getID().toString(), activityType);
     
                 List<ActivityType> activityTypeList = new ArrayList<>();
@@ -53,6 +53,7 @@ public class EnterUseCase {
     
                 output.setLogList(new ArrayList<Log>());
             } else {
+                this.userRepository.save(user);
                 output.setActivityTypeList(this.activityTypeRepository.getActivityTypeList(userID));
                 try {
                     output.setLogList(this.logRepository.getByUserID(userID));

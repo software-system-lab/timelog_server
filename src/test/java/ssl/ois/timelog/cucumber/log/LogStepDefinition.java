@@ -54,7 +54,7 @@ public class LogStepDefinition {
             if (this.userRepository.findByUserID(userID) == null) {
                 this.userRepository.save(new User(UUID.fromString(userID)));
     
-                ActivityType activityType = new ActivityType("Other");
+                ActivityType activityType = new ActivityType("Other", true, false);
                 this.activityTypeRepository.addActivityType(userID, activityType);
             }
     

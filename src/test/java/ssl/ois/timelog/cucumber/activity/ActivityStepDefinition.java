@@ -51,7 +51,7 @@ public class ActivityStepDefinition {
             if (this.userRepository.findByUserID(userID) == null) {
                 this.userRepository.save(new User(UUID.fromString(userID)));
 
-                ActivityType activityType = new ActivityType("Other");
+                ActivityType activityType = new ActivityType("Other", true, false);
                 try {
                     this.activityTypeRepository.addActivityType(userID, activityType);
                 } catch (DuplicateActivityTypeException e) {
@@ -72,7 +72,7 @@ public class ActivityStepDefinition {
 
     @When("I add it to my activity type list")
     public void i_add_it_to_my_activity_type_list() {
-        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.activityTypeRepository);
+        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.userRepository);
         AddActivityTypeUseCaseInput addActivityTypeUseCaseInput = new AddActivityTypeUseCaseInput();
         AddActivityTypeUseCaseOutput addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
 
@@ -103,7 +103,7 @@ public class ActivityStepDefinition {
 
     @Given("I have already had {string} in my activity type list")
     public void i_have_already_had_in_my_activity_type_lis(String activityTypeName) {
-        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.activityTypeRepository);
+        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.userRepository);
         AddActivityTypeUseCaseInput addActivityTypeUseCaseInput = new AddActivityTypeUseCaseInput();
         AddActivityTypeUseCaseOutput addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
 
@@ -121,7 +121,7 @@ public class ActivityStepDefinition {
 
     @When("I add an activity type with same name")
     public void i_add_an_activity_type_with_same_name() {
-        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.activityTypeRepository);
+        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.userRepository);
         AddActivityTypeUseCaseInput addActivityTypeUseCaseInput = new AddActivityTypeUseCaseInput();
         AddActivityTypeUseCaseOutput addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
 

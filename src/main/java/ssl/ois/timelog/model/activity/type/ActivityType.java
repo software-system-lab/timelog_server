@@ -5,12 +5,6 @@ public class ActivityType {
     private boolean isEnable;
     private boolean isPrivate;
 
-    public ActivityType(String name) {
-        this.name = name;
-        this.isEnable = true;
-        this.isPrivate = false;
-    }
-
     public ActivityType(String name, Boolean isEnable, Boolean isPrivate) {
         this.name = name;
         this.isEnable = isEnable;
