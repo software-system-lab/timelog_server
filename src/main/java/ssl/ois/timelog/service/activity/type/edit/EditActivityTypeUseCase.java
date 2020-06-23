@@ -27,5 +27,7 @@ public class EditActivityTypeUseCase {
 
         this.userRepository.save(user);
         output.setActivityTypeName(activityType.getName());
+        output.setIsEnable(activityType.isEnable());
+        output.setIsPrivate(activityType.isPrivate());
     }
 }
