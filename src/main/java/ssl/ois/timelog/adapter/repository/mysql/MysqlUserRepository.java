@@ -84,11 +84,12 @@ public class MysqlUserRepository implements UserRepository {
             )) {
                 stmt.setString(1, userID);
 
-                ResultSet rs = stmt.executeQuery();
-
-                if(rs.next()) {
-                    user = new User(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, userID));
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if(rs.next()) {
+                        user = new User(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, userID));
+                    }
                 }
+
             }
 
         } catch (SQLException e) {
@@ -108,11 +109,11 @@ public class MysqlUserRepository implements UserRepository {
                 stmt.setString(1, userID);
                 stmt.setString(2, activityTypeName);
 
-                ResultSet rs = stmt.executeQuery();
-
-                rs.next();
-
-                return rs.getInt(1) == 1;
+                try (ResultSet rs = stmt.executeQuery()) {
+                    rs.next();
+    
+                    return rs.getInt(1) == 1;
+                }
             }
     }
 
@@ -124,16 +125,17 @@ public class MysqlUserRepository implements UserRepository {
             )) {
                 stmt.setString(1, userID);
 
-                ResultSet rs = stmt.executeQuery();
-
-                while(rs.next()) {
-                    String activityTypeName = rs.getString("activity_type_name");
-                    boolean isEnable = rs.getInt("is_enable") == 1;
-                    boolean isPrivate = rs.getInt("is_private") == 1;
-
-                    ActivityType activityType = new ActivityType(activityTypeName, isEnable, isPrivate);
-                    activityTypeList.add(activityType);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while(rs.next()) {
+                        String activityTypeName = rs.getString("activity_type_name");
+                        boolean isEnable = rs.getInt("is_enable") == 1;
+                        boolean isPrivate = rs.getInt("is_private") == 1;
+    
+                        ActivityType activityType = new ActivityType(activityTypeName, isEnable, isPrivate);
+                        activityTypeList.add(activityType);
+                    }
                 }
+
             }
         return activityTypeList;
     }

@@ -58,18 +58,19 @@ public class MysqlLogRepository implements LogRepository {
 
                 stmt.setString(1, id);
 
-                ResultSet rs = stmt.executeQuery();
+                try (ResultSet rs = stmt.executeQuery()) {
+                    rs.next();
+    
+                    UUID logID = UUID.fromString(rs.getString("id"));
+                    UUID userID = UUID.fromString(rs.getString("user_id"));
+                    String title = rs.getString("title");
+                    String startTime = rs.getString("start_time");
+                    String endTime = rs.getString("end_time");
+                    String description = rs.getString("description");
+                    String activityTypeName = rs.getString("activity_type");
+                    log = new Log(logID, userID, title, startTime, endTime, description, activityTypeName);
+                }
 
-                rs.next();
-
-                UUID logID = UUID.fromString(rs.getString("id"));
-                UUID userID = UUID.fromString(rs.getString("user_id"));
-                String title = rs.getString("title");
-                String startTime = rs.getString("start_time");
-                String endTime = rs.getString("end_time");
-                String description = rs.getString("description");
-                String activityTypeName = rs.getString("activity_type");
-                log = new Log(logID, userID, title, startTime, endTime, description, activityTypeName);
             }
         } catch (SQLException e) {
             throw new GetLogErrorException(id);
@@ -101,22 +102,24 @@ public class MysqlLogRepository implements LogRepository {
             stmt.setString(1, userID);
             stmt.setString(2, startDate);
             stmt.setString(3, endDate);
-            ResultSet result = stmt.executeQuery();
-
-            while (result.next()) {
-                UUID logID = UUID.fromString(result.getString("id"));
-                UUID uid = UUID.fromString(result.getString("user_id"));
-                String title = result.getString("title");
-                String startTime = result.getString("start_time").replace("-", "/");
-                String endTime = result.getString("end_time").replace("-", "/");
-                String description = result.getString("description");
-                String activityType = result.getString("activity_type");
-
-
-                Log log = new Log(logID, uid, title, startTime.substring(0, startTime.lastIndexOf(':')),
-                        endTime.substring(0, endTime.lastIndexOf(':')), description, activityType);
-                logList.add(log);
+            
+            try (ResultSet result = stmt.executeQuery()) {
+                while (result.next()) {
+                    UUID logID = UUID.fromString(result.getString("id"));
+                    UUID uid = UUID.fromString(result.getString("user_id"));
+                    String title = result.getString("title");
+                    String startTime = result.getString("start_time").replace("-", "/");
+                    String endTime = result.getString("end_time").replace("-", "/");
+                    String description = result.getString("description");
+                    String activityType = result.getString("activity_type");
+    
+    
+                    Log log = new Log(logID, uid, title, startTime.substring(0, startTime.lastIndexOf(':')),
+                            endTime.substring(0, endTime.lastIndexOf(':')), description, activityType);
+                    logList.add(log);
+                }
             }
+
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         } finally {

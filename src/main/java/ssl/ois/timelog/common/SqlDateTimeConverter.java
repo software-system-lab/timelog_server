@@ -5,17 +5,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SqlDateTimeConverter {
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private static final String format = "yyyy-MM-dd HH:mm";
 
     private SqlDateTimeConverter() {
         throw new IllegalStateException("Utility class");
     }
 
     public static String toString(Date date) {
-        return sdf.format(date);
+        return (new SimpleDateFormat(format)).format(date);
     }
 
     public static Date toDate(String dateString) throws ParseException {
-        return sdf.parse(dateString);
+        return (new SimpleDateFormat(format)).parse(dateString);
     }
 }
