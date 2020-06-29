@@ -4,9 +4,6 @@ import ssl.ois.timelog.adapter.view.model.log.history.LogHistoryViewModel;
 import ssl.ois.timelog.service.log.LogDTO;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseOutputBound;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class LogHistoryPresenter extends HistoryLogUseCaseOutputBound {
 
     public LogHistoryViewModel build() {

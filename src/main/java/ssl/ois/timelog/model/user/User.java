@@ -10,9 +10,9 @@ import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException
 
 public class User {
 
-    public static enum Operation {
+    public enum Operation {
         CREATE, UPDATE, DELETE, NONE
-    };
+    }
 
     private UUID id;
     private List<ActivityType> activityTypeList;

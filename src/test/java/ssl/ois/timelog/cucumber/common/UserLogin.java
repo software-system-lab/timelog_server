@@ -1,42 +1,40 @@
 package ssl.ois.timelog.cucumber.common;
 
-import static org.junit.Assert.fail;
 
 import java.util.UUID;
 
+import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.exception.DatabaseErrorException;
-import ssl.ois.timelog.service.exception.activity.SaveActivityTypeErrorException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
 public class UserLogin {
     private String userID;
+    private User user;
     private UserRepository userRepository;
 
     public UserLogin(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
-    public void process(String userID) {
-//        try {
-//            if (this.userRepository.findByUserID(userID) == null) {
-//                this.userRepository.save(new User(UUID.fromString(userID)));
-//
-//                try {
-//                    this.userRepository.save(activityTypeList);
-//                } catch (SaveActivityTypeErrorException e) {
-//                    fail(e.getMessage());
-//                }
-//            }
-//
-//            this.userID = userID;
-//        } catch (DatabaseErrorException e) {
-//            e.printStackTrace();
-//        }
 
-        this.userID = userID;
+    public void process(String userID)
+            throws Exception {
+        this.user = this.userRepository.findByUserID(userID);
+        if (this.user == null) {
+            this.user = new User(UUID.fromString(userID));
+            this.userRepository.save(this.user);
+
+            ActivityType activityType = new ActivityType("Other", true, false);
+            this.user.addActivityType(activityType);
+            this.userRepository.save(this.user);
+            this.userID = this.user.getID().toString();
+        }
     }
+
     public String getUserID() {
         return userID;
+    }
+
+    public User getUser() {
+        return this.user;
     }
 }

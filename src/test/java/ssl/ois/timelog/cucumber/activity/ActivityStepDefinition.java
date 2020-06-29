@@ -4,12 +4,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import java.util.UUID;
-
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
+import ssl.ois.timelog.cucumber.common.UserLogin;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCase;
@@ -44,21 +43,14 @@ public class ActivityStepDefinition {
 
     @Given("[Activity] I log in to Timelog with user ID {string}")
     public void activity_i_log_in_to_Timelog_with_user_ID(String userID) {
+        UserLogin userLoginService = new UserLogin(this.userRepository);
         try {
-            this.user = this.userRepository.findByUserID(userID);
-            if (this.user == null) {
-                this.user = new User(UUID.fromString(userID));
-                this.userRepository.save(this.user);
-
-                ActivityType activityType = new ActivityType("Other", true, false);
-                this.user.addActivityType(activityType);
-                this.userRepository.save(this.user);
-            }
+            userLoginService.process(userID);
+            this.userID = userLoginService.getUserID();
+            this.user = userLoginService.getUser();
         } catch (Exception e) {
             fail(e.getMessage());
         }
-
-        this.userID = userID;
     }
 
     @Given("I have {string} course in this semester")
@@ -171,6 +163,7 @@ public class ActivityStepDefinition {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             fail(e.getMessage());
         }
     }
@@ -205,8 +198,8 @@ public class ActivityStepDefinition {
                     oldFound = true;
                 }
                 if (activityType.getName().equals(newActivityTypeName) &&
-                    activityType.isEnable() == false &&
-                    activityType.isPrivate() == true) {
+                    !activityType.isEnable() &&
+                    activityType.isPrivate()) {
                         newFound = true;
                 }
             }

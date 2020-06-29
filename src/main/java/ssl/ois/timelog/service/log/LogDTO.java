@@ -1,9 +1,5 @@
 package ssl.ois.timelog.service.log;
 
-import ssl.ois.timelog.model.log.Log;
-
-import java.text.SimpleDateFormat;
-
 public class LogDTO {
     private String id;
     private String userID;

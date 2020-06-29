@@ -1,6 +1,7 @@
 package ssl.ois.timelog.service.log.history;
 
 import ssl.ois.timelog.model.log.Log;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.log.LogDTO;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 
@@ -18,14 +19,11 @@ public class HistoryLogUseCase {
         this.logRepository = logRepository;
     }
 
-    public void execute(HistoryLogUseCaseInput input, HistoryLogUseCaseOutput output) {
+    public void execute(HistoryLogUseCaseInput input, HistoryLogUseCaseOutput output)
+            throws ParseException, DatabaseErrorException {
         Date endDate;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        try {
-            endDate = dateFormat.parse(input.getEndDate());
-        } catch (ParseException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        endDate = dateFormat.parse(input.getEndDate());
         Calendar c = Calendar.getInstance();
         c.setTime(endDate);
         c.add(Calendar.DATE, 1);
@@ -34,7 +32,7 @@ public class HistoryLogUseCase {
         List<Log> logList = this.logRepository.findByPeriod(input.getUserID(),
                 input.getStartDate(), dateFormat.format(endDate));
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.dateFormatString);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
 
         List<LogDTO> logDTOList = new ArrayList<>();
         for (Log log: logList) {

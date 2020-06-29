@@ -62,7 +62,7 @@ public class MysqlUserRepository implements UserRepository {
                     }
                     this.removeFromActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName());
                     break;
-                case NONE:
+                default:
                     break;
             }
         } catch (SQLException e) {

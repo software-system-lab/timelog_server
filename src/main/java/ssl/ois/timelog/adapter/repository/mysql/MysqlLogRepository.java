@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.common.SqlDateTimeConverter;
 import ssl.ois.timelog.model.log.Log;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.repository.log.LogRepository;
@@ -91,37 +92,38 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public List<Log> findByPeriod(String userID, String startDate, String endDate) {
+    public List<Log> findByPeriod(String userID, String startDate, String endDate) throws DatabaseErrorException {
         Connection connection = null;
         List<Log> logList = new ArrayList<>();
 
         try {
             connection = this.mysqlDriverAdapter.getConnection();
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM `log` " +
-                    "WHERE `user_id` = ? AND `start_time` >= ? AND `end_time` < ? ");
-            stmt.setString(1, userID);
-            stmt.setString(2, startDate);
-            stmt.setString(3, endDate);
-            
-            try (ResultSet result = stmt.executeQuery()) {
-                while (result.next()) {
-                    UUID logID = UUID.fromString(result.getString("id"));
-                    UUID uid = UUID.fromString(result.getString("user_id"));
-                    String title = result.getString("title");
-                    String startTime = result.getString("start_time").replace("-", "/");
-                    String endTime = result.getString("end_time").replace("-", "/");
-                    String description = result.getString("description");
-                    String activityType = result.getString("activity_type");
-    
-    
-                    Log log = new Log(logID, uid, title, startTime.substring(0, startTime.lastIndexOf(':')),
-                            endTime.substring(0, endTime.lastIndexOf(':')), description, activityType);
-                    logList.add(log);
-                }
+            try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM `log` " +
+                    "WHERE `user_id` = ? AND `start_time` >= ? AND `end_time` < ? ")) {
+                        stmt.setString(1, userID);
+                        stmt.setString(2, startDate);
+                        stmt.setString(3, endDate);
+                        
+                        try (ResultSet result = stmt.executeQuery()) {
+                            while (result.next()) {
+                                UUID logID = UUID.fromString(result.getString("id"));
+                                UUID uid = UUID.fromString(result.getString("user_id"));
+                                String title = result.getString("title");
+                                String startTime = result.getString("start_time").replace("-", "/");
+                                String endTime = result.getString("end_time").replace("-", "/");
+                                String description = result.getString("description");
+                                String activityType = result.getString("activity_type");
+                
+                
+                                Log log = new Log(logID, uid, title, startTime.substring(0, startTime.lastIndexOf(':')),
+                                        endTime.substring(0, endTime.lastIndexOf(':')), description, activityType);
+                                logList.add(log);
+                            }
+                        }
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new DatabaseErrorException();
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
         }

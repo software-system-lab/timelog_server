@@ -26,17 +26,4 @@ public class RemoveActivityTypeUseCase {
         this.userRepository.save(user);
         output.setActivityTypeName(input.getActivityTypeName());
     }
-
-    // private ActivityTypeRepository activityTypeRepository;
-
-    // public RemoveActivityTypeUseCase(ActivityTypeRepository activityTypeRepository) {
-    //     this.activityTypeRepository = activityTypeRepository;
-    // }
-
-    // public void execute(RemoveActivityTypeUseCaseInput input, RemoveActivityTypeUseCaseOutput output)
-    //         throws ActivityTypeNotExistException, DatabaseErrorException {
-    //     this.activityTypeRepository.removeActivityType(input.getUserID(), input.getActivityTypeName());
-
-    //     output.setActivityTypeName(input.getActivityTypeName());
-    // }
 }

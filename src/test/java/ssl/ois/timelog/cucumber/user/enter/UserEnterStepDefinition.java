@@ -84,7 +84,7 @@ public class UserEnterStepDefinition {
     public void i_have_entered_the_Timelog_with_user_ID_before(String userID) {
         EnterUseCase enterUseCase = new EnterUseCase(this.userRepository, this.logRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
-        EnterUseCaseOutput enterUseCaseOutput = new EnterUseCaseOutput();
+        enterUseCaseOutput = new EnterUseCaseOutput();
 
         this.userID = userID;
 
@@ -163,7 +163,7 @@ public class UserEnterStepDefinition {
     public void the_log_list_contains_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type(String title, String startTime, String endTime, String description, String activityTypeName) {
         Boolean found = false;
         for(Log log: this.logList) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(Log.dateFormatString);
+            SimpleDateFormat dateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
             if(log.getTitle().equals(title) &&
                dateFormat.format(log.getStartTime()).equals(startTime) &&
                dateFormat.format(log.getEndTime()).equals(endTime) &&

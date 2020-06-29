@@ -7,34 +7,28 @@ import ssl.ois.timelog.service.log.history.HistoryLogUseCaseOutputBound;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class LogDashBoardPresenter extends HistoryLogUseCaseOutputBound {
-    public LogDashBoardViewModel build() {
+    public LogDashBoardViewModel build() throws ParseException {
         LogDashBoardViewModel viewModel = new LogDashBoardViewModel();
         long totalTime = 0;
-        try {
-            for (LogDTO log : this.getLogDTOList()) {
-                LogDashBoardViewModel.Data data = new LogDashBoardViewModel.Data();
-                SimpleDateFormat dateFormat = new SimpleDateFormat(Log.dateFormatString);
-                Date startTime = dateFormat.parse(log.getStartTime());
-                Date endTime = dateFormat.parse(log.getEndTime());
+        for (LogDTO log : this.getLogDTOList()) {
+            LogDashBoardViewModel.Data data = new LogDashBoardViewModel.Data();
+            SimpleDateFormat dateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
+            Date startTime = dateFormat.parse(log.getStartTime());
+            Date endTime = dateFormat.parse(log.getEndTime());
 
-                long timeLength = endTime.getTime() - startTime.getTime();
-                data.setTimeLength(timeLength);
-                totalTime += timeLength;
+            long timeLength = endTime.getTime() - startTime.getTime();
+            data.setTimeLength(timeLength);
+            totalTime += timeLength;
 
-                int hour = this.getHour(timeLength);
-                int minute = this.getMinute(timeLength);
+            int hour = this.getHour(timeLength);
+            int minute = this.getMinute(timeLength);
 
-                data.setHour(hour);
-                data.setMinute(minute);
-                viewModel.add(log.getActivityTypeName(), data);
-            }
-        } catch (ParseException e) {
-            throw new RuntimeException(e.getMessage());
+            data.setHour(hour);
+            data.setMinute(minute);
+            viewModel.add(log.getActivityTypeName(), data);
         }
 
         int hour = this.getHour(totalTime);

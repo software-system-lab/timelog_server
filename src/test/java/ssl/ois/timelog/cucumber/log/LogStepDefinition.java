@@ -13,11 +13,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
-import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.cucumber.common.UserLogin;
 import ssl.ois.timelog.model.log.Log;
-import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.add.*;
@@ -46,23 +44,13 @@ public class LogStepDefinition {
 
     @Given("[Log] I log in to Timelog with user ID {string}")
     public void log_i_log_in_to_Timelog_with_user_ID(String userID) {
+        UserLogin userLoginService = new UserLogin(this.userRepository);
         try {
-            User user = this.userRepository.findByUserID(userID);
-            if (user == null) {
-                user = new User(UUID.fromString(userID));
-                this.userRepository.save(user);
-
-                ActivityType activityType = new ActivityType("Other", true, false);
-                user.addActivityType(activityType);
-
-                this.userRepository.save(user);
-            }
-    
-            this.userID = userID;
+            userLoginService.process(userID);
+            this.userID = userLoginService.getUserID();
         } catch (Exception e) {
             fail(e.getMessage());
         }
-
     }
 
     @Given("I {string} from {string} to {string}, the description is {string}")
@@ -112,13 +100,13 @@ public class LogStepDefinition {
 
     @Then("The log has start time with {string}")
     public void the_log_has_start_time_with(String startTime) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.dateFormatString);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
         assertEquals(startTime, simpleDateFormat.format(this.log.getStartTime()));
     }
 
     @Then("The log has end time with {string}")
     public void the_log_has_end_time_with(String endTime) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.dateFormatString);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
         assertEquals(endTime, simpleDateFormat.format(this.log.getEndTime()));
     }
 

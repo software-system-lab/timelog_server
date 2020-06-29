@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Log {
-    private UUID id;
+    private final UUID id;
     private UUID userID;
     private String title;
     private Date startTime;
@@ -14,64 +14,64 @@ public class Log {
     private String description;
     private String activityTypeName;
 
-    public static final String dateFormatString = "yyyy/MM/dd HH:mm";
+    public static final String DATE_FORMAT = "yyyy/MM/dd HH:mm";
 
-    public Log(UUID logID,
-               UUID userID,
-               String title,
-               String startTime,
-               String endTime,
-               String description,
-               String activityTypeName) {
+    public Log(final UUID logID,
+               final UUID userID,
+               final String title,
+               final String startTime,
+               final String endTime,
+               final String description,
+               final String activityTypeName) {
         this.id = logID;
         this.title = title;
         this.userID = userID;
         this.activityTypeName = activityTypeName;
         this.description = description;
-        SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         try {
             this.startTime = dateFormat.parse(startTime);
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             throw new IllegalArgumentException("Invalid Start Time: " + startTime);
         }
         try {
             this.endTime = dateFormat.parse(endTime);
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             throw new IllegalArgumentException("Invalid End Time format: " + endTime);
         }
     }
 
-    public Log(UUID userID,
-               String title,
-               String startTime,
-               String endTime,
-               String description,
-               String activityTypeName) {
+    public Log(final UUID userID,
+               final String title,
+               final String startTime,
+               final String endTime,
+               final String description,
+               final String activityTypeName) {
         this.id = UUID.randomUUID();
         this.title = title;
         this.userID = userID;
         this.activityTypeName = activityTypeName;
         this.description = description;
-        SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         try {
             this.startTime = dateFormat.parse(startTime);
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             throw new IllegalArgumentException("Invalid Start Time: " + startTime);
         }
         try {
             this.endTime = dateFormat.parse(endTime);
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             throw new IllegalArgumentException("Invalid End Time format: " + endTime);
         }
     }
 
     public int getMinutes() {
-        long time = this.endTime.getTime() - this.startTime.getTime();
+        final long time = this.endTime.getTime() - this.startTime.getTime();
         return (int)(time / (60 * 1000));
     }
 
     public double getHours() {
-        long time = this.endTime.getTime() - this.startTime.getTime();
+        final long time = this.endTime.getTime() - this.startTime.getTime();
         return (double)time / (60 * 60 * 1000);
     }
 
@@ -83,7 +83,7 @@ public class Log {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -91,7 +91,7 @@ public class Log {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(final Date startTime) {
         this.startTime = startTime;
     }
 
@@ -99,7 +99,7 @@ public class Log {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(final Date endTime) {
         this.endTime = endTime;
     }
 
@@ -107,7 +107,7 @@ public class Log {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -115,7 +115,7 @@ public class Log {
         return activityTypeName;
     }
 
-    public void setActivityTypeName(String activityTypeName) {
+    public void setActivityTypeName(final String activityTypeName) {
         this.activityTypeName = activityTypeName;
     }
 
@@ -123,7 +123,7 @@ public class Log {
         return userID;
     }
 
-    public void setUserID(UUID userID) {
+    public void setUserID(final UUID userID) {
         this.userID = userID;
     }
 }

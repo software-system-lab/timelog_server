@@ -12,13 +12,6 @@ import ssl.ois.timelog.service.repository.user.UserRepository;
 @Service
 public class AddActivityTypeUseCase {
     private UserRepository userRepository;
-    // private ActivityTypeRepository activityTypeRepository;
-
-    // public AddActivityTypeUseCase(UserRepository userRepository,
-    // ActivityTypeRepository activityTypeRepository) {
-    // this.userRepository = userRepository;
-    // this.activityTypeRepository = activityTypeRepository;
-    // }
 
     public AddActivityTypeUseCase(UserRepository userRepository) {
         this.userRepository = userRepository;

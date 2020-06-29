@@ -8,6 +8,7 @@ import ssl.ois.timelog.adapter.presenter.log.history.LogHistoryPresenter;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.LogDTO;
 import ssl.ois.timelog.service.log.add.AddLogUseCase;
@@ -22,6 +23,8 @@ import ssl.ois.timelog.service.repository.user.UserRepository;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.text.ParseException;
 
 public class HistoryStepDefinition {
     private UserRepository userRepository;
@@ -39,8 +42,12 @@ public class HistoryStepDefinition {
     @Given("[History] I log in to Timelog with user ID {string}")
     public void history_I_log_in_to_Timelog_with_user_ID(String userID) {
         UserLogin loginService = new UserLogin(this.userRepository);
-        loginService.process(userID);
-        this.userID = loginService.getUserID();
+        try {
+            loginService.process(userID);
+            this.userID = loginService.getUserID();
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
     }
 
     @Given("[History] There is the first log with title {string} and start time {string} and end time {string} and description {string} and activity type {string} in my log history.")
@@ -71,7 +78,11 @@ public class HistoryStepDefinition {
         input.setStartDate(startDate);
         input.setEndDate(endDate);
 
-        useCase.execute(input, this.output);
+        try {
+            useCase.execute(input, this.output);
+        } catch (ParseException | DatabaseErrorException e) {
+            fail(e.getMessage());
+        }
     }
 
     @Then("[History] I should get a list of logs with size of {int}")
@@ -82,12 +93,6 @@ public class HistoryStepDefinition {
     @Then("[History] it should contain a log with title {string} and activity type {string} and start time {string} and end time {string}")
     public void it_should_contain_a_log_with_title_and_activity_type_and_start_time_and_end_time(
             String title, String activityTypeName, String startTime, String endTime) {
-        // LogDTO logDTO = this.output.getLogDTOList().get(0);
-        // assertEquals(title, logDTO.getTitle());
-        // assertEquals(activityTypeName, logDTO.getActivityTypeName());
-        // assertEquals(startTime, logDTO.getStartTime());
-        // assertEquals(endTime, logDTO.getEndTime());
-
         boolean found = false;
         for(LogDTO logDTO: this.output.getLogDTOList()) {
             if(logDTO.getTitle().equals(title) &&

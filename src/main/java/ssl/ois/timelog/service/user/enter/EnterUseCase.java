@@ -15,7 +15,6 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class EnterUseCase {
@@ -48,13 +47,9 @@ public class EnterUseCase {
                 output.setLogList(new ArrayList<Log>());
             } else {
                 output.setActivityTypeList(user.getActivityTypeList());
-                try {
-                    output.setLogList(this.logRepository.getByUserID(input.getUserID()));
-                } catch (GetLogErrorException e) {
-                    throw new InitUserDataErrorException(userID);
-                }
+                output.setLogList(this.logRepository.getByUserID(input.getUserID()));
             }
-        } catch (DatabaseErrorException e) {
+        } catch (DatabaseErrorException | GetLogErrorException e) {
             throw new InitUserDataErrorException(input.getUserID());
         } catch(Exception e) {
             e.printStackTrace();

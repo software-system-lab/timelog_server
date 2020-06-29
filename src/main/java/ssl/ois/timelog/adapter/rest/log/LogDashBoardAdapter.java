@@ -1,5 +1,7 @@
 package ssl.ois.timelog.adapter.rest.log;
 
+import java.text.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ssl.ois.timelog.adapter.presenter.log.dash.board.LogDashBoardPresenter;
 import ssl.ois.timelog.adapter.view.model.log.dash.board.LogDashBoardViewModel;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCase;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseInput;
 import ssl.ois.timelog.service.repository.log.LogRepository;
@@ -24,8 +27,12 @@ public class LogDashBoardAdapter {
         HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository);
 
         LogDashBoardPresenter presenter = new LogDashBoardPresenter();
-        useCase.execute(input, presenter);
 
-        return ResponseEntity.status(HttpStatus.OK).body(presenter.build());
+        try {
+            useCase.execute(input, presenter);
+            return ResponseEntity.status(HttpStatus.OK).body(presenter.build());
+        } catch (ParseException | DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LogDashBoardViewModel());
+        }
     }
 }
