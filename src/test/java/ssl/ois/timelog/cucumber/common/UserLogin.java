@@ -5,6 +5,9 @@ import java.util.UUID;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.user.User;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
+import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
 public class UserLogin {
@@ -17,7 +20,7 @@ public class UserLogin {
     }
 
     public void process(String userID)
-            throws Exception {
+            throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
         this.user = this.userRepository.findByUserID(userID);
         if (this.user == null) {
             this.user = new User(UUID.fromString(userID));
