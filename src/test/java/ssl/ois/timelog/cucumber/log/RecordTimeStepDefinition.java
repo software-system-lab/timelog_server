@@ -51,7 +51,7 @@ public class RecordTimeStepDefinition {
 
     @Given("mvc Activity type {string} is selected")
     public void activity_type_is_selected(String activityName) {
-        this.body.setActivityName(activityName);
+        this.body.setActivityTypeName(activityName);
     }
 
     @When("mvc I record the activity to Timelog")
@@ -112,7 +112,7 @@ public class RecordTimeStepDefinition {
 
     @Then("mvc This log has activity type {string}")
     public void this_log_has_activity_type(String activityType) {
-        assertEquals(activityType, this.resultLog.getActivityType());
+        assertEquals(activityType, this.resultLog.getActivityTypeName());
     }
 
 }
@@ -120,7 +120,7 @@ public class RecordTimeStepDefinition {
 class RecordAPIRequestBody {
     private String userID;
     private String title;
-    private String activityName;
+    private String activityTypeName;
     private String startTime;
     private String endTime;
     private String description;
@@ -141,12 +141,12 @@ class RecordAPIRequestBody {
         this.title = title;
     }
 
-    public String getActivityName() {
-        return activityName;
+    public String getActivityTypeName() {
+        return activityTypeName;
     }
 
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
+    public void setActivityTypeName(String activityTypeName) {
+        this.activityTypeName = activityTypeName;
     }
 
     public String getStartTime() {
@@ -204,7 +204,7 @@ class GetLogByIdResponseBody{
     private String title;
     private String startTime;
     private String endTime;
-    private String activityType;
+    private String activityTypeName;
     private String description;
 
     public void setLogId(String logId){
@@ -223,8 +223,8 @@ class GetLogByIdResponseBody{
         this.endTime = endTime;
     }
 
-    public void setActivityType(String activityType){
-        this.activityType = activityType;
+    public void setActivityTypeName(String activityTypeName){
+        this.activityTypeName = activityTypeName;
     }
 
     public void setDescription(String description){
@@ -247,8 +247,8 @@ class GetLogByIdResponseBody{
         return this.endTime;
     }
 
-    public String getActivityType(){
-        return this.activityType;
+    public String getActivityTypeName(){
+        return this.activityTypeName;
     }
 
     public String getDescription(){

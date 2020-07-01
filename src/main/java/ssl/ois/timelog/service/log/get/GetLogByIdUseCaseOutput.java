@@ -5,7 +5,7 @@ public class GetLogByIdUseCaseOutput {
     private String title;
     private String startTime;
     private String endTime;
-    private String activityType;
+    private String activityTypeName;
     private String description;
 
     public void setLogId(String logId){
@@ -24,8 +24,8 @@ public class GetLogByIdUseCaseOutput {
         this.endTime = endTime;
     }
 
-    public void setActivityType(String activityType){
-        this.activityType = activityType;
+    public void setActivityTypeName(String activityTypeName){
+        this.activityTypeName = activityTypeName;
     }
 
     public void setDescription(String description){
@@ -48,8 +48,8 @@ public class GetLogByIdUseCaseOutput {
         return this.endTime;
     }
 
-    public String getActivityType(){
-        return this.activityType;
+    public String getActivityTypeName(){
+        return this.activityTypeName;
     }
 
     public String getDescription(){

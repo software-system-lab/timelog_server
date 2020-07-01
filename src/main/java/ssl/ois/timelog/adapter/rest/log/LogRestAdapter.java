@@ -32,7 +32,7 @@ public class LogRestAdapter {
         input.setStartTime(requestBody.getStartTime());
         input.setEndTime(requestBody.getEndTime());
         input.setDescription(requestBody.getDescription());
-        input.setActivityTypeName(requestBody.getActivityName());
+        input.setActivityTypeName(requestBody.getActivityTypeName());
 
         try {
             this.addLogUseCase.execute(input, output);
@@ -62,15 +62,15 @@ public class LogRestAdapter {
         private String startTime;
         private String endTime;
         private String description;
-        private String activityName;
+        private String activityTypeName;
 
-        public NewLogRequestInput(String userID, String title, String startTime, String endTime, String description) {
+        public NewLogRequestInput(String userID, String title, String startTime, String endTime, String description, String activityTypeName) {
             this.userID = userID;
             this.title = title;
             this.startTime = startTime;
             this.endTime = endTime;
             this.description = description;
-            this.activityName = "Others";
+            this.activityTypeName = activityTypeName;
         }
 
         public String getUserID() {
@@ -93,8 +93,8 @@ public class LogRestAdapter {
             return description;
         }
 
-        public String getActivityName() {
-            return activityName;
+        public String getActivityTypeName() {
+            return activityTypeName;
         }
     }
 

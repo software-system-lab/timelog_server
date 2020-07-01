@@ -20,11 +20,12 @@ public class LogDashBoardPresenter extends HistoryLogUseCaseOutputBound {
             Date endTime = dateFormat.parse(log.getEndTime());
 
             long timeLength = endTime.getTime() - startTime.getTime();
-            data.setTimeLength(timeLength);
+            data.setTimeLength(timeLength/60000);
             totalTime += timeLength;
 
             int hour = this.getHour(timeLength);
             int minute = this.getMinute(timeLength);
+            
 
             data.setHour(hour);
             data.setMinute(minute);

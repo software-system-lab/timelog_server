@@ -28,8 +28,9 @@ public class GetLogByIdUseCaseTest {
         String startTime = "2020/04/21 15:00";
         String endTime = "2020/04/21 18:00";
         String description = "Composite Pattern";
+        String activityTypeName = "DP";
         AddLogUseCaseInput inputData = new AddLogUseCaseInput(user.getID().toString(), logTitle, startTime, endTime,
-                description);
+                description, activityTypeName);
         AddLogUseCaseOutput outputData = new AddLogUseCaseOutput();
         AddLogUseCase addLogUseCase = new AddLogUseCase(this.logRepository);
         try {
@@ -59,6 +60,6 @@ public class GetLogByIdUseCaseTest {
         assertEquals("2020/04/21 15:00", output.getStartTime());
         assertEquals("2020/04/21 18:00", output.getEndTime());
         assertEquals("Composite Pattern", output.getDescription());
-        assertEquals("Others", output.getActivityType());
+        assertEquals("DP", output.getActivityTypeName());
     }
 }

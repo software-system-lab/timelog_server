@@ -25,7 +25,7 @@ public class GetLogByIdUseCase {
         output.setTitle(log.getTitle());
         output.setStartTime(dateFormat.format(log.getStartTime()));
         output.setEndTime(dateFormat.format(log.getEndTime()));
-        output.setActivityType(log.getActivityTypeName());
+        output.setActivityTypeName(log.getActivityTypeName());
         output.setDescription(log.getDescription());
     }
 }
