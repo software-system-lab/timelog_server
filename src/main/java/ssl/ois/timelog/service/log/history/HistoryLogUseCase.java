@@ -37,6 +37,7 @@ public class HistoryLogUseCase {
         List<LogDTO> logDTOList = new ArrayList<>();
         for (Log log: logList) {
             LogDTO logDTO = new LogDTO();
+            logDTO.setId(log.getID().toString());
             logDTO.setActivityTypeName(log.getActivityTypeName());
             logDTO.setTitle(log.getTitle());
             logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));

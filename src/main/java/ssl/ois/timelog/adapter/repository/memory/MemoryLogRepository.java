@@ -49,15 +49,4 @@ public class MemoryLogRepository implements LogRepository {
         }
         return logList;
     }
-
-    @Override
-    public List<Log> getByUserID(final String userID) {
-        final List<Log> foundLogs = new ArrayList<>();
-        for(final Log log: this.logs.values()) {
-            if(log.getUserID().toString().equals(userID)) {
-                foundLogs.add(log);
-            }
-        }
-        return Collections.unmodifiableList(foundLogs);
-    }
 }

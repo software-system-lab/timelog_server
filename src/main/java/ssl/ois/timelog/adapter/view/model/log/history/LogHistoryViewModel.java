@@ -19,10 +19,15 @@ public class LogHistoryViewModel {
     }
 
     public static class LogItem {
+        private String id;
         private String activityTypeName;
         private String title;
         private String startTime;
         private String endTime;
+
+        public String getID() { return id; }
+
+        public void setID(String id) { this.id = id; }
 
         public String getActivityTypeName() {
             return activityTypeName;

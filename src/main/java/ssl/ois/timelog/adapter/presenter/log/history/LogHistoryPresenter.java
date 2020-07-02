@@ -10,6 +10,7 @@ public class LogHistoryPresenter extends HistoryLogUseCaseOutputBound {
         LogHistoryViewModel viewModel = new LogHistoryViewModel();
         for (LogDTO log: this.getLogDTOList()) {
             LogHistoryViewModel.LogItem logItem = new LogHistoryViewModel.LogItem();
+            logItem.setID(log.getId());
             logItem.setActivityTypeName(log.getActivityTypeName());
             logItem.setTitle(log.getTitle());
             logItem.setStartTime(log.getStartTime());
