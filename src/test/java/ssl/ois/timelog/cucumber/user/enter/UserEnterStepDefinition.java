@@ -56,18 +56,31 @@ public class UserEnterStepDefinition {
         }
     }
 
-    @Then("I will get my activity type list that only contains {string}")
-    public void i_will_get_my_activity_type_list_that_only_contains(String activityTypeName) {
+    @Then("I will get my activity type list that contains {string} and {string}")
+    public void i_will_get_my_activity_type_list_that_only_contains(String activityTypeName1, String activityTypeName2) {
         // assertion for output of use case
         List<ActivityType> activityTypeListFromOutput = this.enterUseCaseOutput.getActivityTypeList();
-        assertEquals(1, activityTypeListFromOutput.size());
-        assertEquals(activityTypeName, activityTypeListFromOutput.get(0).getName());
+        assertEquals(2, activityTypeListFromOutput.size());
+        assertEquals(activityTypeName1, activityTypeListFromOutput.get(0).getName());
 
         // verify that the activity type is actually stored
         try {
             List<ActivityType> activityTypeListFromRepo = this.userRepository.findByUserID(this.userID).getActivityTypeList();
-            assertEquals(1, activityTypeListFromRepo.size());
-            assertEquals(activityTypeName, activityTypeListFromRepo.get(0).getName());
+            assertEquals(2, activityTypeListFromRepo.size());
+
+            boolean found1 = false;
+            boolean found2 = false;
+
+            for (ActivityType activityType: activityTypeListFromRepo) {
+                if(activityType.getName().equals(activityTypeName1)) {
+                    found1 = true;
+                } else if(activityType.getName().equals(activityTypeName2)) {
+                    found2 = true;
+                }
+            }
+
+            assertTrue(found1);
+            assertTrue(found2);
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -140,21 +153,25 @@ public class UserEnterStepDefinition {
         this.activityTypeList = this.enterUseCaseOutput.getActivityTypeList();
     }
 
-    @Then("The activity type list contains {string} and {string}")
-    public void the_activity_type_list_contains_and(String activityTypeName1, String activityTypeName2) {
-        assertEquals(2, this.activityTypeList.size());
-        Boolean containsType1 = false;
-        Boolean containsType2 = false;
+    @Then("The activity type list contains {string} and {string} and {string}")
+    public void the_activity_type_list_contains_and(String activityTypeName1, String activityTypeName2, String activityTypeName3) {
+        assertEquals(3, this.activityTypeList.size());
+        boolean containsType1 = false;
+        boolean containsType2 = false;
+        boolean containsType3 = false;
 
         for(ActivityType type: this.activityTypeList) {
             if(type.getName().equals(activityTypeName1)) {
                 containsType1 = true;
             } else if(type.getName().equals(activityTypeName2)) {
                 containsType2 = true;
+            } else if(type.getName().equals(activityTypeName3)) {
+                containsType3 = true;
             }
         }
 
         assertTrue(containsType1);
         assertTrue(containsType2);
+        assertTrue(containsType3);
     }
 }
