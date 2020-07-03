@@ -5,6 +5,7 @@ import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.user.InitUserDataErrorException;
@@ -42,8 +43,12 @@ public class EnterUseCase {
                 ActivityType activityType = new ActivityType("Other", true, false);
                 user.addActivityType(activityType);
                 this.userRepository.save(user);
+
+                ActivityType labProject = new ActivityType("LabProject", true, false);
+                user.addActivityType(labProject);
+                this.userRepository.save(user);
                 
-                output.setActivityTypeList(user.getActivityTypeList());
+                output.setActivityTypeList(this.userRepository.findByUserID(userID).getActivityTypeList());
                 output.setLogList(new ArrayList<Log>());
             } else {
                 output.setActivityTypeList(user.getActivityTypeList());
