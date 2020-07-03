@@ -138,7 +138,6 @@ public class UserEnterStepDefinition {
     @Then("I will get my activity type list and log list")
     public void i_will_get_my_activity_type_list_and_log_list() {
         this.activityTypeList = this.enterUseCaseOutput.getActivityTypeList();
-        this.logList = this.enterUseCaseOutput.getLogList();
     }
 
     @Then("The activity type list contains {string} and {string}")
@@ -157,23 +156,5 @@ public class UserEnterStepDefinition {
 
         assertTrue(containsType1);
         assertTrue(containsType2);
-    }
-
-    @Then("The log list contains a log with title {string} and start time {string} and end time {string} and description {string} and activity type {string}")
-    public void the_log_list_contains_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type(String title, String startTime, String endTime, String description, String activityTypeName) {
-        Boolean found = false;
-        for(Log log: this.logList) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
-            if(log.getTitle().equals(title) &&
-               dateFormat.format(log.getStartTime()).equals(startTime) &&
-               dateFormat.format(log.getEndTime()).equals(endTime) &&
-               log.getDescription().equals(description) &&
-               log.getActivityTypeName().equals(activityTypeName)) {
-                found = true;
-                break;
-            }
-        }
-
-        assertTrue(found);
     }
 }

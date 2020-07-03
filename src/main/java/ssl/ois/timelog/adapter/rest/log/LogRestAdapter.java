@@ -12,6 +12,9 @@ import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.get.*;
+import ssl.ois.timelog.service.log.remove.RemoveLogUseCase;
+import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseInput;
+import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseOutput;
 
 @RestController
 @RequestMapping("/api/log")
@@ -21,6 +24,9 @@ public class LogRestAdapter {
 
     @Autowired
     GetLogByIdUseCase getLogById;
+
+    @Autowired
+    RemoveLogUseCase removeLogUseCase;
 
     @PostMapping(value = "/record")
     public ResponseEntity<ResponseOutput> newLog(@RequestBody NewLogRequestInput requestBody) {
@@ -51,6 +57,17 @@ public class LogRestAdapter {
         try {
             this.getLogById.execute(input, output);
         } catch (GetLogErrorException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(output);
+    }
+
+    @PostMapping(value = "/remove")
+    public ResponseEntity<RemoveLogUseCaseOutput> removeLog(@RequestBody RemoveLogUseCaseInput input) {
+        RemoveLogUseCaseOutput output = new RemoveLogUseCaseOutput();
+        try {
+            this.removeLogUseCase.execute(input, output);
+        } catch (GetLogErrorException | SaveLogErrorException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);

@@ -82,13 +82,19 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public List<Log> getByUserID(String userID) throws GetLogErrorException {
-        return new ArrayList<>();
-    }
-
-    @Override
     public Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException {
-        return false;
+        Connection connection = null;
+        Log log = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM `log` WHERE `id` = ?");
+            stmt.setString(1, logID);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

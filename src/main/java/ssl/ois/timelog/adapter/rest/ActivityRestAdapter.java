@@ -109,6 +109,4 @@ public class ActivityRestAdapter {
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }
-
-    
 }

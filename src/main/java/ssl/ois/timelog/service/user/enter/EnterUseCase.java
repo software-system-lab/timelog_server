@@ -52,9 +52,8 @@ public class EnterUseCase {
                 output.setLogList(new ArrayList<Log>());
             } else {
                 output.setActivityTypeList(user.getActivityTypeList());
-                output.setLogList(this.logRepository.getByUserID(input.getUserID()));
             }
-        } catch (DatabaseErrorException | GetLogErrorException e) {
+        } catch (DatabaseErrorException e) {
             throw new InitUserDataErrorException(input.getUserID());
         } catch(Exception e) {
             e.printStackTrace();
