@@ -1,11 +1,29 @@
 package ssl.ois.timelog.cucumber.timebox;
 
+import static org.junit.Assert.fail;
+
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
+import ssl.ois.timelog.model.user.User;
+import ssl.ois.timelog.service.repository.user.UserRepository;
 
 public class timelogStepDefinition {
+
+    private UserRepository userRepository;
+    private String userID;
+    private User user;
+
+    @Before
+    public void setup() {
+        this.userRepository = new MemoryUserRepository();
+    }
+
     @Given("[timebox] I log in to Timelog with user ID {string}")
-    public void timebox_I_log_in_to_Timelog_with_user_ID(String string) {
+    public void timebox_I_log_in_to_Timelog_with_user_ID(String userID) {
         UserLogin userLoginService = new UserLogin(this.userRepository);
         try {
             userLoginService.process(userID);
