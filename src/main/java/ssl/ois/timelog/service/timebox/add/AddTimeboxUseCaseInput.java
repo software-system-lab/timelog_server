@@ -1,8 +1,9 @@
-package ssl.ois.timelog.service.timebox.create;
+package ssl.ois.timelog.service.timebox.add;
 
-public class CreateTimeboxUseCaseInput {
+public class AddTimeboxUseCaseInput {
     
     private String title;
+    private String userID;
     private String startTime;
     private String endTime;
 
@@ -12,6 +13,14 @@ public class CreateTimeboxUseCaseInput {
 
     public void setTitle(String title){
         this.title = title;
+    }
+
+    public String getUserID(){
+        return userID;
+    }
+
+    public void setUserID(String userID){
+        this.userID = userID;
     }
 
     public String getStartTime(){
