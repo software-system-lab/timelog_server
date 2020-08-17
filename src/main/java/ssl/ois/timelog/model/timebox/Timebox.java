@@ -1,19 +1,31 @@
 package ssl.ois.timelog.model.timebox;
 
-import java.util.UUID;
-
 public class Timebox {
 
     private String title;
-    private String startTime;
-    private String endTime;
-    private UUID id;
+    private String startDate;
+    private String endDate;
 
-    public Timebox(String title, String startTime, String endTime){
-        this.id = UUID.randomUUID();
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public Timebox(String title, String startDate, String endDate){
         this.title = title;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public String getTitle(){
@@ -22,25 +34,5 @@ public class Timebox {
 
     public void setTitle(String title){
         this.title = title;
-    }
-
-    public String getStartTime(){
-        return startTime;
-    }
-
-    public void setStartTime(String startTime){
-        this.startTime = startTime;
-    }
-
-    public String getEndTime(){
-        return endTime;
-    }
-
-    public void setEndTime(String endTime){
-        this.endTime = endTime;
-    }
-
-    public UUID getID(){
-        return id;
     }
 }

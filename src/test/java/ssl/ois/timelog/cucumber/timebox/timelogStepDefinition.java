@@ -1,5 +1,6 @@
 package ssl.ois.timelog.cucumber.timebox;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import io.cucumber.java.Before;
@@ -8,8 +9,15 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
+import ssl.ois.timelog.model.timebox.Timebox;
 import ssl.ois.timelog.model.user.User;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
+import ssl.ois.timelog.service.timebox.add.AddTimeboxUseCase;
+import ssl.ois.timelog.service.timebox.add.AddTimeboxUseCaseInput;
+import ssl.ois.timelog.service.timebox.add.AddTimeboxUseCaseOutput;
+
+import java.util.List;
 
 public class timelogStepDefinition {
 
@@ -35,14 +43,32 @@ public class timelogStepDefinition {
     }
 
     @When("I create a timebox with the title {string} and start date {string} due date {string}")
-    public void i_create_a_timebox_with_the_title_and_start_date_due_date(String string, String string2, String string3) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void i_create_a_timebox_with_the_title_and_start_date_due_date(String title, String startDate, String endDate) {
+        AddTimeboxUseCase addTimeboxUseCase = new AddTimeboxUseCase(this.userRepository);
+        AddTimeboxUseCaseInput input = new AddTimeboxUseCaseInput();
+        AddTimeboxUseCaseOutput output = new AddTimeboxUseCaseOutput();
+
+        input.setTitle(title);
+        input.setUserID(this.user.getID().toString());
+        input.setStartDate(startDate);
+        input.setEndDate(endDate);
+        try {
+            addTimeboxUseCase.execute(input, output);
+        } catch (DatabaseErrorException e) {
+            e.printStackTrace();
+        }
     }
 
     @Then("{string} has been created with the start date {string} due date {string}")
-    public void has_been_created_with_the_start_date_due_date(String string, String string2, String string3) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void has_been_created_with_the_start_date_due_date(String title, String startDate, String endDate) {
+        boolean found = false;
+        List<Timebox> timeboxList = this.user.getTimeboxList();
+        for (Timebox timebox: timeboxList) {
+            if(timebox.getTitle().equals(title) && timebox.getStartDate().equals(startDate) && timebox.getEndDate().equals(endDate)) {
+                found = true;
+            }
+        }
+
+        assertTrue(found);
     }
 }

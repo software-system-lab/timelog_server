@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.timebox.Timebox;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 
@@ -19,6 +20,9 @@ public class User {
     private ActivityType operatedActivityType;
     private Operation operation;
     private String targetActivityName;
+    private Timebox operatedTimebox;
+    private List<Timebox> timeboxList;
+
 
     public User(UUID id) {
         this.id = id;
@@ -38,6 +42,8 @@ public class User {
     public List<ActivityType> getActivityTypeList() {
         return this.activityTypeList;
     }
+
+    public List<Timebox> getTimeboxList() { return this.timeboxList; }
 
     public ActivityType getOperatedActivityType() {
         return this.operatedActivityType;

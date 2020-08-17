@@ -18,7 +18,7 @@ public class AddTimeboxUseCase {
     public void execute(AddTimeboxUseCaseInput input, AddTimeboxUseCaseOutput output)
             throws DatabaseErrorException{
         User user = this.userRepository.findByUserID(input.getUserID());
-        Timebox timebox = new Timebox(input.getTitle(), input.getStartTime(), input.getEndTime());
+        Timebox timebox = new Timebox(input.getTitle(), input.getStartDate(), input.getEndDate());
         //user.addTimebox(timebox);
 
         //this.userRepository.save(user);

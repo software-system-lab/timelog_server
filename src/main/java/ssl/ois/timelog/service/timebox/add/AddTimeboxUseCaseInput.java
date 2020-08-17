@@ -4,11 +4,27 @@ public class AddTimeboxUseCaseInput {
     
     private String title;
     private String userID;
-    private String startTime;
-    private String endTime;
+    private String startDate;
+    private String endDate;
 
     public String getTitle(){
         return title;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public void setTitle(String title){
@@ -21,21 +37,5 @@ public class AddTimeboxUseCaseInput {
 
     public void setUserID(String userID){
         this.userID = userID;
-    }
-
-    public String getStartTime(){
-        return startTime;
-    }
-
-    public void setStartTime(String startTime){
-        this.startTime = startTime;
-    }
-
-    public String getEndTime(){
-        return endTime;
-    }
-
-    public void setEndTime(String endTime){
-        this.endTime = endTime;
     }
 }
