@@ -56,31 +56,35 @@ public class UserEnterStepDefinition {
         }
     }
 
-    @Then("I will get my activity type list that contains {string} and {string}")
-    public void i_will_get_my_activity_type_list_that_only_contains(String activityTypeName1, String activityTypeName2) {
+    @Then("I will get my activity type list that contains {string} and {string} and {string}")
+    public void i_will_get_my_activity_type_list_that_only_contains(String activityTypeName1, String activityTypeName2, String activityTypeName3) {
         // assertion for output of use case
         List<ActivityType> activityTypeListFromOutput = this.enterUseCaseOutput.getActivityTypeList();
-        assertEquals(2, activityTypeListFromOutput.size());
+        assertEquals(3, activityTypeListFromOutput.size());
         assertEquals(activityTypeName1, activityTypeListFromOutput.get(0).getName());
 
         // verify that the activity type is actually stored
         try {
             List<ActivityType> activityTypeListFromRepo = this.userRepository.findByUserID(this.userID).getActivityTypeList();
-            assertEquals(2, activityTypeListFromRepo.size());
+            assertEquals(3, activityTypeListFromRepo.size());
 
             boolean found1 = false;
             boolean found2 = false;
+            boolean found3 = false;
 
             for (ActivityType activityType: activityTypeListFromRepo) {
                 if(activityType.getName().equals(activityTypeName1)) {
                     found1 = true;
                 } else if(activityType.getName().equals(activityTypeName2)) {
                     found2 = true;
+                } else if(activityType.getName().equals(activityTypeName3)) {
+                    found3 = true;
                 }
             }
 
             assertTrue(found1);
             assertTrue(found2);
+            assertTrue(found3);
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -116,7 +120,7 @@ public class UserEnterStepDefinition {
         try {
             User user = this.userRepository.findByUserID(this.userID);
             user.addActivityType(activityType);
-            this.userRepository.save(user);
+            this.userRepository.addActivityType(user);
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -153,12 +157,13 @@ public class UserEnterStepDefinition {
         this.activityTypeList = this.enterUseCaseOutput.getActivityTypeList();
     }
 
-    @Then("The activity type list contains {string} and {string} and {string}")
-    public void the_activity_type_list_contains_and(String activityTypeName1, String activityTypeName2, String activityTypeName3) {
-        assertEquals(3, this.activityTypeList.size());
+    @Then("The activity type list contains {string} and {string} and {string} and {string}")
+    public void the_activity_type_list_contains_and(String activityTypeName1, String activityTypeName2, String activityTypeName3, String activitytypeName4) {
+        assertEquals(4, this.activityTypeList.size());
         boolean containsType1 = false;
         boolean containsType2 = false;
         boolean containsType3 = false;
+        boolean containsType4 = false;
 
         for(ActivityType type: this.activityTypeList) {
             if(type.getName().equals(activityTypeName1)) {
@@ -167,11 +172,14 @@ public class UserEnterStepDefinition {
                 containsType2 = true;
             } else if(type.getName().equals(activityTypeName3)) {
                 containsType3 = true;
+            } else if(type.getName().equals(activitytypeName4)) {
+                containsType4 = true;
             }
         }
 
         assertTrue(containsType1);
         assertTrue(containsType2);
         assertTrue(containsType3);
+        assertTrue(containsType4);
     }
 }

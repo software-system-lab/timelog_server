@@ -28,7 +28,7 @@ public class UserLogin {
 
             ActivityType activityType = new ActivityType("Other", true, false);
             this.user.addActivityType(activityType);
-            this.userRepository.save(this.user);
+            this.userRepository.addActivityType(this.user);
             this.userID = this.user.getID().toString();
         }
     }

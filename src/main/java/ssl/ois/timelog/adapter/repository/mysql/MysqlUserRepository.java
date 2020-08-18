@@ -37,34 +37,90 @@ public class MysqlUserRepository implements UserRepository {
                 stmt.executeUpdate();
             }
 
-            switch(user.getOperation()) {
-                case CREATE:
-                    if(this.isExistInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName())) {
-                        throw new DuplicateActivityTypeException();
-                    }
-                    this.createInActivityTypeTable(connection, user.getOperatedActivityType());
-                    this.createInActivityTypeUserMapper(connection, user.getID().toString(), user.getOperatedActivityType());
-                    break;
-                case UPDATE:
-                    if(!this.isExistInMapper(connection, user.getID().toString(), user.getTargetActivityTypeName())) {
-                        throw new ActivityTypeNotExistException(user.getOperatedActivityType().getName());
-                    }
-                    if(this.isExistInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName()) &&
-                       !user.getOperatedActivityType().getName().equals(user.getTargetActivityTypeName())) {
-                        throw new DuplicateActivityTypeException();
-                    }
-                    this.createInActivityTypeTable(connection, user.getOperatedActivityType());
-                    this.updateInActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName(), user.getOperatedActivityType());
-                    break;
-                case DELETE:
-                    if(!this.isExistInMapper(connection, user.getID().toString(), user.getTargetActivityTypeName())) {
-                        throw new ActivityTypeNotExistException(user.getTargetActivityTypeName());
-                    }
-                    this.removeFromActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName());
-                    break;
-                default:
-                    break;
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public void addActivityType(User user) throws DatabaseErrorException, DuplicateActivityTypeException{
+        Connection connection = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT IGNORE INTO `user`(`id`) VALUES (?)"
+            )) {
+                stmt.setString(1, user.getID().toString());
+
+                stmt.executeUpdate();
             }
+
+            if(this.isExistInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName())) {
+                throw new DuplicateActivityTypeException();
+            }
+            this.createInActivityTypeTable(connection, user.getOperatedActivityType());
+            this.createInActivityTypeUserMapper(connection, user.getID().toString(), user.getOperatedActivityType());
+
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public void updateActivityType(User user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
+        Connection connection = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT IGNORE INTO `user`(`id`) VALUES (?)"
+            )) {
+                stmt.setString(1, user.getID().toString());
+
+                stmt.executeUpdate();
+            }
+
+            if(!this.isExistInMapper(connection, user.getID().toString(), user.getTargetActivityTypeName())) {
+                throw new ActivityTypeNotExistException(user.getOperatedActivityType().getName());
+            }
+            if(this.isExistInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName()) &&
+                    !user.getOperatedActivityType().getName().equals(user.getTargetActivityTypeName())) {
+                throw new DuplicateActivityTypeException();
+            }
+            this.createInActivityTypeTable(connection, user.getOperatedActivityType());
+            this.updateInActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName(), user.getOperatedActivityType());
+
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public void deleteActivityType(User user) throws DatabaseErrorException, ActivityTypeNotExistException {
+        Connection connection = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "INSERT IGNORE INTO `user`(`id`) VALUES (?)"
+            )) {
+                stmt.setString(1, user.getID().toString());
+
+                stmt.executeUpdate();
+            }
+
+            if(!this.isExistInMapper(connection, user.getID().toString(), user.getTargetActivityTypeName())) {
+                throw new ActivityTypeNotExistException(user.getTargetActivityTypeName());
+            }
+            this.removeFromActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName());
+
         } catch (SQLException e) {
             throw new DatabaseErrorException();
         } finally {

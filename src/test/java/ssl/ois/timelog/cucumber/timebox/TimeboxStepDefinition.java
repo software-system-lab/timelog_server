@@ -19,7 +19,7 @@ import ssl.ois.timelog.service.timebox.add.AddTimeboxUseCaseOutput;
 
 import java.util.List;
 
-public class timelogStepDefinition {
+public class TimeboxStepDefinition {
 
     private UserRepository userRepository;
     private String userID;
@@ -63,12 +63,12 @@ public class timelogStepDefinition {
     public void has_been_created_with_the_start_date_due_date(String title, String startDate, String endDate) {
         boolean found = false;
         List<Timebox> timeboxList = this.user.getTimeboxList();
+        System.out.println(timeboxList);
         for (Timebox timebox: timeboxList) {
             if(timebox.getTitle().equals(title) && timebox.getStartDate().equals(startDate) && timebox.getEndDate().equals(endDate)) {
                 found = true;
             }
         }
-
         assertTrue(found);
     }
 }

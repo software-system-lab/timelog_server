@@ -20,19 +20,24 @@ public class User {
     private ActivityType operatedActivityType;
     private Operation operation;
     private String targetActivityName;
-    private Timebox operatedTimebox;
     private List<Timebox> timeboxList;
-
 
     public User(UUID id) {
         this.id = id;
         this.operation = Operation.NONE;
         this.activityTypeList = new ArrayList<>();
+        this.timeboxList = new ArrayList<>();
     }
 
     public User(UUID id, List<ActivityType> activityTypeList) {
         this.id = id;
         this.activityTypeList = activityTypeList;
+    }
+
+    public User(UUID id, List<ActivityType> activityTypeList, List<Timebox> timeboxList) {
+        this.id = id;
+        this.activityTypeList = activityTypeList;
+        this.timeboxList = timeboxList;
     }
 
     public UUID getID() {
@@ -62,20 +67,23 @@ public class User {
             throw new DuplicateActivityTypeException();
         }
         this.operatedActivityType = activityType;
-        this.operation = Operation.CREATE;
+
+        this.activityTypeList.add(this.operatedActivityType);
     }
 
-    public void updateActivityType(String targetActivityTypeName, ActivityType activityType)
+    public void updateActivityType(String targetActivityTypeName, ActivityType activityTypeToCheck)
             throws DuplicateActivityTypeException, ActivityTypeNotExistException {
         if(!this.isExist(targetActivityTypeName)) {
             throw new ActivityTypeNotExistException(targetActivityTypeName);
         }
-        if(this.isExist(activityType.getName()) && !activityType.getName().equals(targetActivityTypeName)) {
+        if(this.isExist(activityTypeToCheck.getName()) && !activityTypeToCheck.getName().equals(targetActivityTypeName)) {
             throw new DuplicateActivityTypeException();
         }
         this.targetActivityName = targetActivityTypeName;
-        this.operatedActivityType = activityType;
-        this.operation = Operation.UPDATE;
+        this.operatedActivityType = activityTypeToCheck;
+
+        this.activityTypeList.removeIf(activityType -> activityType.getName().equals(this.targetActivityName));
+        this.activityTypeList.add(this.operatedActivityType);
     }
 
     public void deleteActivityType(String activityTypeName) throws ActivityTypeNotExistException {
@@ -83,7 +91,7 @@ public class User {
             throw new ActivityTypeNotExistException(activityTypeName);
         }
         this.targetActivityName = activityTypeName;
-        this.operation = Operation.DELETE;
+        this.activityTypeList.removeIf(activityType -> activityType.getName().equals(this.targetActivityName));
     }
 
     public void store() {
@@ -112,5 +120,9 @@ public class User {
             }
         }
         return false;
+    }
+
+    public void addTimebox(Timebox timebox) {
+        this.timeboxList.add(timebox);
     }
 }

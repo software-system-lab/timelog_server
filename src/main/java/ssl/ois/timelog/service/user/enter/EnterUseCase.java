@@ -27,6 +27,7 @@ public class EnterUseCase {
         this.logRepository = logRepository;
     }
 
+
     public void execute(EnterUseCaseInput input, EnterUseCaseOutput output) throws DuplicateActivityTypeException,
             InitUserDataErrorException {
         try {
@@ -42,12 +43,16 @@ public class EnterUseCase {
                 // Create default activity type "Other" for the user.
                 ActivityType activityType = new ActivityType("Other", true, false);
                 user.addActivityType(activityType);
-                this.userRepository.save(user);
+                this.userRepository.addActivityType(user);
+
+                ActivityType labDuty = new ActivityType("LabDuty", true, false);
+                user.addActivityType(labDuty);
+                this.userRepository.addActivityType(user);
 
                 ActivityType labProject = new ActivityType("LabProject", true, false);
                 user.addActivityType(labProject);
-                this.userRepository.save(user);
-                
+                this.userRepository.addActivityType(user);
+
                 output.setActivityTypeList(this.userRepository.findByUserID(userID).getActivityTypeList());
                 output.setLogList(new ArrayList<Log>());
             } else {
