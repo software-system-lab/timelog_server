@@ -56,6 +56,7 @@ public class TimeboxStepDefinition {
             addTimeboxUseCase.execute(input, output);
         } catch (DatabaseErrorException e) {
             e.printStackTrace();
+            fail(e.getMessage());
         }
     }
 
@@ -63,7 +64,6 @@ public class TimeboxStepDefinition {
     public void has_been_created_with_the_start_date_due_date(String title, String startDate, String endDate) {
         boolean found = false;
         List<Timebox> timeboxList = this.user.getTimeboxList();
-        System.out.println(timeboxList);
         for (Timebox timebox: timeboxList) {
             if(timebox.getTitle().equals(title) && timebox.getStartDate().equals(startDate) && timebox.getEndDate().equals(endDate)) {
                 found = true;

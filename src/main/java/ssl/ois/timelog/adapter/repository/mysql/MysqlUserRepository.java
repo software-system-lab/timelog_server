@@ -50,14 +50,6 @@ public class MysqlUserRepository implements UserRepository {
         try {
             connection = this.mysqlDriverAdapter.getConnection();
 
-            try (PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT IGNORE INTO `user`(`id`) VALUES (?)"
-            )) {
-                stmt.setString(1, user.getID().toString());
-
-                stmt.executeUpdate();
-            }
-
             if(this.isExistInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName())) {
                 throw new DuplicateActivityTypeException();
             }
@@ -76,14 +68,6 @@ public class MysqlUserRepository implements UserRepository {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
-
-            try (PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT IGNORE INTO `user`(`id`) VALUES (?)"
-            )) {
-                stmt.setString(1, user.getID().toString());
-
-                stmt.executeUpdate();
-            }
 
             if(!this.isExistInMapper(connection, user.getID().toString(), user.getTargetActivityTypeName())) {
                 throw new ActivityTypeNotExistException(user.getOperatedActivityType().getName());
@@ -107,14 +91,6 @@ public class MysqlUserRepository implements UserRepository {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
-
-            try (PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT IGNORE INTO `user`(`id`) VALUES (?)"
-            )) {
-                stmt.setString(1, user.getID().toString());
-
-                stmt.executeUpdate();
-            }
 
             if(!this.isExistInMapper(connection, user.getID().toString(), user.getTargetActivityTypeName())) {
                 throw new ActivityTypeNotExistException(user.getTargetActivityTypeName());

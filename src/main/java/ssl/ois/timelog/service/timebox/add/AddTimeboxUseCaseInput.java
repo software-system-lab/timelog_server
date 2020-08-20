@@ -7,8 +7,12 @@ public class AddTimeboxUseCaseInput {
     private String startDate;
     private String endDate;
 
-    public String getTitle(){
+    public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getStartDate() {
@@ -25,10 +29,6 @@ public class AddTimeboxUseCaseInput {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
-    }
-
-    public void setTitle(String title){
-        this.title = title;
     }
 
     public String getUserID(){

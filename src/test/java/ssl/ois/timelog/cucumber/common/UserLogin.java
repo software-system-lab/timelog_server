@@ -26,9 +26,18 @@ public class UserLogin {
             this.user = new User(UUID.fromString(userID));
             this.userRepository.save(this.user);
 
-            ActivityType activityType = new ActivityType("Other", true, false);
-            this.user.addActivityType(activityType);
+            ActivityType activityTypeOther = new ActivityType("Other", true, false);
+            ActivityType activityTypeLabProject = new ActivityType("LabProject", true, false);
+            ActivityType activityTypeLabDuty = new ActivityType("LabDuty", true, false);
+            this.user.addActivityType(activityTypeOther);
             this.userRepository.addActivityType(this.user);
+
+            this.user.addActivityType(activityTypeLabProject);
+            this.userRepository.addActivityType(this.user);
+
+            this.user.addActivityType(activityTypeLabDuty);
+            this.userRepository.addActivityType(this.user);
+
             this.userID = this.user.getID().toString();
         }
     }

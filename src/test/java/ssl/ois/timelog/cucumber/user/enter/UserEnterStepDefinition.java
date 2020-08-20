@@ -68,23 +68,23 @@ public class UserEnterStepDefinition {
             List<ActivityType> activityTypeListFromRepo = this.userRepository.findByUserID(this.userID).getActivityTypeList();
             assertEquals(3, activityTypeListFromRepo.size());
 
-            boolean found1 = false;
-            boolean found2 = false;
-            boolean found3 = false;
+            boolean containsType1 = false;
+            boolean containsType2 = false;
+            boolean containsType3 = false;
 
             for (ActivityType activityType: activityTypeListFromRepo) {
                 if(activityType.getName().equals(activityTypeName1)) {
-                    found1 = true;
+                    containsType1 = true;
                 } else if(activityType.getName().equals(activityTypeName2)) {
-                    found2 = true;
+                    containsType2 = true;
                 } else if(activityType.getName().equals(activityTypeName3)) {
-                    found3 = true;
+                    containsType3 = true;
                 }
             }
 
-            assertTrue(found1);
-            assertTrue(found2);
-            assertTrue(found3);
+            assertTrue(containsType1);
+            assertTrue(containsType2);
+            assertTrue(containsType3);
         } catch (Exception e) {
             fail(e.getMessage());
         }

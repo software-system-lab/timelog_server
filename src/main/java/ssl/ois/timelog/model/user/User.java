@@ -11,20 +11,14 @@ import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException
 
 public class User {
 
-    public enum Operation {
-        CREATE, UPDATE, DELETE, NONE
-    }
-
     private UUID id;
     private List<ActivityType> activityTypeList;
     private ActivityType operatedActivityType;
-    private Operation operation;
     private String targetActivityName;
     private List<Timebox> timeboxList;
 
     public User(UUID id) {
         this.id = id;
-        this.operation = Operation.NONE;
         this.activityTypeList = new ArrayList<>();
         this.timeboxList = new ArrayList<>();
     }
@@ -52,10 +46,6 @@ public class User {
 
     public ActivityType getOperatedActivityType() {
         return this.operatedActivityType;
-    }
-
-    public Operation getOperation() {
-        return this.operation;
     }
 
     public String getTargetActivityTypeName() {
@@ -92,25 +82,6 @@ public class User {
         }
         this.targetActivityName = activityTypeName;
         this.activityTypeList.removeIf(activityType -> activityType.getName().equals(this.targetActivityName));
-    }
-
-    public void store() {
-        switch(this.operation) {
-            case CREATE:
-                this.activityTypeList.add(this.operatedActivityType);
-                break;
-            case UPDATE:
-                this.activityTypeList.removeIf(activityType -> activityType.getName().equals(this.targetActivityName));
-                this.activityTypeList.add(this.operatedActivityType);
-                break;
-            case DELETE:
-                this.activityTypeList.removeIf(activityType -> activityType.getName().equals(this.targetActivityName));
-                break;
-            case NONE:
-                break;
-        }
-        this.targetActivityName = null;
-        this.operation = Operation.NONE;
     }
 
     private boolean isExist(String activityTypeName) {
