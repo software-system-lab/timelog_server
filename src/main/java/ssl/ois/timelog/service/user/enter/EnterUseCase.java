@@ -7,7 +7,6 @@ import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
-import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.user.InitUserDataErrorException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
@@ -58,10 +57,8 @@ public class EnterUseCase {
             } else {
                 output.setActivityTypeList(user.getActivityTypeList());
             }
-        } catch (DatabaseErrorException e) {
+        } catch (DatabaseErrorException | ActivityTypeNotExistException e) {
             throw new InitUserDataErrorException(input.getUserID());
-        } catch(Exception e) {
-            e.printStackTrace();
         }
     }
 }

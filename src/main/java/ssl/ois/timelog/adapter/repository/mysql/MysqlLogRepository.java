@@ -84,7 +84,6 @@ public class MysqlLogRepository implements LogRepository {
     @Override
     public Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException {
         Connection connection = null;
-        Log log = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM `log` WHERE `id` = ?");
@@ -92,8 +91,9 @@ public class MysqlLogRepository implements LogRepository {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
         }
     }
 

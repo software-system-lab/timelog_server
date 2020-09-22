@@ -149,7 +149,6 @@ public class ActivityStepDefinition {
         try {
             removeActivityTypeUseCase.execute(removeActivityTypeUseCaseInput, removeActivityTypeUseCaseOutput);
         } catch (Exception e) {
-            e.printStackTrace();
             fail(e.getMessage());
         }
     }
@@ -163,7 +162,6 @@ public class ActivityStepDefinition {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             fail(e.getMessage());
         }
     }
@@ -207,7 +205,6 @@ public class ActivityStepDefinition {
             assertFalse(oldFound);
             assertTrue(newFound);
         } catch (Exception e) {
-            e.printStackTrace();
             fail(e.getMessage());
         }
     }
