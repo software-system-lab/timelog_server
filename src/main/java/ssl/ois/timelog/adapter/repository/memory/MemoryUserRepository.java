@@ -35,7 +35,6 @@ public class MemoryUserRepository implements UserRepository {
 
     @Override
     public User findByUserID(String userID) {
-        User user = this.users.get(userID);
-        return user;
+        return this.users.get(userID);
     }
 }
