@@ -23,7 +23,7 @@ public class AddActivityTypeUseCase {
         ActivityType activityType = new ActivityType(input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
         user.addActivityType(activityType);
 
-        this.userRepository.save(user);
+        this.userRepository.addActivityType(user);
 
         output.setActivityTypeName(activityType.getName());
     }

@@ -7,7 +7,6 @@ import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
-import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.user.InitUserDataErrorException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
@@ -27,6 +26,7 @@ public class EnterUseCase {
         this.logRepository = logRepository;
     }
 
+
     public void execute(EnterUseCaseInput input, EnterUseCaseOutput output) throws DuplicateActivityTypeException,
             InitUserDataErrorException {
         try {
@@ -42,21 +42,23 @@ public class EnterUseCase {
                 // Create default activity type "Other" for the user.
                 ActivityType activityType = new ActivityType("Other", true, false);
                 user.addActivityType(activityType);
-                this.userRepository.save(user);
+                this.userRepository.addActivityType(user);
+
+                ActivityType labDuty = new ActivityType("LabDuty", true, false);
+                user.addActivityType(labDuty);
+                this.userRepository.addActivityType(user);
 
                 ActivityType labProject = new ActivityType("LabProject", true, false);
                 user.addActivityType(labProject);
-                this.userRepository.save(user);
-                
+                this.userRepository.addActivityType(user);
+
                 output.setActivityTypeList(this.userRepository.findByUserID(userID).getActivityTypeList());
                 output.setLogList(new ArrayList<Log>());
             } else {
                 output.setActivityTypeList(user.getActivityTypeList());
             }
-        } catch (DatabaseErrorException e) {
+        } catch (DatabaseErrorException | ActivityTypeNotExistException e) {
             throw new InitUserDataErrorException(input.getUserID());
-        } catch(Exception e) {
-            e.printStackTrace();
         }
     }
 }

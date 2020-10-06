@@ -15,8 +15,22 @@ public class MemoryUserRepository implements UserRepository {
 
     @Override
     public void save(User user) {
-        user.store();
         this.users.put(user.getID().toString(), user);
+    }
+
+    @Override
+    public void addActivityType(User user) {
+        this.save(user);
+    }
+
+    @Override
+    public void updateActivityType(User user) {
+        this.save(user);
+    }
+
+    @Override
+    public void deleteActivityType(User user)  {
+        this.save(user);
     }
 
     @Override

@@ -23,7 +23,7 @@ public class RemoveActivityTypeUseCase {
 
         user.deleteActivityType(input.getActivityTypeName());
 
-        this.userRepository.save(user);
+        this.userRepository.deleteActivityType(user);
         output.setActivityTypeName(input.getActivityTypeName());
     }
 }

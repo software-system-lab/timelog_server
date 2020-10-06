@@ -21,7 +21,7 @@ public class MysqlDriverAdapter {
     }
 
     public Connection getConnection() throws SQLException {
-        final String url = this.host + "/" + this.database;
+        final String url = this.host + "/" + this.database + "?useUnicode=true&characterEncoding=UTF-8";
         return DriverManager.getConnection(url, this.user, this.password);
     }
 

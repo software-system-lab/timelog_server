@@ -6,6 +6,9 @@ import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 
 public interface UserRepository {
-    public void save(User user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException;
-    public User findByUserID(String userID) throws DatabaseErrorException;
+    void save(User user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException;
+    User findByUserID(String userID) throws DatabaseErrorException;
+    void addActivityType(User user) throws DatabaseErrorException, DuplicateActivityTypeException;
+    void updateActivityType(User user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException;
+    void deleteActivityType(User user) throws DatabaseErrorException, ActivityTypeNotExistException;
 }
