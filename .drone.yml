@@ -40,16 +40,16 @@ steps:
   commands:
   - mvn test
 
-- name: Sonar Scanner
-  image: aosapps/drone-sonar-plugin
-  settings:
-    sonar_token:
-      from_secret: sonar_project_token
-    sonar_host:
-      from_secret:
-        sonar_url
+# - name: Sonar Scanner
+#   image: aosapps/drone-sonar-plugin
+#   settings:
+#     sonar_token:
+#       from_secret: sonar_project_token
+#     sonar_host:
+#       from_secret:
+#         sonar_url
 
-    ver: 1.0
+#     ver: 1.0
 
 trigger:
   branch:
