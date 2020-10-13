@@ -4,11 +4,13 @@ public class ActivityType {
     private String name;
     private boolean isEnable;
     private boolean isPrivate;
+    private boolean isDeleted;
 
-    public ActivityType(String name, Boolean isEnable, Boolean isPrivate) {
+    public ActivityType(String name, Boolean isEnable, Boolean isPrivate, Boolean isDeleted) {
         this.name = name;
         this.isEnable = isEnable;
         this.isPrivate = isPrivate;
+        this.isDeleted = isDeleted;
     }
 
     public String getName() {
@@ -33,5 +35,13 @@ public class ActivityType {
 
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

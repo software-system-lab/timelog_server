@@ -9,6 +9,8 @@ import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
+import java.io.*;
+
 @Service
 public class AddActivityTypeUseCase {
     private UserRepository userRepository;
@@ -20,7 +22,8 @@ public class AddActivityTypeUseCase {
     public void execute(AddActivityTypeUseCaseInput input, AddActivityTypeUseCaseOutput output)
             throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
         User user = this.userRepository.findByUserID(input.getUserID());
-        ActivityType activityType = new ActivityType(input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
+        ActivityType activityType = new ActivityType(input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate(), input.getIsDeleted());
+
         user.addActivityType(activityType);
 
         this.userRepository.addActivityType(user);

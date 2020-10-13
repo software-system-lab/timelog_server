@@ -21,7 +21,7 @@ public class EditActivityTypeUseCase {
     public void execute(EditActivityTypeUseCaseInput input, EditActivityTypeUseCaseOutput output)
             throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
         User user = this.userRepository.findByUserID(input.getUserID());
-        ActivityType activityType = new ActivityType(input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
+        ActivityType activityType = new ActivityType(input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate(), input.getIsDeleted());
 
         user.updateActivityType(input.getTargetActivityTypeName(), activityType);
 

@@ -3,6 +3,7 @@ package ssl.ois.timelog.model.user;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.io.*;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.timebox.Timebox;
@@ -39,7 +40,13 @@ public class User {
     }
 
     public List<ActivityType> getActivityTypeList() {
-        return this.activityTypeList;
+        List<ActivityType> notDeleted = new ArrayList<>();
+        for(ActivityType activityType: this.activityTypeList) {
+            if(!activityType.isDeleted()) {
+                notDeleted.add(activityType);
+            }
+        }
+        return notDeleted;
     }
 
     public List<Timebox> getTimeboxList() { return this.timeboxList; }
@@ -54,11 +61,25 @@ public class User {
 
     public void addActivityType(ActivityType activityType) throws DuplicateActivityTypeException {
         if(this.isExist(activityType.getName())) {
-            throw new DuplicateActivityTypeException();
-        }
-        this.operatedActivityType = activityType;
+            if(!this.isExistandDeleted(activityType.getName())) {
+                throw new DuplicateActivityTypeException();
+            }
 
-        this.activityTypeList.add(this.operatedActivityType);
+            else {
+                activityType.setDeleted(false);
+                this.targetActivityName = activityType.getName();
+                this.operatedActivityType = activityType;
+
+                this.activityTypeList.removeIf(deletedActivityType -> deletedActivityType.getName().equals(this.targetActivityName));
+                this.activityTypeList.add(this.operatedActivityType);
+            }
+
+        }
+        else {
+            this.operatedActivityType = activityType;
+            this.activityTypeList.add(this.operatedActivityType);
+        }
+
     }
 
     public void updateActivityType(String targetActivityTypeName, ActivityType activityTypeToCheck)
@@ -76,18 +97,33 @@ public class User {
         this.activityTypeList.add(this.operatedActivityType);
     }
 
-    public void deleteActivityType(String activityTypeName) throws ActivityTypeNotExistException {
+    public void deleteActivityType(String activityTypeName, ActivityType activityTypeToDelete) throws ActivityTypeNotExistException {
         if(!this.isExist(activityTypeName)) {
             throw new ActivityTypeNotExistException(activityTypeName);
         }
         this.targetActivityName = activityTypeName;
+        this.operatedActivityType = activityTypeToDelete;
+
         this.activityTypeList.removeIf(activityType -> activityType.getName().equals(this.targetActivityName));
+        this.activityTypeList.add(this.operatedActivityType);
     }
 
     private boolean isExist(String activityTypeName) {
         for(ActivityType activityType: this.activityTypeList) {
             if(activityType.getName().equals(activityTypeName)) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isExistandDeleted(String activityTypeName) {
+        for(ActivityType activityType: this.activityTypeList) {
+            if(activityType.getName().equals(activityTypeName)) {
+                if(activityType.isDeleted()) {
+                    return true;
+                }
+
             }
         }
         return false;

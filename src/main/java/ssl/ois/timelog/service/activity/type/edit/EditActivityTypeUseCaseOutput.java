@@ -28,4 +28,6 @@ public class EditActivityTypeUseCaseOutput {
     public void setIsPrivate(boolean isPrivate) {
         this.isPrivate = isPrivate;
     }
+
+
 }

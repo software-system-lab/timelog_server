@@ -1,5 +1,6 @@
 package ssl.ois.timelog.adapter.rest;
 
+import java.io.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +50,8 @@ public class ActivityRestAdapter {
         input.setUserID(requestBody.getUserID());
         input.setIsEnable(requestBody.getIsEnable());
         input.setIsPrivate(requestBody.getIsPrivate());
+        input.setIsDeleted(false);
         input.setActivityTypeName(requestBody.getActivityTypeName());
-
         try {
             addActivityTypeUseCase.execute(input, output);
         } catch (DuplicateActivityTypeException | DatabaseErrorException | ActivityTypeNotExistException e) {
@@ -85,6 +86,7 @@ public class ActivityRestAdapter {
         input.setActivtiyTypeName(requestBody.getActivityTypeName());
         input.setIsEnable(requestBody.getIsEnable());
         input.setIsPrivate(requestBody.getIsPrivate());
+        input.setIsDeleted(false);
 
         try {
             editActivityTypeUseCase.execute(input, output);
@@ -101,6 +103,10 @@ public class ActivityRestAdapter {
 
         input.setUserID(requestBody.getUserID());
         input.setActivityTypeName(requestBody.getActivityTypeName());
+        input.setTargetActivityTypeName(requestBody.getTargetActivityTypeName());
+        input.setIsEnable(requestBody.getIsEnable());
+        input.setIsPrivate(requestBody.getIsPrivate());
+        input.setIsDeleted(true);
 
         try {
             removeActivityTypeUseCase.execute(input, output);

@@ -5,6 +5,7 @@ public class AddActivityTypeUseCaseInput {
     private String userID;
     private boolean isEnable;
     private boolean isPrivate;
+    private boolean isDeleted;
 
     public void setActivityTypeName(String activityTypeName) {
         this.activityTypeName = activityTypeName;
@@ -36,5 +37,13 @@ public class AddActivityTypeUseCaseInput {
 
     public boolean getIsPrivate() {
         return this.isPrivate;
+    }
+
+    public boolean getIsDeleted() {
+        return this.isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }
