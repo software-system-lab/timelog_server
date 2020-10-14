@@ -29,7 +29,7 @@ public class LogDashBoardAdapter {
         LogDashBoardPresenter presenter = new LogDashBoardPresenter();
 
         try {
-            useCase.execute(input, presenter);
+            useCase.executeDashBoard(input, presenter);
             return ResponseEntity.status(HttpStatus.OK).body(presenter.build());
         } catch (ParseException | DatabaseErrorException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LogDashBoardViewModel());

@@ -4,13 +4,19 @@ import ssl.ois.timelog.adapter.view.model.log.dash.board.LogDashBoardViewModel;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.log.LogDTO;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseOutputBound;
+import ssl.ois.timelog.service.activity.type.list.ListActivityTypeUseCaseOutput;
+import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.user.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LogDashBoardPresenter extends HistoryLogUseCaseOutputBound {
     public LogDashBoardViewModel build() throws ParseException {
+
         LogDashBoardViewModel viewModel = new LogDashBoardViewModel();
         long totalTime = 0;
         for (LogDTO log : this.getLogDTOList()) {
@@ -25,11 +31,12 @@ public class LogDashBoardPresenter extends HistoryLogUseCaseOutputBound {
 
             int hour = this.getHour(timeLength);
             int minute = this.getMinute(timeLength);
-            
 
             data.setHour(hour);
             data.setMinute(minute);
+
             viewModel.add(log.getActivityTypeName(), data);
+
         }
 
         int hour = this.getHour(totalTime);

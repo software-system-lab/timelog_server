@@ -47,4 +47,33 @@ public class HistoryLogUseCase {
 
         output.setLogDTOList(logDTOList);
     }
+
+    public void executeDashBoard(HistoryLogUseCaseInput input, HistoryLogUseCaseOutput output)
+            throws ParseException, DatabaseErrorException {
+        Date endDate;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        endDate = dateFormat.parse(input.getEndDate());
+        Calendar c = Calendar.getInstance();
+        c.setTime(endDate);
+        c.add(Calendar.DATE, 1);
+        endDate = c.getTime();
+
+        List<Log> logList = this.logRepository.findByPeriodandNotPrivate(input.getUserID(),
+                input.getStartDate(), dateFormat.format(endDate));
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
+
+        List<LogDTO> logDTOList = new ArrayList<>();
+        for (Log log: logList) {
+            LogDTO logDTO = new LogDTO();
+            logDTO.setId(log.getID().toString());
+            logDTO.setActivityTypeName(log.getActivityTypeName());
+            logDTO.setTitle(log.getTitle());
+            logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
+            logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
+            logDTOList.add(logDTO);
+        }
+
+        output.setLogDTOList(logDTOList);
+    }
 }

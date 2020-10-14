@@ -13,4 +13,5 @@ public interface LogRepository {
     Log findByID(String id) throws GetLogErrorException;
     Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException;
     List<Log> findByPeriod(String userID, String startDate, String endDate) throws ParseException, DatabaseErrorException;
+    List<Log> findByPeriodandNotPrivate(String userID, String startDate, String endDate) throws ParseException, DatabaseErrorException;
 }
