@@ -51,6 +51,33 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
+    public void update(Log log, String targetID) throws GetLogErrorException, SaveLogErrorException {
+        Connection connection = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement("UPDATE `log`"
+                    + "SET `id`= ?, `title`= ?, `start_time`= ?, `end_time`= ?, `activity_type`= ? "
+                    + "WHERE log.id = ? AND log.user_id = ?")) {
+
+                stmt.setString(1, log.getID().toString());
+                stmt.setString(2, log.getTitle());
+                stmt.setString(3, SqlDateTimeConverter.toString(log.getStartTime()));
+                stmt.setString(4, SqlDateTimeConverter.toString(log.getEndTime()));
+                stmt.setString(5, log.getActivityTypeName());
+                stmt.setString(6, targetID);
+                stmt.setString(7, log.getUserID().toString());
+
+                stmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new SaveLogErrorException(log.getTitle());
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+    }
+
+    @Override
     public Log findByID(String id) throws GetLogErrorException {
         Connection connection = null;
         Log log = null;

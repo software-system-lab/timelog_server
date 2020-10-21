@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface LogRepository {
     void save(Log log) throws SaveLogErrorException;
+    void update(Log log, String targetID) throws GetLogErrorException, SaveLogErrorException;
     Log findByID(String id) throws GetLogErrorException;
     Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException;
     List<Log> findByPeriod(String userID, String startDate, String endDate) throws ParseException, DatabaseErrorException;

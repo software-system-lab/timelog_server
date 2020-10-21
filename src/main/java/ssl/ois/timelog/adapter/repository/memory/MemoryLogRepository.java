@@ -20,6 +20,11 @@ public class MemoryLogRepository implements LogRepository {
     }
 
     @Override
+    public void update(final Log log, final String targetID) {
+        this.logs.replace(targetID, log);
+    }
+
+    @Override
     public Log findByID(final String id) {
         return this.logs.get(id);
     }
