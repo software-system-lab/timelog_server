@@ -29,7 +29,7 @@ public class RemoveActivityTypeUseCaseInput {
     }
 
     public String getUserID(){
-        return userID;
+        return this.userID;
     }
 
     public Boolean getIsEnable() {
@@ -49,7 +49,7 @@ public class RemoveActivityTypeUseCaseInput {
     }
 
     public Boolean getIsDeleted() {
-        return isDeleted;
+        return this.isDeleted;
     }
 
     public void setIsDeleted(Boolean isDeleted) {

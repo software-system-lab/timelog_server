@@ -1,6 +1,5 @@
 package ssl.ois.timelog.adapter.repository.mysql;
 
-import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -170,7 +169,6 @@ public class MysqlUserRepository implements UserRepository {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 rs.next();
-
                 return rs.getInt(1) == 1;
             }
         }

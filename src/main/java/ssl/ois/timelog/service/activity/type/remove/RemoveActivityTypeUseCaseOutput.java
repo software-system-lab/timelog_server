@@ -5,7 +5,7 @@ public class RemoveActivityTypeUseCaseOutput {
     private Boolean isDeleted;
 
     public String getActivityTypeName() {
-        return activityTypeName;
+        return this.activityTypeName;
     }
 
     public void setActivityTypeName(String activityTypeName) {
@@ -13,7 +13,7 @@ public class RemoveActivityTypeUseCaseOutput {
     }
 
     public Boolean getIsDeleted() {
-        return isDeleted;
+        return this.isDeleted;
     }
 
     public void setIsDeleted(Boolean isDeleted) {

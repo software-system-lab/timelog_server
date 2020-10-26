@@ -19,8 +19,6 @@ import ssl.ois.timelog.service.log.edit.EditLogUseCase;
 import ssl.ois.timelog.service.log.edit.EditLogUseCaseInput;
 import ssl.ois.timelog.service.log.edit.EditLogUseCaseOutput;
 
-import java.io.*;
-
 @RestController
 @RequestMapping("/api/log")
 public class LogRestAdapter {

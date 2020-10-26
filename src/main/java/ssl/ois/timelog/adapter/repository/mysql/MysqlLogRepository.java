@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import java.io.*;
-
 public class MysqlLogRepository implements LogRepository {
     @Autowired
     private MysqlDriverAdapter mysqlDriverAdapter;
@@ -199,7 +197,6 @@ public class MysqlLogRepository implements LogRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new DatabaseErrorException();
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);

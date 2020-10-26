@@ -3,7 +3,6 @@ package ssl.ois.timelog.model.user;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.io.*;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.timebox.Timebox;
@@ -64,7 +63,6 @@ public class User {
             if(!this.isExistandDeleted(activityType.getName())) {
                 throw new DuplicateActivityTypeException();
             }
-
             else {
                 activityType.setDeleted(false);
                 this.targetActivityName = activityType.getName();
@@ -73,13 +71,11 @@ public class User {
                 this.activityTypeList.removeIf(deletedActivityType -> deletedActivityType.getName().equals(this.targetActivityName));
                 this.activityTypeList.add(this.operatedActivityType);
             }
-
         }
         else {
             this.operatedActivityType = activityType;
             this.activityTypeList.add(this.operatedActivityType);
         }
-
     }
 
     public void updateActivityType(String targetActivityTypeName, ActivityType activityTypeToCheck)
@@ -123,7 +119,6 @@ public class User {
                 if(activityType.isDeleted()) {
                     return true;
                 }
-
             }
         }
         return false;
