@@ -58,20 +58,24 @@ public class HistoryLogUseCase {
         c.add(Calendar.DATE, 1);
         endDate = c.getTime();
 
-        List<Log> logList = this.logRepository.findByPeriodandNotPrivate(input.getUserID(),
+        List<Log> logList = this.logRepository.findByPeriod(input.getUserID(),
                 input.getStartDate(), dateFormat.format(endDate));
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
 
         List<LogDTO> logDTOList = new ArrayList<>();
         for (Log log: logList) {
-            LogDTO logDTO = new LogDTO();
-            logDTO.setId(log.getID().toString());
-            logDTO.setActivityTypeName(log.getActivityTypeName());
-            logDTO.setTitle(log.getTitle());
-            logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
-            logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
-            logDTOList.add(logDTO);
+            for(String filterName: input.getFilterList()) {
+                if(log.getActivityTypeName().equals(filterName)) {
+                    LogDTO logDTO = new LogDTO();
+                    logDTO.setId(log.getID().toString());
+                    logDTO.setActivityTypeName(log.getActivityTypeName());
+                    logDTO.setTitle(log.getTitle());
+                    logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
+                    logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
+                    logDTOList.add(logDTO);
+                }
+            }
         }
 
         output.setLogDTOList(logDTOList);
