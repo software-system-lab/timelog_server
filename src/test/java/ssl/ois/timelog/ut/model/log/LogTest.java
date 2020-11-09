@@ -2,6 +2,7 @@ package ssl.ois.timelog.ut.model.log;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Assert;
 import ssl.ois.timelog.model.log.Log;
 
 import java.util.UUID;
@@ -28,5 +29,10 @@ public class LogTest {
     public void getTime() {
         assertEquals(180, this.log.getMinutes());
         assertEquals(3.0, this.log.getHours(), EPSILON);
+    }
+
+    @Test
+    public void getUserID() {
+        assertEquals(UUID.fromString("c61965be-8176-4419-b289-4d52617728fb"), this.log.getUserID());
     }
 }
