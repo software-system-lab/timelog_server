@@ -115,10 +115,8 @@ public class User {
 
     private boolean isExistandDeleted(String activityTypeName) {
         for(ActivityType activityType: this.activityTypeList) {
-            if(activityType.getName().equals(activityTypeName)) {
-                if(activityType.isDeleted()) {
-                    return true;
-                }
+            if(activityType.getName().equals(activityTypeName) && activityType.isDeleted()) {
+                return true;
             }
         }
         return false;

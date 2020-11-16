@@ -164,43 +164,4 @@ public class MysqlLogRepository implements LogRepository {
         return logList;
     }
 
-    @Override
-    public List<Log> findByPeriodandNotPrivate(String userID, String startDate, String endDate) throws DatabaseErrorException {
-        Connection connection = null;
-        List<Log> logList = new ArrayList<>();
-
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-            try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM `log` as a," +
-                "`activity_user_mapper` as b " +
-                "WHERE a.user_id = ? AND a.start_time >= ? AND a.end_time < ?" +
-                "AND a.user_id = b.user_id AND a.activity_type = b.activity_type_name AND b.is_private = 0 ")) {
-                stmt.setString(1, userID);
-                stmt.setString(2, startDate);
-                stmt.setString(3, endDate);
-
-                try (ResultSet result = stmt.executeQuery()) {
-                    while (result.next()) {
-                        UUID logID = UUID.fromString(result.getString("id"));
-                        UUID uid = UUID.fromString(result.getString("user_id"));
-                        String title = result.getString("title");
-                        String startTime = result.getString("start_time").replace("-", "/");
-                        String endTime = result.getString("end_time").replace("-", "/");
-                        String description = result.getString("description");
-                        String activityType = result.getString("activity_type");
-
-                        Log log = new Log(logID, uid, title, startTime.substring(0, startTime.lastIndexOf(':')),
-                                endTime.substring(0, endTime.lastIndexOf(':')), description, activityType);
-                        logList.add(log);
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
-        }
-        return logList;
-    }
 }

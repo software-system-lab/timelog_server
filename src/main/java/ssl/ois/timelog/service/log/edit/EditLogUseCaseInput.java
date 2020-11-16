@@ -10,6 +10,7 @@ public class EditLogUseCaseInput {
     private String activityTypeName;
 
     public EditLogUseCaseInput() {
+        //empty constructor
     }
 
     public String getLogID() {

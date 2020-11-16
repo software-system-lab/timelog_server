@@ -1,5 +1,7 @@
 package ssl.ois.timelog.cucumber.log;
 
+import java.util.List;
+import java.util.ArrayList;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -99,6 +101,41 @@ public class HistoryStepDefinition {
                logDTO.getActivityTypeName().equals(activityTypeName) &&
                logDTO.getStartTime().equals(startTime) &&
                logDTO.getEndTime().equals(endTime)) {
+                found = true;
+            }
+        }
+        assertTrue(found);
+    }
+
+    @When("[History] I request for the history between {string} and {string} with activity type {string} selected")
+    public void history_I_request_for_the_history_between_and_with_activity_type_selected(
+            String startDate, String endDate, String activityType) {
+        HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository);
+        HistoryLogUseCaseInput input = new HistoryLogUseCaseInput();
+        this.output = new LogHistoryPresenter();
+        List<String> filterList = new ArrayList<>();
+        filterList.add(activityType);
+
+        input.setUserID(this.userID);
+        input.setStartDate(startDate);
+        input.setEndDate(endDate);
+        input.setFilterList(filterList);
+
+        try {
+            useCase.executeDashBoard(input, this.output);
+        } catch (ParseException | DatabaseErrorException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Then("[History] it should contain a log with and start time {string} and end time {string} and activity type {string} in my log dashboard.")
+    public void history_it_should_contain_a_log_with_and_start_time_and_end_time_and_activity_type_in_my_log_dashboard(
+            String startTime, String endTime, String activityTypeName) {
+        boolean found = false;
+        for(LogDTO logDTO: this.output.getLogDTOList()) {
+            if(logDTO.getActivityTypeName().equals(activityTypeName) &&
+                    logDTO.getStartTime().equals(startTime) &&
+                    logDTO.getEndTime().equals(endTime)) {
                 found = true;
             }
         }

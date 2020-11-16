@@ -1,5 +1,4 @@
 package ssl.ois.timelog.service.log.history;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryLogUseCaseInput {

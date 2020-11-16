@@ -55,24 +55,4 @@ public class MemoryLogRepository implements LogRepository {
         return logList;
     }
 
-    @Override
-    public List<Log> findByPeriodandNotPrivate(final String userID, final String startDateString, final String endDateString) throws ParseException {
-        final List<Log> logList = new ArrayList<>();
-
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Date startDate;
-        Date endDate;
-        startDate = simpleDateFormat.parse(startDateString);
-        endDate = simpleDateFormat.parse(endDateString);
-
-        for (final Map.Entry<String, Log> logEntry: this.logs.entrySet()) {
-            final Log log = logEntry.getValue();
-            if (log.getUserID().toString().equals(userID) &&
-                log.getStartTime().compareTo(startDate) >= 0 &&
-                log.getEndTime().compareTo(endDate) < 0) {
-                    logList.add(logEntry.getValue());
-            }
-        }
-        return logList;
-    }
 }
