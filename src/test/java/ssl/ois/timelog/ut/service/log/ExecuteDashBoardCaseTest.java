@@ -23,8 +23,6 @@ import static org.junit.Assert.fail;
 public class ExecuteDashBoardCaseTest {
     private LogRepository logRepository;
     private String logID;
-    private String startDate;
-    private String endDate;
     private HistoryLogUseCaseOutput output;
 
     @Before
