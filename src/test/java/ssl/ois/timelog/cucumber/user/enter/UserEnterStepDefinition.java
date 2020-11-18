@@ -30,7 +30,7 @@ public class UserEnterStepDefinition {
     private LogRepository logRepository;
     private EnterUseCaseOutput enterUseCaseOutput;
     private List<ActivityType> activityTypeList;
-    
+
     @Before
     public void setup() {
         this.userRepository = new MemoryUserRepository();
