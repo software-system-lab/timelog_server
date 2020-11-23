@@ -46,8 +46,7 @@ steps:
     sonar_token:
       from_secret: sonar_project_token
     sonar_host:
-      from_secret:
-        sonar_url
+      from_secret: sonar_url
 
     ver: 1.0
 
