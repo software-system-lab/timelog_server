@@ -5,12 +5,11 @@ import org.junit.Test;
 import org.junit.Assert;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
-
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -55,28 +54,4 @@ public class UserTest {
     public void getActivityTypeList() {
         assertEquals(activityTypeList, this.user.getActivityTypeList());
     }
-
-//    @Test
-//    public void updateActivityType() {
-//        try {
-//            this.user.updateActivityType(this.targetActivityName,this.operatedActivityType);
-//        } catch (ActivityTypeNotExistException | DuplicateActivityTypeException e) {
-//            fail(e.getMessage());
-//        }
-//
-//        this.activityTypeList.remove(1);
-//
-//        assertEquals(this.activityTypeList, this.user.getActivityTypeList());
-//    }
-
-//
-//    @Test
-//    public void getOperatedActivityType() {
-//        assertEquals(operatedActivityType, this.user.getOperatedActivityType());
-//    }
-//
-//    @Test
-//    public void getTargetActivityTypeName() {
-//        assertEquals(targetActivityName, this.user.getTargetActivityTypeName());
-//    }
 }
