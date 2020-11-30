@@ -19,7 +19,8 @@ public class EditLogUseCase {
 
     public void execute(EditLogUseCaseInput input, EditLogUseCaseOutput output) throws GetLogErrorException, SaveLogErrorException {
         UUID userID = UUID.fromString(input.getUserID());
-        Log log = new Log(userID, input.getTitle(), input.getStartTime(), input.getEndTime(), input.getDescription(), input.getActivityTypeName());
+        UUID activityUserMapperID = UUID.fromString(input.getActivityUserMapperID());
+        Log log = new Log(userID, input.getTitle(), input.getStartTime(), input.getEndTime(), input.getDescription(), input.getActivityTypeName(), activityUserMapperID);
 
         logRepository.update(log, input.getLogID());
         output.setLogID(log.getID().toString());

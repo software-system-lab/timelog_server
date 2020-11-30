@@ -55,4 +55,5 @@ public class GetLogByIdUseCaseOutput {
     public String getDescription(){
         return this.description;
     }
+
 }

@@ -28,8 +28,8 @@ public class MysqlLogRepository implements LogRepository {
             connection = this.mysqlDriverAdapter.getConnection();
 
             try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO `log`"
-                    + "(`id`, `user_id`, `title`, `start_time`, `end_time`, `description`, `activity_type`) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                    + "(`id`, `user_id`, `title`, `start_time`, `end_time`, `description`, `activity_type`, `activity_user_mapper_id`) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
 
                 stmt.setString(1, log.getID().toString());
                 stmt.setString(2, log.getUserID().toString());
@@ -38,6 +38,8 @@ public class MysqlLogRepository implements LogRepository {
                 stmt.setString(5, SqlDateTimeConverter.toString(log.getEndTime()));
                 stmt.setString(6, log.getDescription());
                 stmt.setString(7, log.getActivityTypeName());
+                stmt.setString(8, log.getActivityUserMapperId());
+
 
                 stmt.executeUpdate();
             }

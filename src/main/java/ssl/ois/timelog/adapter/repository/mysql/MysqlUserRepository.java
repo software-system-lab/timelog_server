@@ -212,14 +212,15 @@ public class MysqlUserRepository implements UserRepository {
             throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(
             "INSERT INTO `activity_user_mapper` " + 
-            "(`activity_type_name`, `user_id`, `is_enable`, `is_private`, `is_deleted`) " +
-            "VALUES (?, ?, ?, ?, ?)"
+            "(`id`,`activity_type_name`, `user_id`, `is_enable`, `is_private`, `is_deleted`) " +
+            "VALUES (?, ?, ?, ?, ?, ?)"
         )) {
-            stmt.setString(1, activityType.getName());
-            stmt.setString(2, userID);
-            stmt.setInt(3, activityType.isEnable() ? 1 : 0);
-            stmt.setInt(4, activityType.isPrivate() ? 1 : 0);
-            stmt.setInt(5, activityType.isDeleted() ? 1 : 0);
+            stmt.setString(1, UUID.randomUUID());
+            stmt.setString(2, activityType.getName());
+            stmt.setString(3, userID);
+            stmt.setInt(4, activityType.isEnable() ? 1 : 0);
+            stmt.setInt(5, activityType.isPrivate() ? 1 : 0);
+            stmt.setInt(6, activityType.isDeleted() ? 1 : 0);
 
             stmt.executeUpdate();
         }
