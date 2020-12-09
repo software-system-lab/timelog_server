@@ -8,7 +8,6 @@ public class EditLogUseCaseInput {
     private String endTime;
     private String description;
     private String activityTypeName;
-    private String activityUserMapperID;
 
     public EditLogUseCaseInput() {
         //empty constructor
@@ -70,11 +69,4 @@ public class EditLogUseCaseInput {
         this.activityTypeName = activityTypeName;
     }
 
-    public String getActivityUserMapperID() {
-        return activityUserMapperID;
-    }
-
-    public void setActivityUserMapperID(String activityUserMapperID) {
-        this.activityUserMapperID = activityUserMapperID;
-    }
 }

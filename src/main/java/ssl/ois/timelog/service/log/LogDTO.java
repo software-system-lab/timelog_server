@@ -65,11 +65,4 @@ public class LogDTO {
         this.activityTypeName = activityTypeName;
     }
 
-    public String getActivityUserMapperID() {
-        return activityUserMapperID;
-    }
-
-    public void setActivityUserMapperID(String activityUserMapperID) {
-        this.activityUserMapperID = activityUserMapperID;
-    }
 }

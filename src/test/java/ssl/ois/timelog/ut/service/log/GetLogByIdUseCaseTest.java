@@ -7,6 +7,7 @@ import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.get.*;
 
@@ -35,7 +36,7 @@ public class GetLogByIdUseCaseTest {
         AddLogUseCase addLogUseCase = new AddLogUseCase(this.logRepository);
         try {
             addLogUseCase.execute(inputData, outputData);
-        } catch (SaveLogErrorException e) {
+        } catch (SaveLogErrorException | DatabaseErrorException e) {
             fail(e.getMessage());
         }
         this.logID = outputData.getLogID();

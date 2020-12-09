@@ -86,6 +86,7 @@ public class User {
         if(this.isExist(activityTypeToCheck.getName()) && !activityTypeToCheck.getName().equals(targetActivityTypeName)) {
             throw new DuplicateActivityTypeException();
         }
+
         this.targetActivityName = targetActivityTypeName;
         this.operatedActivityType = activityTypeToCheck;
 

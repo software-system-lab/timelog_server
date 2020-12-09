@@ -4,7 +4,7 @@ Feature: user enter Timelog
         Given My user ID is "12345678-90ab-cdef-1234-567812341234"
          When I first time enter Timelog
          Then I will get my activity type list that contains "Other" and "LabProject" and "LabDuty"
-          And I will get my log list that contains nothing
+         And I will get my log list that contains nothing
 
     Scenario: A user re-enter Timelog
         Given I have entered the Timelog with user ID "12345678-90ab-cdef-1234-567812341234" before

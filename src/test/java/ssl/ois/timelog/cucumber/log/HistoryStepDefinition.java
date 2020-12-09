@@ -154,7 +154,7 @@ public class HistoryStepDefinition {
         input.setActivityTypeName(activityTypeName);
         try {
             useCase.execute(input, new AddLogUseCaseOutput());
-        } catch (SaveLogErrorException e) {
+        } catch (SaveLogErrorException | DatabaseErrorException e) {
             fail(e.toString());
         }
     }

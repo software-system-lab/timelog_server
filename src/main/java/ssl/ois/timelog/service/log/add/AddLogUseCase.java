@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 
 @Service
@@ -16,9 +17,10 @@ public class AddLogUseCase {
         this.logRepository = logRepo;
     }
 
-    public void execute(AddLogUseCaseInput input, AddLogUseCaseOutput output) throws SaveLogErrorException {
+    public void execute(AddLogUseCaseInput input, AddLogUseCaseOutput output) throws SaveLogErrorException,DatabaseErrorException {
         UUID userID = UUID.fromString(input.getUserID());
-        UUID activityUserMapperID = UUID.fromString(input.getActivityUserMapperID());
+        UUID activityUserMapperID = this.logRepository.findActivityUserMapperID(userID.toString(), input.getActivityTypeName());
+
         Log log = new Log(userID, input.getTitle(), input.getStartTime(), input.getEndTime(), input.getDescription(), input.getActivityTypeName(), activityUserMapperID);
         logRepository.save(log);
         output.setLogID(log.getID().toString());

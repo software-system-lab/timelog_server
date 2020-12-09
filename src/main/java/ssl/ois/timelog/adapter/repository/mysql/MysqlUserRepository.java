@@ -83,6 +83,7 @@ public class MysqlUserRepository implements UserRepository {
                     !user.getOperatedActivityType().getName().equals(user.getTargetActivityTypeName())) {
                 throw new DuplicateActivityTypeException();
             }
+
             this.createInActivityTypeTable(connection, user.getOperatedActivityType());
             this.updateInActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName(), user.getOperatedActivityType());
 
@@ -184,12 +185,13 @@ public class MysqlUserRepository implements UserRepository {
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     while(rs.next()) {
+                        UUID id = UUID.fromString(rs.getString("id"));
                         String activityTypeName = rs.getString("activity_type_name");
                         boolean isEnable = rs.getInt("is_enable") == 1;
                         boolean isPrivate = rs.getInt("is_private") == 1;
                         boolean isDeleted = rs.getInt("is_deleted") == 1;
     
-                        ActivityType activityType = new ActivityType(activityTypeName, isEnable, isPrivate, isDeleted);
+                        ActivityType activityType = new ActivityType(id, activityTypeName, isEnable, isPrivate, isDeleted);
                         activityTypeList.add(activityType);
                     }
                 }
@@ -215,7 +217,7 @@ public class MysqlUserRepository implements UserRepository {
             "(`id`,`activity_type_name`, `user_id`, `is_enable`, `is_private`, `is_deleted`) " +
             "VALUES (?, ?, ?, ?, ?, ?)"
         )) {
-            stmt.setString(1, UUID.randomUUID());
+            stmt.setString(1, activityType.getId().toString());
             stmt.setString(2, activityType.getName());
             stmt.setString(3, userID);
             stmt.setInt(4, activityType.isEnable() ? 1 : 0);
@@ -260,6 +262,33 @@ public class MysqlUserRepository implements UserRepository {
 
             stmt.executeUpdate();
         }
+    }
+
+
+    @Override
+    public UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException {
+        Connection connection = null;
+        UUID activityUserMapperID;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement(
+                    "SELECT `id` FROM `activity_user_mapper` WHERE `user_id` = ? AND `activity_type_name` = ?")) {
+
+                stmt.setString(1, userID);
+                stmt.setString(2, activityTypeName);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    rs.next();
+                    activityUserMapperID = UUID.fromString(rs.getString("id"));
+
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+        return activityUserMapperID;
     }
 
 }

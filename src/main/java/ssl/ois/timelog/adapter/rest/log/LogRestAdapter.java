@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.get.*;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCase;
@@ -48,7 +49,7 @@ public class LogRestAdapter {
 
         try {
             this.addLogUseCase.execute(input, output);
-        } catch (SaveLogErrorException e) {
+        } catch (SaveLogErrorException | DatabaseErrorException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseOutput());
         }
 
@@ -72,7 +73,7 @@ public class LogRestAdapter {
 
         try {
             this.editLogUseCase.execute(input, output);
-        } catch (GetLogErrorException | SaveLogErrorException e) {
+        } catch (GetLogErrorException | SaveLogErrorException | DatabaseErrorException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);

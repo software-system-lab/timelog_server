@@ -18,6 +18,7 @@ import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCase;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseInput;
@@ -76,7 +77,7 @@ public class LogStepDefinition {
 
         try {
             usecase.execute(addLogUseCaseInput, addLogUseCaseOutput);
-        } catch (SaveLogErrorException e) {
+        } catch (SaveLogErrorException | DatabaseErrorException e) {
             fail(e.getMessage());
         }
 
@@ -125,8 +126,9 @@ public class LogStepDefinition {
             String title, String startTime, String endTime, String description, String activityTypeName) {
         try {
             this.logRepository.save(
-                    new Log(UUID.fromString(this.userID), title, startTime, endTime, description, activityTypeName));
-        } catch (SaveLogErrorException e) {
+                    new Log(UUID.fromString(this.userID), title, startTime, endTime, description, activityTypeName, this.logRepository.findActivityUserMapperID(this.userID,activityTypeName))
+            );
+        } catch (SaveLogErrorException | DatabaseErrorException e) {
             fail(e.getMessage());
         }
     }

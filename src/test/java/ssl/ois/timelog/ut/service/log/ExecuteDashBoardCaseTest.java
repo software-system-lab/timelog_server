@@ -42,7 +42,7 @@ public class ExecuteDashBoardCaseTest {
         AddLogUseCase addLogUseCase = new AddLogUseCase(this.logRepository);
         try {
             addLogUseCase.execute(inputData, outputData);
-        } catch (SaveLogErrorException e) {
+        } catch (SaveLogErrorException | DatabaseErrorException e) {
             fail(e.getMessage());
         }
         this.logID = outputData.getLogID();

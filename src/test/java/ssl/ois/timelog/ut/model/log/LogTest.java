@@ -22,7 +22,8 @@ public class LogTest {
         String activityType = "Others";
         String startTime = "2020/04/21 15:00";
         String endTime = "2020/04/21 18:00";
-        this.log = new Log(userID, title, startTime, endTime, description, activityType);
+        UUID activityUserMapperID = UUID.fromString("c61965be-8176-4419-b289-4d52617728fB");
+        this.log = new Log(userID, title, startTime, endTime, description, activityType,activityUserMapperID);
     }
 
     @Test

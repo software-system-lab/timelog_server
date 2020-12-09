@@ -26,6 +26,7 @@ import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import io.cucumber.java.en.Then;
 
+
 public class ActivityStepDefinition {
 
     private UserRepository userRepository;

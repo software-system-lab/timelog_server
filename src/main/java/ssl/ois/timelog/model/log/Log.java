@@ -56,7 +56,7 @@ public class Log {
         this.userID = userID;
         this.activityTypeName = activityTypeName;
         this.description = description;
-        this.activityUserMapperID = UUID activityUserMapperID;
+        this.activityUserMapperID = activityUserMapperID;
         final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         try {
             this.startTime = dateFormat.parse(startTime);

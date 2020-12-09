@@ -35,6 +35,19 @@ public class MemoryLogRepository implements LogRepository {
     }
 
     @Override
+    public UUID findActivityUserMapperID(String userID, String activityTypeName) {
+        UUID activityUserMapperID = null;
+        for (final Map.Entry<String, Log> logEntry: this.logs.entrySet()) {
+            final Log log = logEntry.getValue();
+            if (log.getUserID().toString().equals(userID) &&
+                log.getActivityTypeName().equals(activityTypeName)) {
+                activityUserMapperID = log.getActivityUserMapperID();
+            }
+        }
+        return activityUserMapperID;
+    }
+
+    @Override
     public List<Log> findByPeriod(final String userID, final String startDateString, final String endDateString) throws ParseException {
         final List<Log> logList = new ArrayList<>();
 

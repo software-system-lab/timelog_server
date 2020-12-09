@@ -7,19 +7,17 @@ public class AddLogUseCaseInput {
     private String endTime;
     private String description;
     private String activityTypeName;
-    private String activityUserMapperID;
 
     public AddLogUseCaseInput() {
     }
 
-    public AddLogUseCaseInput(String userID, String title, String startTime, String endTime, String description, String activityTypeName, String activityUserMapperID) {
+    public AddLogUseCaseInput(String userID, String title, String startTime, String endTime, String description, String activityTypeName) {
         this.userID = userID;
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
         this.description = description;
         this.activityTypeName = activityTypeName;
-        this.activityUserMapperID = activityUserMapperID;
     }
 
     public String getUserID() {
@@ -70,11 +68,4 @@ public class AddLogUseCaseInput {
         this.activityTypeName = activityTypeName;
     }
 
-    public String getActivityUserMapperID() {
-        return activityUserMapperID;
-    }
-
-    public void setActivityUserMapperID(String activityUserMapperID) {
-        this.activityUserMapperID = activityUserMapperID;
-    }
 }

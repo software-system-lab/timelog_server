@@ -19,6 +19,7 @@ import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import ssl.ois.timelog.service.user.enter.EnterUseCase;
 import ssl.ois.timelog.service.user.enter.EnterUseCaseInput;
@@ -129,9 +130,9 @@ public class UserEnterStepDefinition {
     public void there_is_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type_in_my_log_history(String title, String startTime, String endTime, String description, String activityTypeName) {
         try {
             this.logRepository.save(
-                new Log(UUID.fromString(this.userID), title, startTime, endTime, description, activityTypeName)
+                new Log(UUID.fromString(this.userID), title, startTime, endTime, description, activityTypeName, this.logRepository.findActivityUserMapperID(this.userID,activityTypeName))
             );
-        } catch (SaveLogErrorException e) {
+        } catch (SaveLogErrorException |DatabaseErrorException e) {
             fail(e.getMessage());
         }
     }
