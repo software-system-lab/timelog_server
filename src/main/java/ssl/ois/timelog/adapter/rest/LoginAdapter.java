@@ -8,19 +8,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jdk.internal.net.http.Response;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.user.InitUserDataErrorException;
+import ssl.ois.timelog.service.team.get.GetTeamUseCase;
 import ssl.ois.timelog.service.user.enter.EnterUseCase;
 import ssl.ois.timelog.service.user.enter.EnterUseCaseInput;
 import ssl.ois.timelog.service.user.enter.EnterUseCaseOutput;
+import ssl.ois.timelog.service.user.belong.GetMemberOfUseCase;
+import ssl.ois.timelog.service.user.belong.GetMemberOfUseCaseInput;
+import ssl.ois.timelog.service.user.belong.GetMemberOfUseCaseOutput;
+import ssl.ois.timelog.service.exception.team.GetMemberOfErrorException;
 
 @RestController
-@RequestMapping("/api/login")
+@RequestMapping("/api")
 public class LoginAdapter {
     @Autowired
     EnterUseCase enterUseCase;
 
-    @PostMapping(value = "")
+    @Autowired
+    GetMemberOfUseCase getMemberOfUseCase;
+
+    @Autowired
+    GetTeamUseCase getTeamUseCase;
+
+    @PostMapping(value = "/login")
     public ResponseEntity<EnterUseCaseOutput> enterTimelog(@RequestBody EnterUseCaseInput input) {
         EnterUseCaseOutput output = new EnterUseCaseOutput();
 
@@ -30,6 +42,30 @@ public class LoginAdapter {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
 
+        return ResponseEntity.status(HttpStatus.OK).body(output);
+    }
+
+    @PostMapping(value = "/belong")
+    public ResponseEntity<GetMemberOfUseCaseOutput> getMemberOfList(@RequestBody GetMemberOfUseCaseInput input) {
+        GetMemberOfUseCaseOutput output = new GetMemberOfUseCaseOutput();
+        try {
+            this.getMemberOfUseCase.execute(input, output);
+            System.out.println(output.getMemberOfList());
+        } catch (GetMemberOfErrorException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(output);
+    }
+
+    @PostMapping(value = "/group")
+    public ResponseEntity<GetTeamUseCaseOutput> getTeam (@RequestBody GetTeamUseCaseInput input) {
+        GetTeamUseCaseOutput output = new GetTeamUseCaseOutput();
+        try {
+            this.getTeamUseCase.execute(input, output);
+        } catch (GetTeamErrorException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }
 }
