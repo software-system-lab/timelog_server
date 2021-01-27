@@ -48,7 +48,6 @@ steps:
     sonar_host:
       from_secret: sonar_url
 
-    ver: 1.0
 
 trigger:
   branch:
