@@ -19,7 +19,6 @@ public class GetMemberOfUseCase {
     public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException {
         try {
             final String url = "http://localhost:8080/get/groups/byuser";
-
             RestTemplate restTemplate = new RestTemplate();
             List<String> result = restTemplate.postForObject(url, input, List.class);
             output.setMemberOfList(result);

@@ -5,11 +5,12 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.web.client.RestClientException;
 import ssl.ois.timelog.service.exception.team.GetTeamErrorException;
-import ssl.ois.timelog.service.user.belong.GetTeamUseCaseInput;
-import ssl.ois.timelog.service.user.belong.GetTeamUseCaseOutput;
+import ssl.ois.timelog.service.team.get.GetTeamUseCaseInput;
+import ssl.ois.timelog.service.team.get.GetTeamUseCaseOutput;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -23,22 +24,26 @@ public class GetTeamUseCase {
 
             RestTemplate restTemplate = new RestTemplate();
             List<String> result = restTemplate.postForObject(urlMember, input, List.class);
+            
             for(int i = 0; i < result.size(); i++) {
-                String uid = restTemplate.postForObject(urlGetUid, result.get(i), string.class);
-                List<String> person = new ArrayList<String>();
-                person.add(uid);
-                person.add(result.get(i));
-                output.addMemberToList(person); 
-            }
-            String leaderUsername = restTemplate.postForObject(urlLeader, input, string.class);
-            String leaderUid = restTemplate.postForObject(urlGetUid, leaderUsername, string.class);
-            List<String> leader = new ArrayList<String>();
-            person.add(leaderUid);
-            person.add(leaderUsername);
-            output.setLeader(leader); 
+                String uid = restTemplate.postForObject(urlGetUid, result.get(i), String.class);
+                uid = uid.replaceAll("^\"|\"$", "");
 
+                UUID userID = UUID.fromString(uid);
+
+                output.addMemberToList(result.get(i) , userID); 
+            }
+            String leaderUsername = restTemplate.postForObject(urlLeader, input, String.class);
+            leaderUsername = leaderUsername.replaceAll("^\"|\"$", "");
+
+            String leaderUid = restTemplate.postForObject(urlGetUid, leaderUsername, String.class);
+            leaderUid = leaderUid.replaceAll("^\"|\"$", "");
+
+            UUID leaderID = UUID.fromString(leaderUid);
+
+            output.setLeader(leaderUsername, leaderID);
         } catch (RestClientException e) {
-            throw new GetMemberOfErrorException();
+            throw new GetTeamErrorException();
         }
     }
 }
