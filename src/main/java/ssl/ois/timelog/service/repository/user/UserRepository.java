@@ -1,5 +1,6 @@
 package ssl.ois.timelog.service.repository.user;
 
+import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;

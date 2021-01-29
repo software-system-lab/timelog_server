@@ -1,4 +1,4 @@
-package ssl.ois.timelog.service.user.belong;
+package ssl.ois.timelog.service.team.get;
 
 public class GetTeamUseCaseInput {
     private String groupname;
