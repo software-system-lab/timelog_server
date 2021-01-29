@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
@@ -129,7 +130,6 @@ public class MysqlUserRepository implements UserRepository {
                         user = new User(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, userID));
                     }
                 }
-
             }
 
         } catch (SQLException e) {

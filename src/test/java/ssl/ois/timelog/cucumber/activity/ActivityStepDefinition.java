@@ -10,6 +10,7 @@ import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseInput;

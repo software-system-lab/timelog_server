@@ -3,6 +3,7 @@ package ssl.ois.timelog.ut.service.log;
 import org.junit.Before;
 import org.junit.Test;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
+import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
