@@ -7,8 +7,6 @@ import java.util.UUID;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.timebox.Timebox;
 import ssl.ois.timelog.model.unit.Unit;
-import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
-import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 
 public class User extends Unit{
 
@@ -28,9 +26,21 @@ public class User extends Unit{
         this.timeboxList = timeboxList;
     }
 
+    @Override
     public List<Timebox> getTimeboxList() { return this.timeboxList; }
 
+    @Override
     public void addTimebox(Timebox timebox) {
         this.timeboxList.add(timebox);
+    }
+
+    @Override
+    public void addMemberToTeam(UUID targetMember) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteMemberFromTeam(UUID targetMember) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
     }
 }

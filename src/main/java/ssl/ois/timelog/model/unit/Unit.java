@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.UUID;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.timebox.Timebox;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
+import ssl.ois.timelog.service.exception.team.DuplicateMemberException;
+import ssl.ois.timelog.service.exception.team.MemberNotInGroupException;
 
 public abstract class Unit {
 
@@ -91,12 +94,12 @@ public abstract class Unit {
         return notDeleted;
     }
 
-    public Unit(UUID id) {
+    protected Unit(UUID id) {
         this.id = id;
         this.activityTypeList = new ArrayList<>();
     }
 
-    public Unit(UUID id, List<ActivityType> activityTypeList) {
+    protected Unit(UUID id, List<ActivityType> activityTypeList) {
         this.id = id;
         this.activityTypeList = activityTypeList;
     }
@@ -113,4 +116,12 @@ public abstract class Unit {
     public String getTargetActivityTypeName() {
         return this.targetActivityName;
     }
+
+    public abstract void addTimebox(Timebox timebox) throws UnsupportedOperationException;
+
+    public abstract List<Timebox> getTimeboxList() throws UnsupportedOperationException;
+
+    public abstract void addMemberToTeam(UUID memberTarget) throws UnsupportedOperationException, DuplicateMemberException;
+
+    public abstract void deleteMemberFromTeam(UUID memberTarget) throws UnsupportedOperationException, MemberNotInGroupException;
 }
