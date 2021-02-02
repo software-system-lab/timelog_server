@@ -6,7 +6,6 @@ public class RemoveActivityTypeUseCaseInput {
     private String userID;
     private Boolean isEnable;
     private Boolean isPrivate;
-    private Boolean isDeleted;
 
     public String getTargetActivityTypeName() {
         return this.targetActivityTypeName;
@@ -48,11 +47,4 @@ public class RemoveActivityTypeUseCaseInput {
         this.isPrivate = isPrivate;
     }
 
-    public Boolean getIsDeleted() {
-        return this.isDeleted;
-    }
-
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
 }

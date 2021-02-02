@@ -16,8 +16,7 @@ public class ActivityTypeTest {
         String name = "DP";
         boolean isEnable = true;
         boolean isPrivate = false;
-        boolean isDeleted = false;
-        this.activityType = new ActivityType(name, isEnable, isPrivate, isDeleted);
+        this.activityType = new ActivityType(name, isEnable, isPrivate);
     }
 
     @Test
@@ -35,8 +34,4 @@ public class ActivityTypeTest {
         assertEquals(false, this.activityType.isPrivate());
     }
 
-    @Test
-    public void getIsDeleted() {
-        assertEquals(false, this.activityType.isDeleted());
-    }
 }

@@ -39,13 +39,7 @@ public class User {
     }
 
     public List<ActivityType> getActivityTypeList() {
-        List<ActivityType> notDeleted = new ArrayList<>();
-        for(ActivityType activityType: this.activityTypeList) {
-            if(!activityType.isDeleted()) {
-                notDeleted.add(activityType);
-            }
-        }
-        return notDeleted;
+        return this.activityTypeList;
     }
 
     public List<Timebox> getTimeboxList() { return this.timeboxList; }
@@ -60,17 +54,7 @@ public class User {
 
     public void addActivityType(ActivityType activityType) throws DuplicateActivityTypeException {
         if(this.isExist(activityType.getName())) {
-            if(!this.isExistandDeleted(activityType.getName())) {
-                throw new DuplicateActivityTypeException();
-            }
-            else {
-                activityType.setDeleted(false);
-                this.targetActivityName = activityType.getName();
-                this.operatedActivityType = activityType;
-
-                this.activityTypeList.removeIf(deletedActivityType -> deletedActivityType.getName().equals(this.targetActivityName));
-                this.activityTypeList.add(this.operatedActivityType);
-            }
+            throw new DuplicateActivityTypeException();
         }
         else {
             this.operatedActivityType = activityType;
@@ -94,29 +78,18 @@ public class User {
         this.activityTypeList.add(this.operatedActivityType);
     }
 
-    public void deleteActivityType(String activityTypeName, ActivityType activityTypeToDelete) throws ActivityTypeNotExistException {
+    public void deleteActivityType(String activityTypeName) throws ActivityTypeNotExistException {
         if(!this.isExist(activityTypeName)) {
             throw new ActivityTypeNotExistException(activityTypeName);
         }
         this.targetActivityName = activityTypeName;
-        this.operatedActivityType = activityTypeToDelete;
 
         this.activityTypeList.removeIf(activityType -> activityType.getName().equals(this.targetActivityName));
-        this.activityTypeList.add(this.operatedActivityType);
     }
 
     private boolean isExist(String activityTypeName) {
         for(ActivityType activityType: this.activityTypeList) {
             if(activityType.getName().equals(activityTypeName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isExistandDeleted(String activityTypeName) {
-        for(ActivityType activityType: this.activityTypeList) {
-            if(activityType.getName().equals(activityTypeName) && activityType.isDeleted()) {
                 return true;
             }
         }

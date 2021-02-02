@@ -49,7 +49,6 @@ public class ActivityRestAdapter {
         input.setUserID(requestBody.getUserID());
         input.setIsEnable(requestBody.getIsEnable());
         input.setIsPrivate(requestBody.getIsPrivate());
-        input.setIsDeleted(false);
         input.setActivityTypeName(requestBody.getActivityTypeName());
         try {
             addActivityTypeUseCase.execute(input, output);
@@ -85,7 +84,6 @@ public class ActivityRestAdapter {
         input.setActivtiyTypeName(requestBody.getActivityTypeName());
         input.setIsEnable(requestBody.getIsEnable());
         input.setIsPrivate(requestBody.getIsPrivate());
-        input.setIsDeleted(false);
 
         try {
             editActivityTypeUseCase.execute(input, output);
@@ -105,7 +103,6 @@ public class ActivityRestAdapter {
         input.setTargetActivityTypeName(requestBody.getTargetActivityTypeName());
         input.setIsEnable(requestBody.getIsEnable());
         input.setIsPrivate(requestBody.getIsPrivate());
-        input.setIsDeleted(true);
 
         try {
             removeActivityTypeUseCase.execute(input, output);

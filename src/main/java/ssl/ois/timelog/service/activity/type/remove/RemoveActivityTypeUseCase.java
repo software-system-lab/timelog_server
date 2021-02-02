@@ -8,6 +8,7 @@ import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
+import java.util.UUID;
 
 @Service
 public class RemoveActivityTypeUseCase {
@@ -21,12 +22,12 @@ public class RemoveActivityTypeUseCase {
     public void execute(RemoveActivityTypeUseCaseInput input, RemoveActivityTypeUseCaseOutput output)
             throws DatabaseErrorException, ActivityTypeNotExistException, DuplicateActivityTypeException {
         User user = this.userRepository.findByUserID(input.getUserID());
-        ActivityType activityType = new ActivityType(input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate(), input.getIsDeleted());
+        UUID activityUserMapperID = this.userRepository.findActivityUserMapperID(input.getUserID(),input.getTargetActivityTypeName());
+        ActivityType activityType = new ActivityType(activityUserMapperID,input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
 
-        user.deleteActivityType(input.getTargetActivityTypeName(), activityType);
+        user.deleteActivityType(input.getTargetActivityTypeName());
 
         this.userRepository.deleteActivityType(user);
         output.setActivityTypeName(input.getActivityTypeName());
-        output.setIsDeleted(input.getIsDeleted());
     }
 }

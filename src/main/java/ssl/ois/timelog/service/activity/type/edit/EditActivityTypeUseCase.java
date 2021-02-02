@@ -24,7 +24,7 @@ public class EditActivityTypeUseCase {
             throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
         User user = this.userRepository.findByUserID(input.getUserID());
         UUID activityUserMapperID = this.userRepository.findActivityUserMapperID(input.getUserID(),input.getTargetActivityTypeName());
-        ActivityType activityType = new ActivityType(activityUserMapperID,input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate(), input.getIsDeleted());
+        ActivityType activityType = new ActivityType(activityUserMapperID,input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
 
         user.updateActivityType(input.getTargetActivityTypeName(), activityType);
         this.userRepository.updateActivityType(user);

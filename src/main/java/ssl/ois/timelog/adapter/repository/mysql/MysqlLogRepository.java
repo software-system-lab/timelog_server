@@ -114,8 +114,8 @@ public class MysqlLogRepository implements LogRepository {
             throw new GetLogErrorException(id);
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
-            return log;
         }
+        return log;
     }
 
     @Override
@@ -131,8 +131,8 @@ public class MysqlLogRepository implements LogRepository {
             return false;
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
-            return true;
         }
+        return true;
     }
 
     @Override
@@ -174,8 +174,8 @@ public class MysqlLogRepository implements LogRepository {
             throw new DatabaseErrorException();
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
-            return logList;
         }
+        return logList;
     }
 
     @Override
@@ -200,7 +200,7 @@ public class MysqlLogRepository implements LogRepository {
             throw new DatabaseErrorException();
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
-            return activityUserMapperID;
-        }
+        }            
+        return activityUserMapperID;
     }
 }

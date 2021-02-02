@@ -25,11 +25,11 @@ public class UserTest {
     public void setup() {
         UUID id = UUID.fromString("c61965be-8176-4419-b289-4d52617728fb");
         this.activityTypeList = new ArrayList<>();
-        this.operatedActivityType = new ActivityType("Break", true, false, false);
+        this.operatedActivityType = new ActivityType("Break", true, false);
         this.targetActivityName = "DP";
         this.user = new User(id, activityTypeList);
 
-        ActivityType activityType = new ActivityType("DP", true, false, false);
+        ActivityType activityType = new ActivityType("DP", true, false);
         this.activityTypeList.add(activityType);
     }
 

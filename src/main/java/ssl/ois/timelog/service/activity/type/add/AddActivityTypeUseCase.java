@@ -20,7 +20,7 @@ public class AddActivityTypeUseCase {
     public void execute(AddActivityTypeUseCaseInput input, AddActivityTypeUseCaseOutput output)
             throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
         User user = this.userRepository.findByUserID(input.getUserID());
-        ActivityType activityType = new ActivityType(input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate(), input.getIsDeleted());
+        ActivityType activityType = new ActivityType(input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
 
         user.addActivityType(activityType);
         this.userRepository.addActivityType(user);
