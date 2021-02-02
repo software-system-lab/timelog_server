@@ -35,18 +35,4 @@ public class LogDashBoardAdapter {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LogDashBoardViewModel());
         }
     }
-
-    @PostMapping("/filter")
-    public ResponseEntity<LogDashBoardViewModel> updateLogDashBoard(@RequestBody HistoryLogUseCaseInput input) {
-        HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository);
-
-        LogDashBoardPresenter presenter = new LogDashBoardPresenter();
-
-        try {
-            useCase.executeDashBoard(input, presenter);
-            return ResponseEntity.status(HttpStatus.OK).body(presenter.build());
-        } catch (ParseException | DatabaseErrorException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LogDashBoardViewModel());
-        }
-    }
 }
