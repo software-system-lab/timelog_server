@@ -136,33 +136,33 @@ public class MysqlUserRepository implements UserRepository {
             throw new DatabaseErrorException();
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
+            return user;
         }
-        return user;
     }
 
     private boolean isExistInMapper(Connection connection, String userID, String activityTypeName) throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT COUNT(*) FROM `activity_user_mapper` " +
-                "WHERE activity_user_mapper.user_id = ? " +
-                "AND activity_user_mapper.activity_type_name = ?"
-            )) {
-                stmt.setString(1, userID);
-                stmt.setString(2, activityTypeName);
+            "SELECT COUNT(*) FROM `activity_user_mapper` " +
+            "WHERE activity_user_mapper.user_id = ? " +
+            "AND activity_user_mapper.activity_type_name = ?"
+        )) {
+            stmt.setString(1, userID);
+            stmt.setString(2, activityTypeName);
 
-                try (ResultSet rs = stmt.executeQuery()) {
-                    rs.next();
-    
-                    return rs.getInt(1) == 1;
-                }
+            try (ResultSet rs = stmt.executeQuery()) {
+                rs.next();
+
+                return rs.getInt(1) == 1;
             }
+        }
     }
 
     private boolean isDeletedInMapper(Connection connection, String userID, String activityTypeName) throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT COUNT(*) FROM `activity_user_mapper` " +
-                "WHERE activity_user_mapper.user_id = ? " +
-                "AND activity_user_mapper.activity_type_name = ?" +
-                "AND activity_user_mapper.is_deleted = ?"
+            "SELECT COUNT(*) FROM `activity_user_mapper` " +
+            "WHERE activity_user_mapper.user_id = ? " +
+            "AND activity_user_mapper.activity_type_name = ?" +
+            "AND activity_user_mapper.is_deleted = ?"
         )) {
             stmt.setString(1, userID);
             stmt.setString(2, activityTypeName);
@@ -287,8 +287,8 @@ public class MysqlUserRepository implements UserRepository {
             throw new DatabaseErrorException();
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
+            return activityUserMapperID;
         }
-        return activityUserMapperID;
     }
 
 }
