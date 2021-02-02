@@ -34,13 +34,4 @@ public class User extends Unit{
         this.timeboxList.add(timebox);
     }
 
-    @Override
-    public void addMemberToTeam(UUID targetMember) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void deleteMemberFromTeam(UUID targetMember) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
 }

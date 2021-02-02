@@ -121,7 +121,11 @@ public abstract class Unit {
 
     public abstract List<Timebox> getTimeboxList() throws UnsupportedOperationException;
 
-    public abstract void addMemberToTeam(UUID memberTarget) throws UnsupportedOperationException, DuplicateMemberException;
+    public void addMemberToTeam(UUID targetMember) throws UnsupportedOperationException, DuplicateMemberException {
+        throw new UnsupportedOperationException();
+    }
 
-    public abstract void deleteMemberFromTeam(UUID memberTarget) throws UnsupportedOperationException, MemberNotInGroupException;
+    public void deleteMemberFromTeam(UUID targetMember) throws UnsupportedOperationException, MemberNotInGroupException {
+        throw new UnsupportedOperationException();
+    }
 }
