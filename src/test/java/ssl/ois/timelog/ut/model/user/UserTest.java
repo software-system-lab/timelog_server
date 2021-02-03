@@ -54,4 +54,5 @@ public class UserTest {
     public void getActivityTypeList() {
         assertEquals(activityTypeList, this.user.getActivityTypeList());
     }
+
 }
