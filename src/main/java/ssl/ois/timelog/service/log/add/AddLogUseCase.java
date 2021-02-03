@@ -22,7 +22,7 @@ public class AddLogUseCase {
         UUID activityUserMapperID = this.logRepository.findActivityUserMapperID(userID.toString(), input.getActivityTypeName());
 
         Log log = new Log(userID, input.getTitle(), input.getStartTime(), input.getEndTime(), input.getDescription(), input.getActivityTypeName(), activityUserMapperID);
-        logRepository.save(log);
+        logRepository.addLog(log);
         output.setLogID(log.getID().toString());
     }
 }

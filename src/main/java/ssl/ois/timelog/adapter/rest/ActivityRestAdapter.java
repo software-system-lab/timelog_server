@@ -52,8 +52,10 @@ public class ActivityRestAdapter {
         input.setActivityTypeName(requestBody.getActivityTypeName());
         try {
             addActivityTypeUseCase.execute(input, output);
-        } catch (DuplicateActivityTypeException | DatabaseErrorException | ActivityTypeNotExistException e) {
+        } catch (DuplicateActivityTypeException | ActivityTypeNotExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }
@@ -68,7 +70,7 @@ public class ActivityRestAdapter {
         try {
             listActivityTypeUseCase.execute(input, output);
         } catch (DatabaseErrorException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }
@@ -87,8 +89,10 @@ public class ActivityRestAdapter {
 
         try {
             editActivityTypeUseCase.execute(input, output);
-        } catch (ActivityTypeNotExistException | DatabaseErrorException | DuplicateActivityTypeException e) {
+        } catch (DuplicateActivityTypeException | ActivityTypeNotExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);        
     }
@@ -106,8 +110,10 @@ public class ActivityRestAdapter {
 
         try {
             removeActivityTypeUseCase.execute(input, output);
-        } catch (ActivityTypeNotExistException | DatabaseErrorException | DuplicateActivityTypeException e) {
+        } catch (DuplicateActivityTypeException | ActivityTypeNotExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }

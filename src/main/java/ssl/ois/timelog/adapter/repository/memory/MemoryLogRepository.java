@@ -15,12 +15,12 @@ public class MemoryLogRepository implements LogRepository {
     }
 
     @Override
-    public void save(Log log) {
+    public void addLog(Log log) {
         this.logs.put(log.getID().toString(), log);
     }
 
     @Override
-    public void update(Log log, String targetID) {
+    public void updateLog(Log log, String targetID) {
         this.logs.replace(targetID, log);
     }
 
@@ -50,7 +50,6 @@ public class MemoryLogRepository implements LogRepository {
     @Override
     public List<Log> findByPeriod(String userID, String startDateString, String endDateString) throws ParseException {
         final List<Log> logList = new ArrayList<>();
-
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date startDate;
         Date endDate;

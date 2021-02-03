@@ -31,8 +31,10 @@ public class LogDashBoardAdapter {
         try {
             useCase.execute(input, presenter);
             return ResponseEntity.status(HttpStatus.OK).body(presenter.build());
-        } catch (ParseException | DatabaseErrorException e) {
+        } catch (ParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LogDashBoardViewModel());
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LogDashBoardViewModel());
         }
     }
 }

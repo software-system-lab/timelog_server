@@ -49,8 +49,10 @@ public class LogRestAdapter {
 
         try {
             this.addLogUseCase.execute(input, output);
-        } catch (SaveLogErrorException | DatabaseErrorException e) {
+        } catch (SaveLogErrorException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseOutput());
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseOutput());
         }
 
         ResponseOutput responseOutput = new ResponseOutput();
@@ -73,8 +75,10 @@ public class LogRestAdapter {
 
         try {
             this.editLogUseCase.execute(input, output);
-        } catch (GetLogErrorException | SaveLogErrorException | DatabaseErrorException e) {
+        } catch (GetLogErrorException | SaveLogErrorException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }

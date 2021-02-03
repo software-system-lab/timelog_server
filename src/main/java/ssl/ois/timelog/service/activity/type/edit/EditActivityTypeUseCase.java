@@ -27,7 +27,7 @@ public class EditActivityTypeUseCase {
         ActivityType activityType = new ActivityType(activityUserMapperID,input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
 
         user.updateActivityType(input.getTargetActivityTypeName(), activityType);
-        this.userRepository.updateActivityType(user);
+        this.userRepository.editActivityType(user);
         output.setActivityTypeName(activityType.getName());
         output.setIsEnable(activityType.isEnable());
         output.setIsPrivate(activityType.isPrivate());

@@ -22,7 +22,7 @@ public class MysqlLogRepository implements LogRepository {
     private MysqlDriverAdapter mysqlDriverAdapter;
 
     @Override
-    public void save(Log log) throws SaveLogErrorException {
+    public void addLog(Log log) throws SaveLogErrorException {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
@@ -51,7 +51,7 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public void update(Log log, String targetID) throws GetLogErrorException, SaveLogErrorException {
+    public void updateLog(Log log, String targetID) throws GetLogErrorException, SaveLogErrorException {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
@@ -97,12 +97,10 @@ public class MysqlLogRepository implements LogRepository {
                     rs.next();
 
                     UUID logID = UUID.fromString(rs.getString("id"));
-                    UUID user_ID = UUID.fromString(rs.getString("user_id"));
                     String title = rs.getString("title");
                     String startTime = rs.getString("start_time").replace("-","/");
                     String endTime = rs.getString("end_time").replace("-","/");
                     String description = rs.getString("description");
-                    String activity_type_name = rs.getString("activity_type");
                     UUID activityUserMapperID = UUID.fromString(rs.getString("activity_user_mapper"));
                     UUID userID = UUID.fromString(rs.getString("user_id"));
                     String activityType = rs.getString("activity_type_name");
@@ -123,6 +121,7 @@ public class MysqlLogRepository implements LogRepository {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
+
             try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM `log` WHERE `id` = ?")) {
                 stmt.setString(1, logID);
                 stmt.executeUpdate();
@@ -139,9 +138,9 @@ public class MysqlLogRepository implements LogRepository {
     public List<Log> findByPeriod(String userID, String startDate, String endDate) throws DatabaseErrorException {
         Connection connection = null;
         List<Log> logList = new ArrayList<>();
-
         try {
             connection = this.mysqlDriverAdapter.getConnection();
+            
             try (PreparedStatement stmt = connection.prepareStatement(
                 "SELECT `log`.* ,`activity`.`user_id`,`activity`.`activity_type_name`" +
                 "FROM `log`, `activity_user_mapper` as `activity`" +
