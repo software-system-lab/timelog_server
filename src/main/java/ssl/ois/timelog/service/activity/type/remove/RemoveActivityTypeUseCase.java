@@ -25,9 +25,9 @@ public class RemoveActivityTypeUseCase {
         UUID activityUserMapperID = this.userRepository.findActivityUserMapperID(input.getUserID(),input.getTargetActivityTypeName());
         ActivityType activityType = new ActivityType(activityUserMapperID,input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
 
-        user.deleteActivityType(input.getTargetActivityTypeName());
+        user.removeActivityType(input.getTargetActivityTypeName());
 
-        this.userRepository.deleteActivityType(user);
+        this.userRepository.removeActivityType(user);
         output.setActivityTypeName(input.getActivityTypeName());
     }
 }
