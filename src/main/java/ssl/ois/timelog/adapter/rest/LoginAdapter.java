@@ -23,7 +23,7 @@ public class LoginAdapter {
     @Autowired
     EnterUseCase enterUseCase;
 
-    private static Log logger = LogFactory.getLog(LogExample.class.getName());
+    private static Log logger = LogFactory.getLog(LoginAdapter.class.getName());
 
     @PostMapping(value = "")
     public ResponseEntity<EnterUseCaseOutput> enterTimelog(@RequestBody EnterUseCaseInput input) {
