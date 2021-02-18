@@ -16,10 +16,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+import org.apache.commons.logging.LogFactory;
+
 @Service
 public class EnterUseCase {
     private UserRepository userRepository;
     private LogRepository logRepository;
+    private static org.apache.commons.logging.Log logger = LogFactory.getLog(EnterUseCase.class.getName());
 
     public EnterUseCase(UserRepository userRepository, LogRepository logRepository) {
         this.userRepository = userRepository;
@@ -58,6 +61,7 @@ public class EnterUseCase {
                 output.setActivityTypeList(user.getActivityTypeList());
             }
         } catch (DatabaseErrorException | ActivityTypeNotExistException e) {
+            logger.error(e);
             throw new InitUserDataErrorException(input.getUserID());
         }
     }
