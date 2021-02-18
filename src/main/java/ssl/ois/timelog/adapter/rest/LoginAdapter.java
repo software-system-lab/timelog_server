@@ -20,12 +20,15 @@ public class LoginAdapter {
     @Autowired
     EnterUseCase enterUseCase;
 
+    private static Log logger = LogFactory.getLog(LogExample.class.getName());
+
     @PostMapping(value = "")
     public ResponseEntity<EnterUseCaseOutput> enterTimelog(@RequestBody EnterUseCaseInput input) {
         EnterUseCaseOutput output = new EnterUseCaseOutput();
         try {
             this.enterUseCase.execute(input, output);
         } catch (DuplicateActivityTypeException | InitUserDataErrorException e) {
+            logger.error(e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
 
