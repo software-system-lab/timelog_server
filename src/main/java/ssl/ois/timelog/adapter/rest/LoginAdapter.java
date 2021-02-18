@@ -14,6 +14,9 @@ import ssl.ois.timelog.service.user.enter.EnterUseCase;
 import ssl.ois.timelog.service.user.enter.EnterUseCaseInput;
 import ssl.ois.timelog.service.user.enter.EnterUseCaseOutput;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 @RestController
 @RequestMapping("/api/login")
 public class LoginAdapter {
