@@ -75,7 +75,6 @@ public class MysqlUserRepository implements UserRepository {
     public void editActivityType(User user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
         Connection connection = null;
         try {
-            System.out.println("repository edit");
             connection = this.mysqlDriverAdapter.getConnection();
 
             if(!this.isExistInMapper(connection, user.getID().toString(), user.getTargetActivityTypeName())) {

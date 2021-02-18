@@ -145,11 +145,7 @@ public class ActivityStepDefinition {
         RemoveActivityTypeUseCaseOutput removeActivityTypeUseCaseOutput = new RemoveActivityTypeUseCaseOutput();
 
         removeActivityTypeUseCaseInput.setActivityTypeName(this.activityTypeName);
-        removeActivityTypeUseCaseInput.setTargetActivityTypeName(this.activityTypeName);
-        removeActivityTypeUseCaseInput.setIsEnable(true);
-        removeActivityTypeUseCaseInput.setIsPrivate(false);
         removeActivityTypeUseCaseInput.setUserID(this.userID);
-
 
         try {
             removeActivityTypeUseCase.execute(removeActivityTypeUseCaseInput, removeActivityTypeUseCaseOutput);

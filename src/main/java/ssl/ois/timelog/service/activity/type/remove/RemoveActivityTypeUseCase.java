@@ -22,10 +22,9 @@ public class RemoveActivityTypeUseCase {
     public void execute(RemoveActivityTypeUseCaseInput input, RemoveActivityTypeUseCaseOutput output)
             throws DatabaseErrorException, ActivityTypeNotExistException, DuplicateActivityTypeException {
         User user = this.userRepository.findByUserID(input.getUserID());
-        UUID activityUserMapperID = this.userRepository.findActivityUserMapperID(input.getUserID(),input.getTargetActivityTypeName());
-        ActivityType activityType = new ActivityType(activityUserMapperID,input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
+        UUID activityUserMapperID = this.userRepository.findActivityUserMapperID(input.getUserID(),input.getActivityTypeName());
 
-        user.removeActivityType(input.getTargetActivityTypeName());
+        user.removeActivityType(input.getActivityTypeName());
 
         this.userRepository.removeActivityType(user);
         output.setActivityTypeName(input.getActivityTypeName());

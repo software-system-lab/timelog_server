@@ -104,9 +104,6 @@ public class ActivityRestAdapter {
 
         input.setUserID(requestBody.getUserID());
         input.setActivityTypeName(requestBody.getActivityTypeName());
-        input.setTargetActivityTypeName(requestBody.getTargetActivityTypeName());
-        input.setIsEnable(requestBody.getIsEnable());
-        input.setIsPrivate(requestBody.getIsPrivate());
 
         try {
             removeActivityTypeUseCase.execute(input, output);
