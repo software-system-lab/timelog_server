@@ -9,6 +9,8 @@ import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 
+import java.util.UUID;
+
 @Service
 public class EditActivityTypeUseCase {
 
@@ -21,11 +23,11 @@ public class EditActivityTypeUseCase {
     public void execute(EditActivityTypeUseCaseInput input, EditActivityTypeUseCaseOutput output)
             throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
         User user = this.userRepository.findByUserID(input.getUserID());
-        ActivityType activityType = new ActivityType(input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
+        UUID activityUserMapperID = this.userRepository.findActivityUserMapperID(input.getUserID(),input.getTargetActivityTypeName());
+        ActivityType activityType = new ActivityType(activityUserMapperID,input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
 
-        user.updateActivityType(input.getTargetActivityTypeName(), activityType);
-
-        this.userRepository.updateActivityType(user);
+        user.editActivityType(input.getTargetActivityTypeName(), activityType);
+        this.userRepository.editActivityType(user);
         output.setActivityTypeName(activityType.getName());
         output.setIsEnable(activityType.isEnable());
         output.setIsPrivate(activityType.isPrivate());

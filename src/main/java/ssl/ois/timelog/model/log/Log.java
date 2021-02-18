@@ -13,6 +13,7 @@ public class Log {
     private Date endTime;
     private String description;
     private String activityTypeName;
+    private UUID activityUserMapperID;
 
     public static final String DATE_FORMAT = "yyyy/MM/dd HH:mm";
 
@@ -22,12 +23,14 @@ public class Log {
                final String startTime,
                final String endTime,
                final String description,
-               final String activityTypeName) {
+               final String activityTypeName,
+               final UUID activityUserMapperID) {
         this.id = logID;
         this.title = title;
         this.userID = userID;
         this.activityTypeName = activityTypeName;
         this.description = description;
+        this.activityUserMapperID = activityUserMapperID;
         final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         try {
             this.startTime = dateFormat.parse(startTime);
@@ -46,12 +49,14 @@ public class Log {
                final String startTime,
                final String endTime,
                final String description,
-               final String activityTypeName) {
+               final String activityTypeName,
+               final UUID activityUserMapperID) {
         this.id = UUID.randomUUID();
         this.title = title;
         this.userID = userID;
         this.activityTypeName = activityTypeName;
         this.description = description;
+        this.activityUserMapperID = activityUserMapperID;
         final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         try {
             this.startTime = dateFormat.parse(startTime);
@@ -126,4 +131,14 @@ public class Log {
     public void setUserID(final UUID userID) {
         this.userID = userID;
     }
+
+    public UUID getActivityUserMapperID() {
+        return activityUserMapperID;
+    }
+
+    public void setActivityUserMapperID(final UUID activityUserMapperID) {
+        this.activityUserMapperID = activityUserMapperID;
+    }
+
+
 }

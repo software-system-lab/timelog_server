@@ -1,14 +1,29 @@
 package ssl.ois.timelog.model.activity.type;
 
+import java.util.UUID;
+
 public class ActivityType {
+    private final UUID id;
     private String name;
     private boolean isEnable;
     private boolean isPrivate;
 
-    public ActivityType(String name, Boolean isEnable, Boolean isPrivate) {
+    public ActivityType(UUID activity_id, String name, Boolean isEnable, Boolean isPrivate) {
+        this.id = activity_id;
         this.name = name;
         this.isEnable = isEnable;
         this.isPrivate = isPrivate;
+    }
+
+    public ActivityType(String name, Boolean isEnable, Boolean isPrivate) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.isEnable = isEnable;
+        this.isPrivate = isPrivate;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
@@ -34,4 +49,5 @@ public class ActivityType {
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
     }
+
 }

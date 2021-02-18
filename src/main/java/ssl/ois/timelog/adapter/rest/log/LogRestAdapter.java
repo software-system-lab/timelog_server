@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.get.*;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCase;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseInput;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseOutput;
+import ssl.ois.timelog.service.log.edit.EditLogUseCase;
+import ssl.ois.timelog.service.log.edit.EditLogUseCaseInput;
+import ssl.ois.timelog.service.log.edit.EditLogUseCaseOutput;
 
 @RestController
 @RequestMapping("/api/log")
@@ -27,6 +31,9 @@ public class LogRestAdapter {
 
     @Autowired
     RemoveLogUseCase removeLogUseCase;
+
+    @Autowired
+    EditLogUseCase editLogUseCase;
 
     @PostMapping(value = "/record")
     public ResponseEntity<ResponseOutput> newLog(@RequestBody NewLogRequestInput requestBody) {
@@ -44,11 +51,36 @@ public class LogRestAdapter {
             this.addLogUseCase.execute(input, output);
         } catch (SaveLogErrorException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseOutput());
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseOutput());
         }
 
         ResponseOutput responseOutput = new ResponseOutput();
         responseOutput.setLogID(output.getLogID());
         return ResponseEntity.status(HttpStatus.OK).body(responseOutput);
+    }
+
+    @PostMapping(value = "/edit")
+    public ResponseEntity<EditLogUseCaseOutput> editLog(@RequestBody EditLogUseCaseInput requestBody) {
+        EditLogUseCaseInput input = new EditLogUseCaseInput();
+        EditLogUseCaseOutput output = new EditLogUseCaseOutput();
+
+        input.setLogID(requestBody.getLogID());
+        input.setUserID(requestBody.getUserID());
+        input.setTitle(requestBody.getTitle());
+        input.setStartTime(requestBody.getStartTime());
+        input.setEndTime(requestBody.getEndTime());
+        input.setDescription(requestBody.getDescription());
+        input.setActivityTypeName(requestBody.getActivityTypeName());
+
+        try {
+            this.editLogUseCase.execute(input, output);
+        } catch (GetLogErrorException | SaveLogErrorException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(output);
     }
 
     @PostMapping(value = "/get/id")

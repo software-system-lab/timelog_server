@@ -23,7 +23,6 @@ public class LoginAdapter {
     @PostMapping(value = "")
     public ResponseEntity<EnterUseCaseOutput> enterTimelog(@RequestBody EnterUseCaseInput input) {
         EnterUseCaseOutput output = new EnterUseCaseOutput();
-
         try {
             this.enterUseCase.execute(input, output);
         } catch (DuplicateActivityTypeException | InitUserDataErrorException e) {

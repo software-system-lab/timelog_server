@@ -20,6 +20,7 @@ public class GetLogByIdUseCase {
             throws GetLogErrorException {
         Log log = this.logRepository.findByID(input.getLogID());
 
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         output.setLogId(log.getID().toString());
         output.setTitle(log.getTitle());
@@ -27,5 +28,6 @@ public class GetLogByIdUseCase {
         output.setEndTime(dateFormat.format(log.getEndTime()));
         output.setActivityTypeName(log.getActivityTypeName());
         output.setDescription(log.getDescription());
+
     }
 }

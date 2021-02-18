@@ -3,12 +3,13 @@ package ssl.ois.timelog.service.activity.type.remove;
 public class RemoveActivityTypeUseCaseInput {
     private String activityTypeName;
     private String userID;
-    public void setActivityTypeName(String activityTypeName) {
-        this.activityTypeName = activityTypeName;
-    }
 
     public String getActivityTypeName() {
-        return activityTypeName;
+        return this.activityTypeName;
+    }
+
+    public void setActivityTypeName(String activityTypeName) {
+        this.activityTypeName = activityTypeName;
     }
 
     public void setUserID(String userID) {
@@ -16,6 +17,7 @@ public class RemoveActivityTypeUseCaseInput {
     }
 
     public String getUserID(){
-        return userID;
+        return this.userID;
     }
+
 }

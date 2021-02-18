@@ -56,12 +56,13 @@ public class User {
         if(this.isExist(activityType.getName())) {
             throw new DuplicateActivityTypeException();
         }
-        this.operatedActivityType = activityType;
-
-        this.activityTypeList.add(this.operatedActivityType);
+        else {
+            this.operatedActivityType = activityType;
+            this.activityTypeList.add(this.operatedActivityType);
+        }
     }
 
-    public void updateActivityType(String targetActivityTypeName, ActivityType activityTypeToCheck)
+    public void editActivityType(String targetActivityTypeName, ActivityType activityTypeToCheck)
             throws DuplicateActivityTypeException, ActivityTypeNotExistException {
         if(!this.isExist(targetActivityTypeName)) {
             throw new ActivityTypeNotExistException(targetActivityTypeName);
@@ -69,6 +70,7 @@ public class User {
         if(this.isExist(activityTypeToCheck.getName()) && !activityTypeToCheck.getName().equals(targetActivityTypeName)) {
             throw new DuplicateActivityTypeException();
         }
+
         this.targetActivityName = targetActivityTypeName;
         this.operatedActivityType = activityTypeToCheck;
 
@@ -76,11 +78,12 @@ public class User {
         this.activityTypeList.add(this.operatedActivityType);
     }
 
-    public void deleteActivityType(String activityTypeName) throws ActivityTypeNotExistException {
+    public void removeActivityType(String activityTypeName) throws ActivityTypeNotExistException {
         if(!this.isExist(activityTypeName)) {
             throw new ActivityTypeNotExistException(activityTypeName);
         }
         this.targetActivityName = activityTypeName;
+
         this.activityTypeList.removeIf(activityType -> activityType.getName().equals(this.targetActivityName));
     }
 

@@ -26,8 +26,10 @@ public class LogHistoryAdapter {
 
         try {
             useCase.execute(input, output);
-        } catch (ParseException | DatabaseErrorException e) {
+        } catch (ParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LogHistoryViewModel());
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LogHistoryViewModel());
         }
         return ResponseEntity.status(HttpStatus.OK).body(output.build());
     }

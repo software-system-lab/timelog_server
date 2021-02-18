@@ -1,7 +1,7 @@
-package ssl.ois.timelog.service.log;
+package ssl.ois.timelog.service.log.edit;
 
-public class LogDTO {
-    private String id;
+public class EditLogUseCaseInput {
+    private String logID;
     private String userID;
     private String title;
     private String startTime;
@@ -9,12 +9,16 @@ public class LogDTO {
     private String description;
     private String activityTypeName;
 
-    public String getId() {
-        return id;
+    public EditLogUseCaseInput() {
+        //empty constructor
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getLogID() {
+        return logID;
+    }
+
+    public void setLogID(String logID) {
+        this.logID = logID;
     }
 
     public String getUserID() {

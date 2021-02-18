@@ -67,4 +67,5 @@ public class AddLogUseCaseInput {
     public void setActivityTypeName(String activityTypeName) {
         this.activityTypeName = activityTypeName;
     }
+
 }

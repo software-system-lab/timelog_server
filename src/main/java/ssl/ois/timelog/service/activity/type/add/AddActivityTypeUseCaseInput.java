@@ -37,4 +37,5 @@ public class AddActivityTypeUseCaseInput {
     public boolean getIsPrivate() {
         return this.isPrivate;
     }
+
 }

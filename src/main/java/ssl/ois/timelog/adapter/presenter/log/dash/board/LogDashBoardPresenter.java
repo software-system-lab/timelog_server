@@ -11,6 +11,7 @@ import java.util.Date;
 
 public class LogDashBoardPresenter extends HistoryLogUseCaseOutputBound {
     public LogDashBoardViewModel build() throws ParseException {
+
         LogDashBoardViewModel viewModel = new LogDashBoardViewModel();
         long totalTime = 0;
         for (LogDTO log : this.getLogDTOList()) {
@@ -25,11 +26,12 @@ public class LogDashBoardPresenter extends HistoryLogUseCaseOutputBound {
 
             int hour = this.getHour(timeLength);
             int minute = this.getMinute(timeLength);
-            
 
             data.setHour(hour);
             data.setMinute(minute);
+
             viewModel.add(log.getActivityTypeName(), data);
+
         }
 
         int hour = this.getHour(totalTime);

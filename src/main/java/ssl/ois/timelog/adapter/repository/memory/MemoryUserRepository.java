@@ -2,9 +2,12 @@ package ssl.ois.timelog.adapter.repository.memory;
 
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.user.UserRepository;
+import ssl.ois.timelog.model.activity.type.ActivityType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.UUID;
 
 public class MemoryUserRepository implements UserRepository {
     private Map<String, User> users;
@@ -24,17 +27,28 @@ public class MemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public void updateActivityType(User user) {
+    public void editActivityType(User user) {
         this.save(user);
     }
 
     @Override
-    public void deleteActivityType(User user)  {
+    public void removeActivityType(User user)  {
         this.save(user);
     }
 
     @Override
     public User findByUserID(String userID) {
         return this.users.get(userID);
+    }
+
+    @Override
+    public UUID findActivityUserMapperID(String userID, String activityTypeName) {
+        UUID activityUserMapperID = null;
+        for(final ActivityType activityType: this.findByUserID(userID).getActivityTypeList()){
+            if(activityType.getName().equals(activityTypeName)){
+                activityUserMapperID = activityType.getId();
+            }
+        }
+        return activityUserMapperID;
     }
 }

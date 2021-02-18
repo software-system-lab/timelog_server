@@ -35,15 +35,31 @@ public class HistoryLogUseCase {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
 
         List<LogDTO> logDTOList = new ArrayList<>();
-        for (Log log: logList) {
-            LogDTO logDTO = new LogDTO();
-            logDTO.setId(log.getID().toString());
-            logDTO.setActivityTypeName(log.getActivityTypeName());
-            logDTO.setTitle(log.getTitle());
-            logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
-            logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
-            logDTOList.add(logDTO);
-        }
+        if(input.getFilterList() == null){
+            for (Log log: logList) {
+                LogDTO logDTO = new LogDTO();
+                logDTO.setId(log.getID().toString());
+                logDTO.setActivityTypeName(log.getActivityTypeName());
+                logDTO.setTitle(log.getTitle());
+                logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
+                logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
+                logDTOList.add(logDTO);
+            }
+        } else {
+            for (Log log: logList) {
+                for(String filterName: input.getFilterList()) {
+                    if(log.getActivityTypeName().equals(filterName)) {
+                        LogDTO logDTO = new LogDTO();
+                        logDTO.setId(log.getID().toString());
+                        logDTO.setActivityTypeName(log.getActivityTypeName());
+                        logDTO.setTitle(log.getTitle());
+                        logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
+                        logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
+                        logDTOList.add(logDTO);
+                    }
+                }
+            }
+        }      
 
         output.setLogDTOList(logDTOList);
     }

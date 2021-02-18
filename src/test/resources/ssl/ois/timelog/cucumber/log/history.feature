@@ -10,3 +10,8 @@ Feature: History of logs.
         Then [History] I should get a list of logs with size of 2
          And [History] it should contain a log with title "Study clean architecture" and activity type "SA" and start time "2020/06/20 11:00" and end time "2020/06/20 12:00"
          And [History] it should contain a log with title "Study DDD" and activity type "SA" and start time "2020/06/21 13:00" and end time "2020/06/21 14:00"
+
+    Scenario: I want to show my log with selected activity.
+        When [History] I request for the history between "2020/06/19" and "2020/06/21" with activity type "POSD" selected
+        Then [History] I should get a list of logs with size of 1
+         And [History] it should contain a log with and start time "2020/06/19 10:00" and end time "2020/06/19 11:00" and activity type "POSD" in my log dashboard.
