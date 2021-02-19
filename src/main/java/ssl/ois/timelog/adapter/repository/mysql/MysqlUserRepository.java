@@ -131,6 +131,8 @@ public class MysqlUserRepository implements UserRepository {
                 }
             }
         } catch (SQLException e) {
+            System.out.println("findByUserID");
+            System.out.println(e);
             throw new DatabaseErrorException();
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
@@ -231,6 +233,8 @@ public class MysqlUserRepository implements UserRepository {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("addActivityTypeUserMapper");
+            System.out.println(e);
             throw e;
         } 
     }
@@ -277,19 +281,20 @@ public class MysqlUserRepository implements UserRepository {
     @Override
     public UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException {
         Connection connection = null;
-        UUID activityUserMapperID;
+        UUID activityUserMapperID = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
+            if(this.isExistInMapper(connection, userID, activityTypeName)){
+                try (PreparedStatement stmt = connection.prepareStatement(
+                        "SELECT `id` FROM `activity_user_mapper` WHERE `user_id` = ? AND `activity_type_name` = ?")) {
 
-            try (PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT `id` FROM `activity_user_mapper` WHERE `user_id` = ? AND `activity_type_name` = ?")) {
+                    stmt.setString(1, userID);
+                    stmt.setString(2, activityTypeName);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        rs.next();
+                        activityUserMapperID = UUID.fromString(rs.getString("id"));
 
-                stmt.setString(1, userID);
-                stmt.setString(2, activityTypeName);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    rs.next();
-                    activityUserMapperID = UUID.fromString(rs.getString("id"));
-
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -299,5 +304,6 @@ public class MysqlUserRepository implements UserRepository {
         }
         return activityUserMapperID;
     }
+    
 
 }
