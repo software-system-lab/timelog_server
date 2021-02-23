@@ -55,7 +55,6 @@ public class ActivityRestAdapter {
         } catch (DuplicateActivityTypeException | ActivityTypeNotExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         } catch (DatabaseErrorException e) {
-            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);

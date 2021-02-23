@@ -131,8 +131,6 @@ public class MysqlUserRepository implements UserRepository {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("findByUserID");
-            System.out.println(e);
             throw new DatabaseErrorException();
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
@@ -233,8 +231,6 @@ public class MysqlUserRepository implements UserRepository {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("addActivityTypeUserMapper");
-            System.out.println(e);
             throw e;
         } 
     }
