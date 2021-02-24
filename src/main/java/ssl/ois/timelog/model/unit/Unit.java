@@ -20,17 +20,11 @@ public abstract class Unit {
 
     public void addActivityType(ActivityType activityType) throws DuplicateActivityTypeException {
         if(this.isExist(activityType.getName())) {
-            if(!this.isExistandDeleted(activityType.getName())) {
-                throw new DuplicateActivityTypeException();
-            }
-            else {
-                activityType.setDeleted(false);
-                this.targetActivityName = activityType.getName();
-                this.operatedActivityType = activityType;
+            this.targetActivityName = activityType.getName();
+            this.operatedActivityType = activityType;
 
-                this.activityTypeList.removeIf(deletedActivityType -> deletedActivityType.getName().equals(this.targetActivityName));
-                this.activityTypeList.add(this.operatedActivityType);
-            }
+            this.activityTypeList.removeIf(deletedActivityType -> deletedActivityType.getName().equals(this.targetActivityName));
+            this.activityTypeList.add(this.operatedActivityType);
         }
         else {
             this.operatedActivityType = activityType;
@@ -38,7 +32,7 @@ public abstract class Unit {
         }
     }
 
-    public void updateActivityType(String targetActivityTypeName, ActivityType activityTypeToCheck)
+    public void editActivityType(String targetActivityTypeName, ActivityType activityTypeToCheck)
             throws DuplicateActivityTypeException, ActivityTypeNotExistException {
         if(!this.isExist(targetActivityTypeName)) {
             throw new ActivityTypeNotExistException(targetActivityTypeName);
@@ -73,25 +67,9 @@ public abstract class Unit {
         }
         return false;
     }
-
-    private boolean isExistandDeleted(String activityTypeName) {
-        for(ActivityType activityType: this.activityTypeList) {
-            if(activityType.getName().equals(activityTypeName) && activityType.isDeleted()) {
-                return true;
-            }
-        }
-        return false;
-    }
     
-
     public List<ActivityType> getActivityTypeList() {
-        List<ActivityType> notDeleted = new ArrayList<>();
-        for(ActivityType activityType: this.activityTypeList) {
-            if(!activityType.isDeleted()) {
-                notDeleted.add(activityType);
-            }
-        }
-        return notDeleted;
+        return this.activityTypeList;
     }
 
     protected Unit(UUID id) {

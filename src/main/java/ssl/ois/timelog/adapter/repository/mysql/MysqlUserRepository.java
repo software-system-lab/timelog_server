@@ -116,7 +116,7 @@ public class MysqlUserRepository implements UserRepository {
     @Override
     public User findByUserID(String userID) throws DatabaseErrorException{
         Connection connection = null;
-        User user = null;
+        Unit user = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
 
