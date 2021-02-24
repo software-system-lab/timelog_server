@@ -146,12 +146,7 @@ public class ActivityStepDefinition {
         RemoveActivityTypeUseCaseOutput removeActivityTypeUseCaseOutput = new RemoveActivityTypeUseCaseOutput();
 
         removeActivityTypeUseCaseInput.setActivityTypeName(this.activityTypeName);
-        removeActivityTypeUseCaseInput.setTargetActivityTypeName(this.activityTypeName);
-        removeActivityTypeUseCaseInput.setIsEnable(true);
-        removeActivityTypeUseCaseInput.setIsPrivate(false);
         removeActivityTypeUseCaseInput.setUserID(this.userID);
-        removeActivityTypeUseCaseInput.setIsDeleted(true);
-
 
         try {
             removeActivityTypeUseCase.execute(removeActivityTypeUseCaseInput, removeActivityTypeUseCaseOutput);
@@ -184,7 +179,6 @@ public class ActivityStepDefinition {
         editActivityTypeUseCaseInput.setActivtiyTypeName(newActivityTypeName);
         editActivityTypeUseCaseInput.setIsEnable(false);
         editActivityTypeUseCaseInput.setIsPrivate(true);
-        editActivityTypeUseCaseInput.setIsDeleted(false);
 
         try {
             editActivityTypeUseCase.execute(editActivityTypeUseCaseInput, editActivityTypeUseCaseOutput);

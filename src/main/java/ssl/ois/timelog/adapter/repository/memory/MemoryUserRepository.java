@@ -28,12 +28,12 @@ public class MemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public void updateActivityType(User user) {
+    public void editActivityType(User user) {
         this.save(user);
     }
 
     @Override
-    public void deleteActivityType(User user)  {
+    public void removeActivityType(User user)  {
         this.save(user);
     }
 
@@ -41,7 +41,6 @@ public class MemoryUserRepository implements UserRepository {
     public User findByUserID(String userID) {
         return this.users.get(userID);
     }
-
 
     @Override
     public UUID findActivityUserMapperID(String userID, String activityTypeName) {

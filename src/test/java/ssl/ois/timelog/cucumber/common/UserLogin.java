@@ -27,9 +27,9 @@ public class UserLogin {
             this.user = new User(UUID.fromString(userID));
             this.userRepository.save(this.user);
 
-            ActivityType activityTypeOther = new ActivityType("Other", true, false, false);
-            ActivityType activityTypeLabProject = new ActivityType("LabProject", true, false, false);
-            ActivityType activityTypeLabDuty = new ActivityType("LabDuty", true, false, false);
+            ActivityType activityTypeOther = new ActivityType("Other", true, false);
+            ActivityType activityTypeLabProject = new ActivityType("LabProject", true, false);
+            ActivityType activityTypeLabDuty = new ActivityType("LabDuty", true, false);
             this.user.addActivityType(activityTypeOther);
             this.userRepository.addActivityType(this.user);
 

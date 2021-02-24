@@ -122,7 +122,7 @@ public class HistoryStepDefinition {
         input.setFilterList(filterList);
 
         try {
-            useCase.executeDashBoard(input, this.output);
+            useCase.execute(input, this.output);
         } catch (ParseException | DatabaseErrorException e) {
             fail(e.getMessage());
         }

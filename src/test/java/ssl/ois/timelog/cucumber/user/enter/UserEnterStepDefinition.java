@@ -117,7 +117,7 @@ public class UserEnterStepDefinition {
 
     @Given("There is an activity type {string} in my activity type list")
     public void there_is_an_activity_type_in_my_activity_type_list(String activityTypeName) {
-        ActivityType activityType = new ActivityType(activityTypeName, true, false, false);
+        ActivityType activityType = new ActivityType(activityTypeName, true, false);
         try {
             User user = this.userRepository.findByUserID(this.userID);
             user.addActivityType(activityType);
@@ -130,7 +130,7 @@ public class UserEnterStepDefinition {
     @Given("There is a log with title {string} and start time {string} and end time {string} and description {string} and activity type {string} in my log history")
     public void there_is_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type_in_my_log_history(String title, String startTime, String endTime, String description, String activityTypeName) {
         try {
-            this.logRepository.save(
+            this.logRepository.addLog(
                 new Log(UUID.fromString(this.userID), title, startTime, endTime, description, activityTypeName, this.logRepository.findActivityUserMapperID(this.userID,activityTypeName))
             );
         } catch (SaveLogErrorException |DatabaseErrorException e) {

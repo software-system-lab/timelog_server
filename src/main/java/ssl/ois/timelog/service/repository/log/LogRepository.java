@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface LogRepository {
-    void save(Log log) throws SaveLogErrorException;
-    void update(Log log, String targetID) throws GetLogErrorException, SaveLogErrorException;
+    void addLog(Log log) throws SaveLogErrorException;
+    void updateLog(Log log, String targetID) throws GetLogErrorException, SaveLogErrorException;
     Log findByID(String id) throws GetLogErrorException;
     Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException;
     UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException;

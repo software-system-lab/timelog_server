@@ -49,12 +49,13 @@ public class ActivityRestAdapter {
         input.setUserID(requestBody.getUserID());
         input.setIsEnable(requestBody.getIsEnable());
         input.setIsPrivate(requestBody.getIsPrivate());
-        input.setIsDeleted(false);
         input.setActivityTypeName(requestBody.getActivityTypeName());
         try {
             addActivityTypeUseCase.execute(input, output);
-        } catch (DuplicateActivityTypeException | DatabaseErrorException | ActivityTypeNotExistException e) {
+        } catch (DuplicateActivityTypeException | ActivityTypeNotExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }
@@ -69,7 +70,7 @@ public class ActivityRestAdapter {
         try {
             listActivityTypeUseCase.execute(input, output);
         } catch (DatabaseErrorException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }
@@ -85,12 +86,13 @@ public class ActivityRestAdapter {
         input.setActivtiyTypeName(requestBody.getActivityTypeName());
         input.setIsEnable(requestBody.getIsEnable());
         input.setIsPrivate(requestBody.getIsPrivate());
-        input.setIsDeleted(false);
 
         try {
             editActivityTypeUseCase.execute(input, output);
-        } catch (ActivityTypeNotExistException | DatabaseErrorException | DuplicateActivityTypeException e) {
+        } catch (DuplicateActivityTypeException | ActivityTypeNotExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);        
     }
@@ -102,15 +104,13 @@ public class ActivityRestAdapter {
 
         input.setUserID(requestBody.getUserID());
         input.setActivityTypeName(requestBody.getActivityTypeName());
-        input.setTargetActivityTypeName(requestBody.getTargetActivityTypeName());
-        input.setIsEnable(requestBody.getIsEnable());
-        input.setIsPrivate(requestBody.getIsPrivate());
-        input.setIsDeleted(true);
 
         try {
             removeActivityTypeUseCase.execute(input, output);
-        } catch (ActivityTypeNotExistException | DatabaseErrorException | DuplicateActivityTypeException e) {
+        } catch (DuplicateActivityTypeException | ActivityTypeNotExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        } catch (DatabaseErrorException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }

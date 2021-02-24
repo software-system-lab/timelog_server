@@ -41,15 +41,15 @@ public class EnterUseCase {
                 this.userRepository.save(user);
     
                 // Create default activity type "Other" for the user.
-                ActivityType activityType = new ActivityType("Other", true, false, false);
+                ActivityType activityType = new ActivityType("Other", true, false);
                 user.addActivityType(activityType);
                 this.userRepository.addActivityType(user);
 
-                ActivityType labDuty = new ActivityType("LabDuty", true, false, false);
+                ActivityType labDuty = new ActivityType("LabDuty", true, false);
                 user.addActivityType(labDuty);
                 this.userRepository.addActivityType(user);
 
-                ActivityType labProject = new ActivityType("LabProject", true, false, false);
+                ActivityType labProject = new ActivityType("LabProject", true, false);
                 user.addActivityType(labProject);
                 this.userRepository.addActivityType(user);
 

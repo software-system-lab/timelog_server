@@ -78,6 +78,8 @@ trigger:
   branch:
   - master
   - beta
+  event:
+  - push
 
 depends_on:
   - Test
@@ -106,7 +108,6 @@ steps:
     - master
     event:
     - push
-    - pull_request
 
 - name: Deploy Beta
   image: nightlord851108/kustomize
@@ -126,7 +127,6 @@ steps:
     - beta
     event:
     - push
-    - pull_request
 
 depends_on:
   - Publish

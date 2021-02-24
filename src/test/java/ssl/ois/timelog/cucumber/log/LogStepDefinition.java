@@ -125,7 +125,7 @@ public class LogStepDefinition {
     public void i_have_added_a_log_with_title_and_start_time_and_end_time_and_description_and_activity_type_before(
             String title, String startTime, String endTime, String description, String activityTypeName) {
         try {
-            this.logRepository.save(
+            this.logRepository.addLog(
                     new Log(UUID.fromString(this.userID), title, startTime, endTime, description, activityTypeName, this.logRepository.findActivityUserMapperID(this.userID,activityTypeName))
             );
         } catch (SaveLogErrorException | DatabaseErrorException e) {

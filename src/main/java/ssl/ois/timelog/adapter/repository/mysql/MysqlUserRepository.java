@@ -48,20 +48,21 @@ public class MysqlUserRepository implements UserRepository {
     @Override
     public void addActivityType(User user) throws DatabaseErrorException, DuplicateActivityTypeException{
         Connection connection = null;
+
         try {
             connection = this.mysqlDriverAdapter.getConnection();
+
             if(this.isExistInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName())) {
                 if(this.isDeletedInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName())){
-                    this.createInActivityTypeTable(connection, user.getOperatedActivityType());
-                    this.updateInActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName(), user.getOperatedActivityType());
+                    this.updateActivityTypeUserMapper(connection, user.getID().toString(), user.getOperatedActivityType());
                 }
                 else{
                     throw new DuplicateActivityTypeException();
                 }
             }
             else {
-                this.createInActivityTypeTable(connection, user.getOperatedActivityType());
-                this.createInActivityTypeUserMapper(connection, user.getID().toString(), user.getOperatedActivityType());
+                this.addActivityType(connection, user.getOperatedActivityType());
+                this.addActivityTypeUserMapper(connection, user.getID().toString(), user.getOperatedActivityType());
             }
 
         } catch (SQLException e) {
@@ -72,7 +73,7 @@ public class MysqlUserRepository implements UserRepository {
     }
 
     @Override
-    public void updateActivityType(User user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
+    public void editActivityType(User user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
@@ -84,9 +85,8 @@ public class MysqlUserRepository implements UserRepository {
                     !user.getOperatedActivityType().getName().equals(user.getTargetActivityTypeName())) {
                 throw new DuplicateActivityTypeException();
             }
-
-            this.createInActivityTypeTable(connection, user.getOperatedActivityType());
-            this.updateInActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName(), user.getOperatedActivityType());
+            this.addActivityType(connection, user.getOperatedActivityType());
+            this.updateActivityTypeUserMapper(connection, user.getID().toString(), user.getOperatedActivityType());
 
         } catch (SQLException e) {
             throw new DatabaseErrorException();
@@ -96,7 +96,7 @@ public class MysqlUserRepository implements UserRepository {
     }
 
     @Override
-    public void deleteActivityType(User user) throws DatabaseErrorException, ActivityTypeNotExistException {
+    public void removeActivityType(User user) throws DatabaseErrorException, ActivityTypeNotExistException {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
@@ -104,7 +104,7 @@ public class MysqlUserRepository implements UserRepository {
             if(!this.isExistInMapper(connection, user.getID().toString(), user.getTargetActivityTypeName())) {
                 throw new ActivityTypeNotExistException(user.getTargetActivityTypeName());
             }
-            this.removeFromActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName(), user.getOperatedActivityType());
+            this.removeActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName());
 
         } catch (SQLException e) {
             throw new DatabaseErrorException();
@@ -131,7 +131,6 @@ public class MysqlUserRepository implements UserRepository {
                     }
                 }
             }
-
         } catch (SQLException e) {
             throw new DatabaseErrorException();
         } finally {
@@ -142,27 +141,29 @@ public class MysqlUserRepository implements UserRepository {
 
     private boolean isExistInMapper(Connection connection, String userID, String activityTypeName) throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT COUNT(*) FROM `activity_user_mapper` " +
-                "WHERE activity_user_mapper.user_id = ? " +
-                "AND activity_user_mapper.activity_type_name = ?"
-            )) {
-                stmt.setString(1, userID);
-                stmt.setString(2, activityTypeName);
+            "SELECT COUNT(*) FROM `activity_user_mapper` " +
+            "WHERE activity_user_mapper.user_id = ? " +
+            "AND activity_user_mapper.activity_type_name = ?"
+        )) {
+            stmt.setString(1, userID);
+            stmt.setString(2, activityTypeName);
 
-                try (ResultSet rs = stmt.executeQuery()) {
-                    rs.next();
-    
-                    return rs.getInt(1) == 1;
-                }
-            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                rs.next();
+
+                return rs.getInt(1) == 1;
+            } catch (SQLException e) {
+                throw e;
+            } 
+        }
     }
 
     private boolean isDeletedInMapper(Connection connection, String userID, String activityTypeName) throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT COUNT(*) FROM `activity_user_mapper` " +
-                "WHERE activity_user_mapper.user_id = ? " +
-                "AND activity_user_mapper.activity_type_name = ?" +
-                "AND activity_user_mapper.is_deleted = ?"
+            "SELECT COUNT(*) FROM `activity_user_mapper` " +
+            "WHERE activity_user_mapper.user_id = ? " +
+            "AND activity_user_mapper.activity_type_name = ?" +
+            "AND activity_user_mapper.is_deleted = ?"
         )) {
             stmt.setString(1, userID);
             stmt.setString(2, activityTypeName);
@@ -171,7 +172,9 @@ public class MysqlUserRepository implements UserRepository {
             try (ResultSet rs = stmt.executeQuery()) {
                 rs.next();
                 return rs.getInt(1) == 1;
-            }
+            } catch (SQLException e) {
+                throw e;
+            } 
         }
     }
 
@@ -179,7 +182,8 @@ public class MysqlUserRepository implements UserRepository {
         List<ActivityType> activityTypeList = new ArrayList<>();
 
         try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT * FROM `activity_user_mapper` WHERE activity_user_mapper.user_id = ?"
+                "SELECT * FROM `activity_user_mapper` WHERE activity_user_mapper.user_id = ?" +
+                " AND activity_user_mapper.is_deleted = 0 "
             )) {
                 stmt.setString(1, userID);
 
@@ -189,66 +193,70 @@ public class MysqlUserRepository implements UserRepository {
                         String activityTypeName = rs.getString("activity_type_name");
                         boolean isEnable = rs.getInt("is_enable") == 1;
                         boolean isPrivate = rs.getInt("is_private") == 1;
-                        boolean isDeleted = rs.getInt("is_deleted") == 1;
     
-                        ActivityType activityType = new ActivityType(id, activityTypeName, isEnable, isPrivate, isDeleted);
+                        ActivityType activityType = new ActivityType(id, activityTypeName, isEnable, isPrivate);
+
                         activityTypeList.add(activityType);
                     }
-                }
-
+                } catch (SQLException e) {
+                    throw e;
+                } 
             }
         return activityTypeList;
     }
 
-    private void createInActivityTypeTable(Connection connection, ActivityType activityType) throws SQLException {
+    private void addActivityType(Connection connection, ActivityType activityType) throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(
             "INSERT IGNORE INTO `activity_type` (`name`) VALUES (?)"
         )) {
             stmt.setString(1, activityType.getName());
 
             stmt.executeUpdate();
-        }
+        } catch (SQLException e) {
+            throw e;
+        } 
     }
 
-    private void createInActivityTypeUserMapper(Connection connection, String userID, ActivityType activityType)
+    private void addActivityTypeUserMapper(Connection connection, String userID, ActivityType activityType)
             throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(
             "INSERT INTO `activity_user_mapper` " + 
-            "(`id`,`activity_type_name`, `user_id`, `is_enable`, `is_private`, `is_deleted`) " +
-            "VALUES (?, ?, ?, ?, ?, ?)"
+            "(`id`,`activity_type_name`, `user_id`, `is_enable`, `is_private`) " +
+            "VALUES (?, ?, ?, ?, ?)"
         )) {
             stmt.setString(1, activityType.getId().toString());
             stmt.setString(2, activityType.getName());
             stmt.setString(3, userID);
             stmt.setInt(4, activityType.isEnable() ? 1 : 0);
             stmt.setInt(5, activityType.isPrivate() ? 1 : 0);
-            stmt.setInt(6, activityType.isDeleted() ? 1 : 0);
 
             stmt.executeUpdate();
-        }
+        } catch (SQLException e) {
+            throw e;
+        } 
     }
 
-    private void updateInActivityTypeUserMapper(Connection connection, String userID, String targetActivityTypeName, ActivityType activityType)
+    private void updateActivityTypeUserMapper(Connection connection, String userID, ActivityType activityType)
             throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(
             "UPDATE `activity_user_mapper` " + 
             "SET `activity_type_name`= ?, `is_enable`= ?,`is_private`= ?,`is_deleted`= ? " +
-            "WHERE activity_user_mapper.activity_type_name = ?" +
-            "AND activity_user_mapper.user_id = ?"
+            "WHERE activity_user_mapper.id = ?" 
         )) {
             stmt.setString(1, activityType.getName());
             stmt.setInt(2, activityType.isEnable() ? 1 : 0);
             stmt.setInt(3, activityType.isPrivate() ? 1 : 0);
-            stmt.setInt(4, activityType.isDeleted() ? 1 : 0);
-            stmt.setString(5, targetActivityTypeName);
-            stmt.setString(6, userID);
+            stmt.setInt(4, 0);
+            stmt.setString(5, activityType.getId().toString());
 
             stmt.executeUpdate();
 
-        }
+        } catch (SQLException e) {
+            throw e;
+        } 
     }
 
-    private void removeFromActivityTypeUserMapper(Connection connection, String userID, String targetActivityTypeName, ActivityType activityType)
+    private void removeActivityTypeUserMapper(Connection connection, String userID, String targetActivityTypeName)
             throws SQLException {
         try(PreparedStatement stmt = connection.prepareStatement(
             "UPDATE `activity_user_mapper` " +
@@ -256,12 +264,14 @@ public class MysqlUserRepository implements UserRepository {
             "WHERE activity_user_mapper.user_id = ? " +
             "AND activity_user_mapper.activity_type_name = ?"
         )) {
-            stmt.setInt(1, activityType.isDeleted() ? 1 : 0);
+            stmt.setInt(1, 1);
             stmt.setString(2, userID);
             stmt.setString(3, targetActivityTypeName);
 
             stmt.executeUpdate();
-        }
+        } catch (SQLException e) {
+            throw e;
+        } 
     }
 
 
