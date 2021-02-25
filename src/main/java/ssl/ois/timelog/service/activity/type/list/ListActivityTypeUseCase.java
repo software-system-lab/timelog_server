@@ -2,6 +2,7 @@ package ssl.ois.timelog.service.activity.type.list;
 
 import org.springframework.stereotype.Service;
 
+import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
@@ -18,7 +19,7 @@ public class ListActivityTypeUseCase {
 
     public void execute(ListActivityTypeUseCaseInput input, ListActivityTypeUseCaseOutput output)
             throws DatabaseErrorException {
-        User user = this.userRepository.findByUserID(input.getUserID());
+        UnitInterface user = this.userRepository.findByUserID(input.getUserID());
 
         output.setActivityTypeList(user.getActivityTypeList());
     }

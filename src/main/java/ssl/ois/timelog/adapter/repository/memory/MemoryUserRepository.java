@@ -3,6 +3,7 @@ package ssl.ois.timelog.adapter.repository.memory;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.user.UserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.unit.Unit;
 
 import java.util.HashMap;
@@ -11,34 +12,34 @@ import java.util.List;
 import java.util.UUID;
 
 public class MemoryUserRepository implements UserRepository {
-    private Map<String, User> users;
+    private Map<String, UnitInterface> users;
 
     public MemoryUserRepository() {
         this.users = new HashMap<>();
     }
 
     @Override
-    public void save(User user) {
+    public void save(UnitInterface user) {
         this.users.put(user.getID().toString(), user);
     }
 
     @Override
-    public void addActivityType(User user) {
+    public void addActivityType(UnitInterface user) {
         this.save(user);
     }
 
     @Override
-    public void editActivityType(User user) {
+    public void editActivityType(UnitInterface user) {
         this.save(user);
     }
 
     @Override
-    public void removeActivityType(User user)  {
+    public void removeActivityType(UnitInterface user)  {
         this.save(user);
     }
 
     @Override
-    public User findByUserID(String userID) {
+    public UnitInterface findByUserID(String userID) {
         return this.users.get(userID);
     }
 

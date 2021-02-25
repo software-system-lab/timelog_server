@@ -10,6 +10,7 @@ import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCase;
@@ -31,7 +32,7 @@ import io.cucumber.java.en.Then;
 public class ActivityStepDefinition {
 
     private UserRepository userRepository;
-    private User user;
+    private UnitInterface user;
     private String userID;
     private String activityTypeName;
     private boolean errorOccurred;

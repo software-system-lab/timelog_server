@@ -62,7 +62,7 @@ public class ExecuteDashBoardCaseTest {
         input.setFilterList(filterList);
 
         try {
-            service.executeDashBoard(input, this.output);
+            service.execute(input, this.output);
         } catch (ParseException | DatabaseErrorException e) {
             fail(e.getMessage());
         }

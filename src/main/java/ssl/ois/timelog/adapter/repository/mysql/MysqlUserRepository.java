@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
@@ -24,7 +25,7 @@ public class MysqlUserRepository implements UserRepository {
     private MysqlDriverAdapter mysqlDriverAdapter;
 
     @Override
-    public void save(User user) throws DatabaseErrorException, DuplicateActivityTypeException,
+    public void save(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException,
             ActivityTypeNotExistException {
         Connection connection = null;
         try {
@@ -46,7 +47,7 @@ public class MysqlUserRepository implements UserRepository {
     }
 
     @Override
-    public void addActivityType(User user) throws DatabaseErrorException, DuplicateActivityTypeException{
+    public void addActivityType(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException{
         Connection connection = null;
 
         try {
@@ -73,7 +74,7 @@ public class MysqlUserRepository implements UserRepository {
     }
 
     @Override
-    public void editActivityType(User user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
+    public void editActivityType(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
@@ -96,7 +97,7 @@ public class MysqlUserRepository implements UserRepository {
     }
 
     @Override
-    public void removeActivityType(User user) throws DatabaseErrorException, ActivityTypeNotExistException {
+    public void removeActivityType(UnitInterface user) throws DatabaseErrorException, ActivityTypeNotExistException {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
@@ -114,7 +115,7 @@ public class MysqlUserRepository implements UserRepository {
     }
 
     @Override
-    public User findByUserID(String userID) throws DatabaseErrorException{
+    public UnitInterface findByUserID(String userID) throws DatabaseErrorException{
         Connection connection = null;
         Unit user = null;
         try {

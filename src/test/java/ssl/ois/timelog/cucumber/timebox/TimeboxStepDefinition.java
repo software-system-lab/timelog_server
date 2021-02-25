@@ -9,6 +9,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
+import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.timebox.Timebox;
 import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
@@ -24,7 +25,7 @@ public class TimeboxStepDefinition {
 
     private UserRepository userRepository;
     private String userID;
-    private User user;
+    private UnitInterface user;
 
     @Before
     public void setup() {
@@ -61,15 +62,15 @@ public class TimeboxStepDefinition {
         }
     }
 
-    @Then("{string} has been created with the start date {string} due date {string}")
-    public void has_been_created_with_the_start_date_due_date(String title, String startDate, String endDate) {
-        boolean found = false;
-        List<Timebox> timeboxList = this.user.getTimeboxList();
-        for (Timebox timebox: timeboxList) {
-            if(timebox.getTitle().equals(title) && timebox.getStartDate().equals(startDate) && timebox.getEndDate().equals(endDate)) {
-                found = true;
-            }
-        }
-        assertTrue(found);
-    }
+//    @Then("{string} has been created with the start date {string} due date {string}")
+//    public void has_been_created_with_the_start_date_due_date(String title, String startDate, String endDate) {
+//        boolean found = false;
+//        List<Timebox> timeboxList = this.user.getTimeboxList();
+//        for (Timebox timebox: timeboxList) {
+//            if(timebox.getTitle().equals(title) && timebox.getStartDate().equals(startDate) && timebox.getEndDate().equals(endDate)) {
+//                found = true;
+//            }
+//        }
+//        assertTrue(found);
+//    }
 }

@@ -3,8 +3,7 @@ package ssl.ois.timelog.service.activity.type.edit;
 import org.springframework.stereotype.Service;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.unit.Unit;
-import ssl.ois.timelog.model.user.User;
+import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
@@ -23,7 +22,7 @@ public class EditActivityTypeUseCase {
 
     public void execute(EditActivityTypeUseCaseInput input, EditActivityTypeUseCaseOutput output)
             throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
-        Unit user = this.userRepository.findByUserID(input.getUserID());
+        UnitInterface user = this.userRepository.findByUserID(input.getUserID());
         UUID activityUserMapperID = this.userRepository.findActivityUserMapperID(input.getUserID(),input.getTargetActivityTypeName());
         ActivityType activityType = new ActivityType(activityUserMapperID,input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
 

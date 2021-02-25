@@ -15,6 +15,7 @@ import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
@@ -119,7 +120,7 @@ public class UserEnterStepDefinition {
     public void there_is_an_activity_type_in_my_activity_type_list(String activityTypeName) {
         ActivityType activityType = new ActivityType(activityTypeName, true, false);
         try {
-            User user = this.userRepository.findByUserID(this.userID);
+            UnitInterface user = this.userRepository.findByUserID(this.userID);
             user.addActivityType(activityType);
             this.userRepository.addActivityType(user);
         } catch (Exception e) {

@@ -2,6 +2,7 @@ package ssl.ois.timelog.service.timebox.add;
 
 import org.springframework.stereotype.Service;
 
+import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.timebox.Timebox;
 import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
@@ -18,9 +19,9 @@ public class AddTimeboxUseCase {
     
     public void execute(AddTimeboxUseCaseInput input, AddTimeboxUseCaseOutput output)
             throws DatabaseErrorException{
-        User user = this.userRepository.findByUserID(input.getUserID());
+        UnitInterface user = this.userRepository.findByUserID(input.getUserID());
         Timebox timebox = new Timebox(input.getTitle(), input.getStartDate(), input.getEndDate());
-        user.addTimebox(timebox);
+//        user.addTimebox(timebox);
 
 //        this.userRepository.save(user);
         

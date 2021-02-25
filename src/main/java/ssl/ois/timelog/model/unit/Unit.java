@@ -5,26 +5,33 @@ import java.util.List;
 import java.util.UUID;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.timebox.Timebox;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.team.DuplicateMemberException;
 import ssl.ois.timelog.service.exception.team.MemberNotInGroupException;
 
-public abstract class Unit {
+public abstract class Unit implements UnitInterface {
 
     private UUID id;
     private List<ActivityType> activityTypeList;
     private ActivityType operatedActivityType;
     private String targetActivityName;
 
-    public void addActivityType(ActivityType activityType) throws DuplicateActivityTypeException {
-        if(this.isExist(activityType.getName())) {
-            this.targetActivityName = activityType.getName();
-            this.operatedActivityType = activityType;
+    protected Unit(UUID id) {
+        this.id = id;
+        this.activityTypeList = new ArrayList<>();
+    }
 
-            this.activityTypeList.removeIf(deletedActivityType -> deletedActivityType.getName().equals(this.targetActivityName));
-            this.activityTypeList.add(this.operatedActivityType);
+    protected Unit(UUID id, List<ActivityType> activityTypeList) {
+        this.id = id;
+        this.activityTypeList = activityTypeList;
+    }
+    
+    public void addActivityType(ActivityType activityType) throws DuplicateActivityTypeException{
+        if(this.isExist(activityType.getName())) {
+            throw new DuplicateActivityTypeException();
         }
         else {
             this.operatedActivityType = activityType;
@@ -48,15 +55,13 @@ public abstract class Unit {
         this.activityTypeList.add(this.operatedActivityType);
     }
 
-    public void deleteActivityType(String activityTypeName, ActivityType activityTypeToDelete) throws ActivityTypeNotExistException {
+    public void removeActivityType(String activityTypeName) throws ActivityTypeNotExistException {
         if(!this.isExist(activityTypeName)) {
             throw new ActivityTypeNotExistException(activityTypeName);
         }
         this.targetActivityName = activityTypeName;
-        this.operatedActivityType = activityTypeToDelete;
 
         this.activityTypeList.removeIf(activityType -> activityType.getName().equals(this.targetActivityName));
-        this.activityTypeList.add(this.operatedActivityType);
     }
 
     private boolean isExist(String activityTypeName) {
@@ -72,17 +77,6 @@ public abstract class Unit {
         return this.activityTypeList;
     }
 
-    protected Unit(UUID id) {
-        this.id = id;
-        this.activityTypeList = new ArrayList<>();
-    }
-
-    protected Unit(UUID id, List<ActivityType> activityTypeList) {
-        this.id = id;
-        this.activityTypeList = activityTypeList;
-    }
-
-
     public UUID getID() {
         return id;
     }
@@ -95,9 +89,13 @@ public abstract class Unit {
         return this.targetActivityName;
     }
 
-    public abstract void addTimebox(Timebox timebox) throws UnsupportedOperationException;
+    public void addTimebox(Timebox timebox) throws UnsupportedOperationException{
+        throw new UnsupportedOperationException();
+    }
 
-    public abstract List<Timebox> getTimeboxList() throws UnsupportedOperationException;
+    public List<Timebox> getTimeboxList() throws UnsupportedOperationException{
+        throw new UnsupportedOperationException();
+    }
 
     public void addMemberToTeam(UUID targetMember) throws UnsupportedOperationException, DuplicateMemberException {
         throw new UnsupportedOperationException();

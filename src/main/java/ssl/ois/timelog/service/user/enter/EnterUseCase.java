@@ -1,6 +1,7 @@
 package ssl.ois.timelog.service.user.enter;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
@@ -32,7 +33,7 @@ public class EnterUseCase {
             InitUserDataErrorException {
         try {
             String userID = input.getUserID();
-            User user = this.userRepository.findByUserID(userID);
+            UnitInterface user = this.userRepository.findByUserID(userID);
             if (user == null) {
                 // First time login to Timelog
     
