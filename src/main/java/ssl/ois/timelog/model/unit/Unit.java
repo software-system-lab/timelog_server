@@ -104,4 +104,8 @@ public abstract class Unit implements UnitInterface {
     public void deleteMemberFromTeam(UUID targetMember) throws UnsupportedOperationException, MemberNotInGroupException {
         throw new UnsupportedOperationException();
     }
+
+    public List<UUID>  getMemberTeamList(UUID targetMember) throws UnsupportedOperationException, MemberNotInGroupException {
+        throw new UnsupportedOperationException();
+    }
 }

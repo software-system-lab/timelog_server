@@ -57,6 +57,11 @@ public class Team extends Unit {
     }
 
     @Override
+    public List<UUID>  getMemberTeamList(UUID targetMember) {
+	    return this.memberIdList;
+    }
+
+    @Override
     public void addTimebox(Timebox timebox) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }

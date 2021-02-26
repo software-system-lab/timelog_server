@@ -8,31 +8,31 @@ import java.util.ArrayList;
 
 public class GetTeamUseCaseOutput {
 	class Person {
-	private String username;
-	private UUID userID;
+		private String username;
+		private UUID userID;
 
-	public String getUsername() {
-		return username;
-	}
+		public String getUsername() {
+			return username;
+		}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+		public void setUsername(String username) {
+			this.username = username;
+		}
 
-	public UUID getUserID() {
-		return userID;
-	}
+		public UUID getUserID() {
+			return userID;
+		}
 
-	public void setUserID(UUID userID) {
-		this.userID = userID;
-	}
+		public void setUserID(UUID userID) {
+			this.userID = userID;
+		}
 
-	public Person (){}
-	public Person(String username, UUID userID){
-		this.userID = userID;
-		this.username = username;
+		public Person (){}
+		public Person(String username, UUID userID){
+			this.userID = userID;
+			this.username = username;
+		}
 	}
-}
     private List<Person> memberList;
     private Person leader;
 

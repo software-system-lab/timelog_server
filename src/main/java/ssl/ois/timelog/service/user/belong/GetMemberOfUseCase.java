@@ -18,10 +18,19 @@ public class GetMemberOfUseCase {
 
     public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException {
         try {
-            final String url = "http://localhost:8080/get/groups/byuser";
+            final String urlGetTeamName = "http://localhost:8080/get/groups/byuser";
+            final String ulrGetTeamUid = "http://localhost:8080/get/teamUid";
             RestTemplate restTemplate = new RestTemplate();
-            List<String> result = restTemplate.postForObject(url, input, List.class);
-            output.setMemberOfList(result);
+            List<String> result = restTemplate.postForObject(urlGetTeamName, input, List.class);
+
+            for(int i = 0; i < result.size(); i++) {
+                String uid = restTemplate.postForObject(ulrGetTeamUid, result.get(i), String.class);
+                uid = uid.replaceAll("^\"|\"$", "");
+
+                UUID teamID = UUID.fromString(uid);
+
+                output.addTeamToList(result.get(i) , teamID);
+            }
         } catch (RestClientException e) {
             throw new GetMemberOfErrorException();
         }
