@@ -142,9 +142,9 @@ public class MysqlLogRepository implements LogRepository {
             connection = this.mysqlDriverAdapter.getConnection();
             
             try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT `log`.* ,`activity`.`user_id`,`activity`.`activity_type_name`" +
+                "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
                 "FROM `log`, `activity_user_mapper` as `activity`" +
-                "WHERE `activity`.`user_id` = ? " +
+                "WHERE `activity`.`unit_id` = ? " +
                 "AND `log`.`activity_user_mapper_id` = `activity`.`id`" +
                 "AND `log`.`start_time` >= ? " +
                 "AND `log`.`end_time` < ? ")) {
@@ -160,7 +160,7 @@ public class MysqlLogRepository implements LogRepository {
                         String endTime = rs.getString("end_time").replace("-","/");
                         String description = rs.getString("description");
                         UUID activityUserMapperID = UUID.fromString(rs.getString("activity_user_mapper_id"));
-                        UUID uid = UUID.fromString(rs.getString("user_id"));
+                        UUID uid = UUID.fromString(rs.getString("unit_id"));
                         String activityType = rs.getString("activity_type_name");
                         Log log = new Log(logID, uid, title, startTime,
                                 endTime, description, activityType,activityUserMapperID);
@@ -180,13 +180,12 @@ public class MysqlLogRepository implements LogRepository {
     @Override
     public UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException {
         Connection connection = null;
-        UUID activityUserMapperID;
+        UUID activityUserMapperID = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
-
             try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT `id` FROM `activity_user_mapper` WHERE `user_id` = ? " +
-                "AND `activity_type_name` = ?")) {
+                    "SELECT `id` FROM `activity_user_mapper` WHERE `unit_id` = ? " +
+                            "AND `activity_type_name` = ?")) {
 
                 stmt.setString(1, userID);
                 stmt.setString(2, activityTypeName);

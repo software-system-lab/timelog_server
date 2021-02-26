@@ -24,7 +24,7 @@ public class AddActivityTypeUseCase {
             throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
         UnitInterface user = this.userRepository.findByUserID(input.getUserID());
         UUID activityUserMapperID = this.userRepository.findActivityUserMapperID(input.getUserID(),input.getActivityTypeName());
-        ActivityType activityType; 
+        ActivityType activityType;
         if(activityUserMapperID == null){
             activityType = new ActivityType(input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
         } else {
