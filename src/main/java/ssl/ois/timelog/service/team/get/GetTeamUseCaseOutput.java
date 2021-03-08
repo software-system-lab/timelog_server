@@ -1,5 +1,7 @@
 package ssl.ois.timelog.service.team.get;
 
+import ssl.ois.timelog.model.activity.type.ActivityType;
+
 import java.util.List;
 import java.util.UUID;
 import java.lang.String;
