@@ -25,8 +25,9 @@ public class ListActivityTypeUseCase {
 
         final String urlName = "http://localhost:8080/get/unitdto";
 
+
         for(int i = 0 ; i < input.getUnitIdList().size(); i++){
-            UnitInterface user = this.userRepository.findByUserID(input.getUnitIdList().get(i).toString());
+            UnitInterface user = this.userRepository.findByUserID(input.getUnitIdList().get(i));
             RestTemplate restTemplate = new RestTemplate();
             String userName = restTemplate.postForObject(urlName, input.getUnitIdList().get(i), String.class);
             System.out.println("---------------------------------------------------------------------------");
@@ -36,7 +37,7 @@ public class ListActivityTypeUseCase {
             System.out.println(userName);
             System.out.println(user.getActivityTypeList());
 
-            output.addUnitDTOtoList(user.getID(), userName, user.getActivityTypeList());
+            output.addUnitDTOtoList(user.getID().toString(), userName, user.getActivityTypeList());
         }
     }
 }

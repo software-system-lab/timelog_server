@@ -1,5 +1,6 @@
 package ssl.ois.timelog.service.activity.type.list;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,21 +18,21 @@ public class ListActivityTypeUseCaseOutput {
 //    }
 
     class UnitDTO{
-        private UUID unitID;
+        private String unitID;
         private String unitName;
         private List<ActivityType> activityTypeList;
 
-        public UnitDTO(UUID unitID, String unitName, List<ActivityType> activityTypeList) {
+        public UnitDTO(String unitID, String unitName, List<ActivityType> activityTypeList) {
             this.unitID = unitID;
             this.unitName = unitName;
             this.activityTypeList = activityTypeList;
         }
 
-        public void setUnitID(UUID unitID) {
+        public void setUnitID(String unitID) {
             this.unitID = unitID;
         }
 
-        public UUID getUnitID() {
+        public String getUnitID() {
             return this.unitID;
         }
 
@@ -54,12 +55,16 @@ public class ListActivityTypeUseCaseOutput {
 
     private List<UnitDTO> unitDTOList;
 
-    public void addUnitDTOtoList(UUID unitID, String unitName, List<ActivityType> activityTypeList) {
+    public ListActivityTypeUseCaseOutput(){
+        this.unitDTOList = new ArrayList<>();
+    }
+    public void addUnitDTOtoList(String unitID, String unitName, List<ActivityType> activityTypeList) {
         UnitDTO unitDTO = new UnitDTO(unitID, unitName, activityTypeList);
         System.out.println("---------------------ListActivityTypeUseCaseOutput---------------------");
-        System.out.println(unitID);
-        System.out.println(unitName);
-        System.out.println(activityTypeList);
+        System.out.println(unitDTO.getUnitID());
+        System.out.println(unitDTO.getUnitName());
+        System.out.println(unitDTO.getActivityTypeList());
+        this.unitDTOList.add(unitDTO);
     }
 
     public List<UnitDTO> getUnitDTOList() {

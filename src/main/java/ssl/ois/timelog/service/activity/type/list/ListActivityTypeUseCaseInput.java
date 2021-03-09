@@ -14,17 +14,17 @@ public class ListActivityTypeUseCaseInput {
 //        return this.userID;
 //    }
 
-    private List<UUID> unitIdList;
+    private List<String> unitIdList;
 
-    public void addUnitId(UUID unitId) {
+    public void addUnitId(String unitId) {
         this.unitIdList.add(unitId);
     }
 
-    public void setUnitIdList(List<UUID> unitIdList) {
+    public void setUnitIdList(List<String> unitIdList) {
         this.unitIdList = unitIdList;
     }
 
-    public List<UUID> getUnitIdList(){
+    public List<String> getUnitIdList(){
         return this.unitIdList;
     }
 }
