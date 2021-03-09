@@ -23,7 +23,7 @@ public class ListActivityTypeUseCase {
     public void execute(ListActivityTypeUseCaseInput input, ListActivityTypeUseCaseOutput output)
             throws DatabaseErrorException {
 
-        final String urlName = "http://localhost:8080/";
+        final String urlName = "http://localhost:8080/get/unitdto";
 
         for(int i = 0 ; i < input.getUnitIdList().size(); i++){
             UnitInterface user = this.userRepository.findByUserID(input.getUnitIdList().get(i).toString());
