@@ -20,6 +20,10 @@ public class ListActivityTypeUseCaseInput {
         this.unitIdList.add(unitId);
     }
 
+    public void setUnitIdList(List<UUID> unitIdList) {
+        this.unitIdList = unitIdList;
+    }
+
     public List<UUID> getUnitIdList(){
         return this.unitIdList;
     }

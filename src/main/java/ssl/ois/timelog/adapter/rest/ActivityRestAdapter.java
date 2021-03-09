@@ -65,7 +65,7 @@ public class ActivityRestAdapter {
         ListActivityTypeUseCaseInput input = new ListActivityTypeUseCaseInput();
         ListActivityTypeUseCaseOutput output = new ListActivityTypeUseCaseOutput();
 
-        input.setUserID(requestBody.getUserID());
+        input.setUnitIdList(requestBody.getUnitIdList());
         
         try {
             listActivityTypeUseCase.execute(input, output);

@@ -29,6 +29,12 @@ public class ListActivityTypeUseCase {
             UnitInterface user = this.userRepository.findByUserID(input.getUnitIdList().get(i).toString());
             RestTemplate restTemplate = new RestTemplate();
             String userName = restTemplate.postForObject(urlName, input.getUnitIdList().get(i), String.class);
+            System.out.println("---------------------------------------------------------------------------");
+            System.out.println("-------------------------- add Unit DTO -----------------------------------");
+            System.out.println("---------------------------------------------------------------------------");
+            System.out.println(user.getID());
+            System.out.println(userName);
+            System.out.println(user.getActivityTypeList());
 
             output.addUnitDTOtoList(user.getID(), userName, user.getActivityTypeList());
         }
