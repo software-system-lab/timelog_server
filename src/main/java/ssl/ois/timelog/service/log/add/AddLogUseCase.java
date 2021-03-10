@@ -19,7 +19,8 @@ public class AddLogUseCase {
 
     public void execute(AddLogUseCaseInput input, AddLogUseCaseOutput output) throws SaveLogErrorException,DatabaseErrorException {
         UUID userID = UUID.fromString(input.getUserID());
-        UUID activityUserMapperID = this.logRepository.findActivityUserMapperID(userID.toString(), input.getActivityTypeName());
+        UUID unitIDforActivity = UUID.fromString(input.getActivityUnitID());
+        UUID activityUserMapperID = this.logRepository.findActivityUserMapperID(unitIDforActivity.toString(), input.getActivityTypeName());
 
         Log log = new Log(userID, input.getTitle(), input.getStartTime(), input.getEndTime(), input.getDescription(), input.getActivityTypeName(), activityUserMapperID);
         logRepository.addLog(log);
