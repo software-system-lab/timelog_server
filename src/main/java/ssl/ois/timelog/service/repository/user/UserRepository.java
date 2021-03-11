@@ -16,4 +16,5 @@ public interface UserRepository {
     void editActivityType(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException;
     void removeActivityType(UnitInterface user) throws DatabaseErrorException, ActivityTypeNotExistException;
     UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException;
+    void insertTeamToUnit(UnitInterface team) throws DatabaseErrorException;
 }

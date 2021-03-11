@@ -20,7 +20,7 @@ public class EditLogUseCase {
     }
 
     public void execute(EditLogUseCaseInput input, EditLogUseCaseOutput output) throws GetLogErrorException,DatabaseErrorException, SaveLogErrorException {
-        UUID unitID = UUID.fromString(input.getUnitID());
+        UUID unitID = UUID.fromString(input.getActivityUnitID());
         UUID activityUserMapperID = this.logRepository.findActivityUserMapperID(unitID.toString(), input.getActivityTypeName());
         Log log = new Log(UUID.fromString(input.getLogID()),unitID, input.getTitle(), input.getStartTime(), input.getEndTime(), input.getDescription(), input.getActivityTypeName(), activityUserMapperID);
 

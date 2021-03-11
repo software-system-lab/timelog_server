@@ -22,6 +22,7 @@ import ssl.ois.timelog.service.team.get.GetTeamUseCase;
 import ssl.ois.timelog.service.team.get.GetTeamUseCaseInput;
 import ssl.ois.timelog.service.team.get.GetTeamUseCaseOutput;
 import ssl.ois.timelog.service.exception.team.GetTeamErrorException;
+import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
 
 
 @RestController
@@ -54,7 +55,7 @@ public class LoginAdapter {
 
         try {
             this.getMemberOfUseCase.execute(input, output);
-        } catch (GetMemberOfErrorException e) {
+        } catch (GetMemberOfErrorException | InitTeamDataErrorException | DuplicateActivityTypeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
 

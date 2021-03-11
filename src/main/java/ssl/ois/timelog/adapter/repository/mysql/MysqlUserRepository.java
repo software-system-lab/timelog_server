@@ -303,4 +303,25 @@ public class MysqlUserRepository implements UserRepository {
         return activityUserMapperID;
     }
 
+    @Override
+    public void insertTeamToUnit(UnitInterface team) throws DatabaseErrorException {
+        Connection connection = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement(
+                "INSERT IGNORE INTO `unit`(`id`) VALUES (?)"
+            )) {
+                stmt.setString(1, team.getID().toString());
+
+                stmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+    }
+
 }

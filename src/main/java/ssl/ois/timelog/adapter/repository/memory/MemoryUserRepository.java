@@ -43,6 +43,10 @@ public class MemoryUserRepository implements UserRepository {
         return this.users.get(userID);
     }
 
+    public void insertTeamToUnit(UnitInterface team) {
+        this.users.put(team.getID().toString(), team);
+    }
+
     @Override
     public UUID findActivityUserMapperID(String userID, String activityTypeName) {
         UUID activityUserMapperID = null;
