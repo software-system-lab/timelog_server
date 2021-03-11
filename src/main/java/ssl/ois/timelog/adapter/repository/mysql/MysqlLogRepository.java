@@ -144,7 +144,7 @@ public class MysqlLogRepository implements LogRepository {
             try (PreparedStatement stmt = connection.prepareStatement(
                 "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
                 "FROM `log`, `activity_user_mapper` as `activity`" +
-                "WHERE `activity`.`unit_id` = ? " +
+                "WHERE `log`.`user_id` = ? " +
                 "AND `log`.`activity_user_mapper_id` = `activity`.`id`" +
                 "AND `log`.`start_time` >= ? " +
                 "AND `log`.`end_time` < ? ")) {
