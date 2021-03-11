@@ -178,7 +178,7 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException {
+    public UUID findActivityUserMapperID(String unitID, String activityTypeName) throws DatabaseErrorException {
         Connection connection = null;
         UUID activityUserMapperID = null;
         try {
@@ -187,7 +187,7 @@ public class MysqlLogRepository implements LogRepository {
                     "SELECT `id` FROM `activity_user_mapper` WHERE `unit_id` = ? " +
                             "AND `activity_type_name` = ?")) {
 
-                stmt.setString(1, userID);
+                stmt.setString(1, unitID);
                 stmt.setString(2, activityTypeName);
                 try (ResultSet rs = stmt.executeQuery()) {
                     rs.next();

@@ -3,6 +3,7 @@ package ssl.ois.timelog.service.log.edit;
 public class EditLogUseCaseInput {
     private String logID;
     private String userID;
+    private String unitID;
     private String title;
     private String startTime;
     private String endTime;
@@ -27,6 +28,14 @@ public class EditLogUseCaseInput {
 
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public String getUnitID() {
+        return unitID;
+    }
+
+    public void setUnitID(String unitID) {
+        this.unitID = unitID;
     }
 
     public String getTitle() {

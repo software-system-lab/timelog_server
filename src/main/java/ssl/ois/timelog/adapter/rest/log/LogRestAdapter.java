@@ -68,6 +68,7 @@ public class LogRestAdapter {
 
         input.setLogID(requestBody.getLogID());
         input.setUserID(requestBody.getUserID());
+        input.setUnitID(requestBody.getUnitID());
         input.setTitle(requestBody.getTitle());
         input.setStartTime(requestBody.getStartTime());
         input.setEndTime(requestBody.getEndTime());
