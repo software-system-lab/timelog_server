@@ -37,7 +37,7 @@ public class ExecuteDashBoardCaseTest {
         this.logRepository = new MemoryLogRepository();
         String description = "Composite Pattern";
 
-        AddLogUseCaseInput inputData = new AddLogUseCaseInput(user.getID().toString(), this.logTitle, this.startTime, this.endTime,
+        AddLogUseCaseInput inputData = new AddLogUseCaseInput(user.getID().toString(), user.getID().toString(), this.logTitle, this.startTime, this.endTime,
                 description, this.activityTypeName);
         AddLogUseCaseOutput outputData = new AddLogUseCaseOutput();
         AddLogUseCase addLogUseCase = new AddLogUseCase(this.logRepository);

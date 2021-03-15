@@ -74,6 +74,7 @@ public class LogStepDefinition {
         addLogUseCaseInput.setEndTime(this.endTime);
         addLogUseCaseInput.setDescription(this.description);
         addLogUseCaseInput.setActivityTypeName(activityTypeName);
+        addLogUseCaseInput.setActivityUnitID(this.userID);
 
         try {
             usecase.execute(addLogUseCaseInput, addLogUseCaseOutput);

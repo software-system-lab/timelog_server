@@ -57,6 +57,7 @@ public class RecordTimeStepDefinition {
     @When("mvc I record the activity to Timelog")
     public void i_record_the_activity_to_Timelog() throws Exception {
         this.body.setUserID(this.userID);
+        this.body.setActivityUnitID(this.userID);
         this.result = this.mvc.perform(MockMvcRequestBuilders
             .post("/api/log/record")
             .content(asJsonString(this.body))
@@ -119,6 +120,7 @@ public class RecordTimeStepDefinition {
 
 class RecordAPIRequestBody {
     private String userID;
+    private String activityUnitID;
     private String title;
     private String activityTypeName;
     private String startTime;
@@ -131,6 +133,14 @@ class RecordAPIRequestBody {
 
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public String getActivityUnitID() {
+        return activityUnitID;
+    }
+
+    public void setActivityUnitID(String activityUnitID) {
+        this.activityUnitID = activityUnitID;
     }
 
     public String getTitle() {

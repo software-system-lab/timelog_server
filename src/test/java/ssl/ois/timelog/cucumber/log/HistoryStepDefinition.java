@@ -152,6 +152,7 @@ public class HistoryStepDefinition {
         input.setEndTime(endTime);
         input.setDescription(description);
         input.setActivityTypeName(activityTypeName);
+        input.setActivityUnitID(this.userID);
         try {
             useCase.execute(input, new AddLogUseCaseOutput());
         } catch (SaveLogErrorException | DatabaseErrorException e) {

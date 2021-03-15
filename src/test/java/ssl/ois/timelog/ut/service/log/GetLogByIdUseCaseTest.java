@@ -31,7 +31,7 @@ public class GetLogByIdUseCaseTest {
         String endTime = "2020/04/21 18:00";
         String description = "Composite Pattern";
         String activityTypeName = "DP";
-        AddLogUseCaseInput inputData = new AddLogUseCaseInput(user.getID().toString(), logTitle, startTime, endTime,
+        AddLogUseCaseInput inputData = new AddLogUseCaseInput(user.getID().toString(), user.getID().toString(), logTitle, startTime, endTime,
                 description, activityTypeName);
         AddLogUseCaseOutput outputData = new AddLogUseCaseOutput();
         AddLogUseCase addLogUseCase = new AddLogUseCase(this.logRepository);
