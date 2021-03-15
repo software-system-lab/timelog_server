@@ -65,10 +65,11 @@ public class LogRestAdapter {
     public ResponseEntity<EditLogUseCaseOutput> editLog(@RequestBody EditLogUseCaseInput requestBody) {
         EditLogUseCaseInput input = new EditLogUseCaseInput();
         EditLogUseCaseOutput output = new EditLogUseCaseOutput();
-
+        
+        System.out.println("-----------------server--------------");
         input.setLogID(requestBody.getLogID());
         input.setUserID(requestBody.getUserID());
-        input.setUnitID(requestBody.getUnitID());
+        input.setActivityUnitID(requestBody.getActivityUnitID());
         input.setTitle(requestBody.getTitle());
         input.setStartTime(requestBody.getStartTime());
         input.setEndTime(requestBody.getEndTime());
