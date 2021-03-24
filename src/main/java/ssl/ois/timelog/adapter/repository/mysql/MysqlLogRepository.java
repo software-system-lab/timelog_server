@@ -201,4 +201,47 @@ public class MysqlLogRepository implements LogRepository {
         }            
         return activityUserMapperID;
     }
+
+    @Override
+    public List<Log> findByPeriodAndTeam(String teamID, String startDate, String endDate) throws DatabaseErrorException {
+        Connection connection = null;
+        List<Log> logList = new ArrayList<>();
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+            
+            try (PreparedStatement stmt = connection.prepareStatement(
+                "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
+                "FROM `log`, `activity_user_mapper` as `activity`" +
+                "WHERE `activity`.`unit_id` = ? " +
+                "AND `log`.`activity_user_mapper_id` = `activity`.`id`" +
+                "AND `log`.`start_time` >= ? " +
+                "AND `log`.`end_time` < ? ")) {
+
+                stmt.setString(1, teamID);
+                stmt.setString(2, startDate);
+                stmt.setString(3, endDate);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        UUID logID = UUID.fromString(rs.getString("id"));
+                        String title = rs.getString("title");
+                        String startTime = rs.getString("start_time").replace("-","/");
+                        String endTime = rs.getString("end_time").replace("-","/");
+                        String description = rs.getString("description");
+                        UUID activityUserMapperID = UUID.fromString(rs.getString("activity_user_mapper_id"));
+                        UUID uid = UUID.fromString(rs.getString("unit_id"));
+                        String activityType = rs.getString("activity_type_name");
+                        Log log = new Log(logID, uid, title, startTime,
+                                endTime, description, activityType,activityUserMapperID);
+                        logList.add(log);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+        return logList;
+    }
 }

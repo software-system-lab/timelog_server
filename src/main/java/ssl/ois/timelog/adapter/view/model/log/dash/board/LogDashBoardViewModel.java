@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class LogDashBoardViewModel {
     private String totalTime;
-    private Map<String, Data> dataMap;
+    private Map<String, Data> dataMap; 
 
     public LogDashBoardViewModel() {
         this.dataMap = new HashMap<>();

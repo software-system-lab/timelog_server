@@ -37,4 +37,20 @@ public class LogDashBoardAdapter {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LogDashBoardViewModel());
         }
     }
+
+    // @PostMapping("/team/dashboard")
+    // public ResponseEntity<LogDashBoardViewModel> viewTeamDashBoard(@RequestBody TeamDashboardUseCaseInput input) {
+    //     TeamDashboardUseCase useCase = new TeamDashboardUseCase(this.logRepository);
+
+    //     LogDashBoardPresenter presenter = new LogDashBoardPresenter();
+
+    //     try {
+    //         useCase.execute(input, presenter);
+    //         return ResponseEntity.status(HttpStatus.OK).body(presenter.build());
+    //     } catch (ParseException e) {
+    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LogDashBoardViewModel());
+    //     } catch (DatabaseErrorException e) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LogDashBoardViewModel());
+    //     }
+    // }
 }
