@@ -17,5 +17,6 @@ public interface LogRepository {
     UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException;
     List<Log> findByPeriod(String userID, String startDate, String endDate) throws ParseException, DatabaseErrorException;
     List<Log> findByPeriodAndTeam(String userID, String startDate, String endDate) throws ParseException, DatabaseErrorException;
+    List<Log> findByPeriodAndUserIDWithTeamID(String teamID, String userID, String startDate, String endDate) throws ParseException, DatabaseErrorException;
     
 }

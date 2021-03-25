@@ -57,17 +57,21 @@ public class TeamDashboardUseCase {
 
         //member dashboard
         for(Person member: input.getMemberList()){
+            List<Log> memberLogList = this.logRepository.findByPeriodAndUserIDWithTeamID(input.getTeamID().toString(),
+            member.getUserID().toString(),input.getStartDate(), dateFormat.format(endDate));
+
             List<LogDTO> logDTOList = new ArrayList<>();
-            for(Log log: logList) {
-                if(log.getUserID().equals(member.getUserID())){
-                    LogDTO logDTO = new LogDTO();
-                    logDTO.setId(log.getID().toString());
-                    logDTO.setActivityTypeName(log.getActivityTypeName());
-                    logDTO.setTitle(log.getTitle());
-                    logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
-                    logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
-                    logDTOList.add(logDTO);
-                }
+            for(Log log: memberLogList) {
+                LogDTO logDTO = new LogDTO();
+                logDTO.setId(log.getID().toString());
+                logDTO.setActivityTypeName(log.getActivityTypeName());
+                logDTO.setTitle(log.getTitle());
+                logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
+                logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
+                System.out.println("-----------------getting member log--------------");
+                System.out.println(log.getTitle());
+                System.out.println("-----------------------------");
+                logDTOList.add(logDTO);
             }
             output.addMemberLog(member.getUsername(), logDTOList);
         }

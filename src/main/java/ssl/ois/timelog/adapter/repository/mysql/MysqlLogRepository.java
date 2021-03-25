@@ -251,4 +251,57 @@ public class MysqlLogRepository implements LogRepository {
         }
         return logList;
     }
+
+    @Override
+    public List<Log> findByPeriodAndUserIDWithTeamID(String teamID, String userID, String startDate, String endDate) throws DatabaseErrorException {
+        System.out.println("-----------------connecting MYSQL-------------");        
+        System.out.println(teamID);
+        System.out.println(userID);
+        System.out.println(startDate);
+        System.out.println(endDate);
+
+        Connection connection = null;
+        List<Log> logList = new ArrayList<>();
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+            
+            try (PreparedStatement stmt = connection.prepareStatement(
+                "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
+                "FROM `log`, `activity_user_mapper` as `activity`" +
+                "WHERE `activity`.`unit_id` = ? " +
+                "AND `log`.`activity_user_mapper_id` = `activity`.`id`" +
+                "AND `log`.`user_id` = ? " +
+                "AND `log`.`start_time` >= ? " +
+                "AND `log`.`end_time` < ? ")) {
+
+                stmt.setString(1, teamID);
+                stmt.setString(2, userID);
+                stmt.setString(3, "2021/03/10");
+                stmt.setString(4, "2021/03/24");
+                System.out.println("----------------- getting data -------------");        
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        UUID logID = UUID.fromString(rs.getString("id"));
+                        String title = rs.getString("title");
+                        String startTime = rs.getString("start_time").replace("-","/");
+                        String endTime = rs.getString("end_time").replace("-","/");
+                        String description = rs.getString("description");
+                        UUID activityUserMapperID = UUID.fromString(rs.getString("activity_user_mapper_id"));
+                        UUID uid = UUID.fromString(rs.getString("unit_id"));
+                        String activityType = rs.getString("activity_type_name");
+                        Log log = new Log(logID, uid, title, startTime,
+                                endTime, description, activityType,activityUserMapperID);
+                        System.out.println(title);
+                        logList.add(log);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+        return logList;
+    }
 }
