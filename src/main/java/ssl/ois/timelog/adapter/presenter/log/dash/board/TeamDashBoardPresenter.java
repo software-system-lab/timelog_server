@@ -1,6 +1,7 @@
 package ssl.ois.timelog.adapter.presenter.log.dash.board;
 
 import ssl.ois.timelog.adapter.view.model.log.dash.board.TeamDashBoardViewModel;
+import ssl.ois.timelog.adapter.view.model.log.dash.board.TeamDashBoardViewModel.MemberDashboard;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.log.LogDTO;
 import ssl.ois.timelog.service.team.dashboard.TeamDashboardUseCaseOutputBound;
@@ -40,11 +41,33 @@ public class TeamDashBoardPresenter extends TeamDashboardUseCaseOutputBound {
         viewModel.setTotalTime(String.format("%02d:%02d", hour, minute));
 
         for (Map.Entry<String, List<LogDTO>> entry : this.getMemberdashboardMap().entrySet()){
-
+            TeamDashBoardViewModel.MemberDashboard memberDashboard = new TeamDashBoardViewModel.MemberDashboard(entry.getKey());
+            long memberTotalTime = 0;
             for (LogDTO log : entry.getValue()){
-                
+                TeamDashBoardViewModel.Data data = new TeamDashBoardViewModel.Data();
+                SimpleDateFormat dateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
+                Date startTime = dateFormat.parse(log.getStartTime());
+                Date endTime = dateFormat.parse(log.getEndTime());
+    
+                long timeLength = endTime.getTime() - startTime.getTime();
+                data.setTimeLength(timeLength/60000);
+                memberTotalTime += timeLength;
+    
+                int memberHour = this.getHour(timeLength);
+                int memberMinute = this.getMinute(timeLength);
+    
+                data.setHour(hour);
+                data.setMinute(minute);
+
+                memberDashboard.add(log.getActivityTypeName(), data);
             }
+            int memberHour = this.getHour(memberTotalTime);
+            int memberMinute = this.getMinute(memberTotalTime);
+            memberDashboard.setTotalTime(String.format("%02d:%02d", hour, minute));
+
+            viewModel.addMember(memberDashboard);
         }
+       
         return viewModel;
     }
 

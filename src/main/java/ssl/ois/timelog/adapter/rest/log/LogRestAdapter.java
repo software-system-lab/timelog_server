@@ -66,7 +66,6 @@ public class LogRestAdapter {
         EditLogUseCaseInput input = new EditLogUseCaseInput();
         EditLogUseCaseOutput output = new EditLogUseCaseOutput();
         
-        System.out.println("-----------------server--------------");
         input.setLogID(requestBody.getLogID());
         input.setUserID(requestBody.getUserID());
         input.setActivityUnitID(requestBody.getActivityUnitID());

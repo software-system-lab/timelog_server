@@ -28,8 +28,6 @@ public class GetTeamUseCase {
             for(int i = 0; i < result.size(); i++) {
                 String uid = restTemplate.postForObject(urlGetUid, result.get(i), String.class);
                 uid = uid.replaceAll("^\"|\"$", "");
-                System.out.println("uid");
-                System.out.println(uid);
                 UUID userID = UUID.fromString(uid);
 
                 output.addMemberToList(result.get(i) , userID); 

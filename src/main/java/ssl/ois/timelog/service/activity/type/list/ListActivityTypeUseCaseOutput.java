@@ -60,10 +60,6 @@ public class ListActivityTypeUseCaseOutput {
     }
     public void addUnitDTOtoList(String unitID, String unitName, List<ActivityType> activityTypeList) {
         UnitDTO unitDTO = new UnitDTO(unitID, unitName, activityTypeList);
-        System.out.println("---------------------ListActivityTypeUseCaseOutput---------------------");
-        System.out.println(unitDTO.getUnitID());
-        System.out.println(unitDTO.getUnitName());
-        System.out.println(unitDTO.getActivityTypeList());
         this.unitDTOList.add(unitDTO);
     }
 

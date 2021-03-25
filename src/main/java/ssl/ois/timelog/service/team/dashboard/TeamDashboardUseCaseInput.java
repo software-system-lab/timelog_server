@@ -12,6 +12,7 @@ public class TeamDashboardUseCaseInput {
     private String startDate;
     private String endDate;
     private List<Person> memberList;
+    private String groupname;
 
     public String getTeamID() {
         return teamID;
@@ -41,8 +42,19 @@ public class TeamDashboardUseCaseInput {
 		return this.memberList;
 	}
 
+    public void setMemberList(List<Person> memberList) {
+		this.memberList = memberList;
+	}
+
     public void addMemberToList(String username, UUID userID) {
 		this.memberList.add(new Person(username, userID));
+	}
+    public String getGroupname() {
+		return groupname;
+	}
+
+	public void setGroupname(String groupname) {
+		this.groupname = groupname;
 	}
 }
 

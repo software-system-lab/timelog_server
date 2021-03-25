@@ -31,12 +31,6 @@ public class ListActivityTypeUseCase {
             RestTemplate restTemplate = new RestTemplate();
             String userName = restTemplate.postForObject(urlName, input.getUnitIdList().get(i), String.class);
             userName = userName.replaceAll("\"","");
-            System.out.println("---------------------------------------------------------------------------");
-            System.out.println("-------------------------- add Unit DTO -----------------------------------");
-            System.out.println("---------------------------------------------------------------------------");
-            System.out.println(user.getID());
-            System.out.println(userName);
-            System.out.println(user.getActivityTypeList());
 
             output.addUnitDTOtoList(user.getID().toString(), userName, user.getActivityTypeList());
         }

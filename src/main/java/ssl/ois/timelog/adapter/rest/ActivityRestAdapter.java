@@ -67,8 +67,6 @@ public class ActivityRestAdapter {
 
 
         input.setUnitIdList(requestBody.getUnitIdList());
-        System.out.println(requestBody.getUnitIdList());
-        System.out.println(input.getUnitIdList());
         try {
             listActivityTypeUseCase.execute(input, output);
         } catch (DatabaseErrorException e) {

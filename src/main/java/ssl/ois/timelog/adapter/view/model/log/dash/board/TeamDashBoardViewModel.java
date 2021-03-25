@@ -47,8 +47,8 @@ public class TeamDashBoardViewModel {
         return this.memberDashboardList;
     }
 
-    public void addMember(String username, Map<String, Data> dataMap, String totalTime){
-        this.memberDashboardList.add(new MemberDashboard(username, dataMap, totalTime));
+    public void addMember(MemberDashboard memberDashboard){
+        this.memberDashboardList.add(memberDashboard);
     }
 
     public static class Data {
@@ -86,10 +86,9 @@ public class TeamDashBoardViewModel {
         private String totalTime;
         private Map<String, Data> dataMap; 
     
-        public MemberDashboard(String username, Map<String, Data> dataMap, String totalTime) {
-            this.dataMap = dataMap;
+        public MemberDashboard(String username) {
+            this.dataMap = new HashMap<>();
             this.username = username;
-            this.totalTime = totalTime;
         }
     
         public void setUsername(String username){

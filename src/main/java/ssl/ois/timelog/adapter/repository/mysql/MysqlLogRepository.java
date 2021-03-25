@@ -204,6 +204,11 @@ public class MysqlLogRepository implements LogRepository {
 
     @Override
     public List<Log> findByPeriodAndTeam(String teamID, String startDate, String endDate) throws DatabaseErrorException {
+        System.out.println("-----------------connecting MYSQL-------------");        
+        System.out.println(teamID);
+        System.out.println(startDate);
+        System.out.println(endDate);
+
         Connection connection = null;
         List<Log> logList = new ArrayList<>();
         try {
@@ -218,8 +223,9 @@ public class MysqlLogRepository implements LogRepository {
                 "AND `log`.`end_time` < ? ")) {
 
                 stmt.setString(1, teamID);
-                stmt.setString(2, startDate);
-                stmt.setString(3, endDate);
+                stmt.setString(2, "2021/03/10");
+                stmt.setString(3, "2021/03/24");
+                System.out.println("----------------- getting data -------------");        
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         UUID logID = UUID.fromString(rs.getString("id"));
@@ -232,6 +238,7 @@ public class MysqlLogRepository implements LogRepository {
                         String activityType = rs.getString("activity_type_name");
                         Log log = new Log(logID, uid, title, startTime,
                                 endTime, description, activityType,activityUserMapperID);
+                        System.out.println(title);
                         logList.add(log);
                     }
                 }
