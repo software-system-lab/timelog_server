@@ -223,8 +223,8 @@ public class MysqlLogRepository implements LogRepository {
                 "AND `log`.`end_time` < ? ")) {
 
                 stmt.setString(1, teamID);
-                stmt.setString(2, "2021/03/10");
-                stmt.setString(3, "2021/03/24");
+                stmt.setString(2, startDate);
+                stmt.setString(3, endDate);
                 System.out.println("----------------- getting data -------------");        
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
@@ -276,8 +276,8 @@ public class MysqlLogRepository implements LogRepository {
 
                 stmt.setString(1, teamID);
                 stmt.setString(2, userID);
-                stmt.setString(3, "2021/03/10");
-                stmt.setString(4, "2021/03/24");
+                stmt.setString(3, startDate);
+                stmt.setString(4, endDate);
                 System.out.println("----------------- getting data -------------");        
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
