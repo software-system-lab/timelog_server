@@ -81,7 +81,7 @@ public class ActivityRestAdapter {
         EditActivityTypeUseCaseInput input = new EditActivityTypeUseCaseInput();
         EditActivityTypeUseCaseOutput output = new EditActivityTypeUseCaseOutput();
 
-        input.setUserID(requestBody.getUserID());
+        input.setUnitID(requestBody.getUnitID());
         input.setTargetActivityTypeName(requestBody.getTargetActivityTypeName());
         input.setActivtiyTypeName(requestBody.getActivityTypeName());
         input.setIsEnable(requestBody.getIsEnable());
