@@ -55,8 +55,10 @@ public class GetMemberOfUseCase {
                 output.addTeamToList(result.get(i) , teamID);
             }
         } catch (RestClientException e) {
+            System.out.println(e);
             throw new GetMemberOfErrorException();
         } catch (DatabaseErrorException | DuplicateActivityTypeException e) {
+            System.out.println(e);
             throw new InitTeamDataErrorException();
         } 
     }
