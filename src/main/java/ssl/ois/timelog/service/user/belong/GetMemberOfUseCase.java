@@ -12,7 +12,9 @@ import org.springframework.web.client.RestTemplate;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
 import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.team.Team;
+import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
+import ssl.ois.timelog.service.manager.AMSManager;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 
@@ -21,40 +23,27 @@ import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException
 @Service
 public class GetMemberOfUseCase {
     private UnitRepository unitRepository;
+    private AMSManager amsManager;
 
-    public GetMemberOfUseCase(UnitRepository unitRepository) {
+    public GetMemberOfUseCase(UnitRepository unitRepository, AMSManager amsManager) {
         this.unitRepository = unitRepository;
+        this.amsManager = amsManager;
     }
 
     public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException, InitTeamDataErrorException, DuplicateActivityTypeException {
-        try {
-            final String urlGetTeamName = "http://localhost:8080/get/groups/byuser";
-            final String ulrGetTeamUid = "http://localhost:8080/get/teamUid";
-            RestTemplate restTemplate = new RestTemplate();
-            List<String> result = restTemplate.postForObject(urlGetTeamName, input, List.class);
+        List<UUID> teamIdList = this.amsManager.getMemberOf(input.getUsername());
+        for(UUID teamID : teamIdList){
+            UnitInterface team = this.unitRepository.findByUserID(teamID.toString());
+            if(team == null){
+                Map<UUID,Role> memberRoleMap = this.amsManager.getTeamRoleRelation(teamID.toString());
+                team = new Team(teamID,memberRoleMap);
+                this.unitRepository.save(team);
+                this.unitRepository.addRoleRelation(teamID.toString(), memberRoleMap);
 
-            for(int i = 0; i < result.size(); i++) {
-                String uid = restTemplate.postForObject(ulrGetTeamUid, result.get(i), String.class);
-                uid = uid.replaceAll("^\"|\"$", "");
-                UUID teamID = UUID.fromString(uid);
-
-                UnitInterface team = this.unitRepository.findByUserID(uid);
-                if(team == null){
-                    team = new Team(teamID);
-                    this.unitRepository.insertTeamToUnit(team);
-
-                    ActivityType activityType = new ActivityType("Other", true, false);
-                    team.addActivityType(activityType);
-                    this.unitRepository.addActivityType(team);
-                }
-                output.addTeamToList(result.get(i) , teamID);
+                ActivityType activityType = new ActivityType("Other", true, false);
+                team.addActivityType(activityType);
+                this.unitRepository.addActivityType(team);
             }
-        } catch (RestClientException e) {
-            System.out.println(e);
-            throw new GetMemberOfErrorException();
-        } catch (DatabaseErrorException | DuplicateActivityTypeException e) {
-            System.out.println(e);
-            throw new InitTeamDataErrorException();
-        } 
+        }
     }
 }

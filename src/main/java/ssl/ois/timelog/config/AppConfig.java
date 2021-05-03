@@ -29,6 +29,15 @@ public class AppConfig {
     private String mysqlUser;
     @Value("${mysql.password}")
     private String mysqlPasswd;
+    @Value("${ams.host}")
+    private String amsHost;
+    @Value("${ams.port}")
+    private String amsPort;
+
+    @Bean 
+    public AMSManager getAMSManager() {
+        return new DirectoryAMSManager(this.amsHost, this.amsPort);
+    } 
 
     @Bean
     public LogRepository getLogRepository() {

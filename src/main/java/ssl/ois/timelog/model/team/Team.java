@@ -17,8 +17,9 @@ public class Team extends Unit {
 //    private UUID leaderId;
     private Map<UUID, Role> memberRoleMap;
 
-    public Team(UUID id) {
-        super(id);
+    public Team(UUID id, Map<UUID, Role> memberRoleMap) {
+        super(id);        
+        this.memberRoleMap = memberRoleMap;
     }
 
     public Team(UUID id, List<ActivityType> activityTypeList, Map<UUID, Role> memberRoleMap) {

@@ -115,6 +115,21 @@ public class MysqlUnitRepository implements UnitRepository {
     }
 
     @Override
+    public void addRoleRelation(String teamID, Map<UUID,Role> memberRoleMap) {
+        Connection connection = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+            for(Map.Entry<UUID, Role> entry : memberRoleMap.entrySet()) {
+                this.insertRoleRelation(connection, teamID, entry.getKey().toString(), Role.entry.getValue().name());
+            }
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+    }
+
+    @Override
     public UnitInterface findByUserID(String userID) throws DatabaseErrorException{
         Connection connection = null;
         Unit user = null;
@@ -275,6 +290,19 @@ public class MysqlUnitRepository implements UnitRepository {
         } 
     }
 
+    private void insertRoleRelation(Connection connection, String teamID, String userID, String role) throws SQLException {
+        try(PreparedStatement stmt = connection.prepareStatement(
+            "INSERT IGNORE INTO `role_relation` VALUES (?,?,?)"
+        )) {
+            stmt.setString(1, teamID);
+            stmt.setString(2, userID);
+            stmt.setString(3, role);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } 
+    }
 
     @Override
     public UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException {

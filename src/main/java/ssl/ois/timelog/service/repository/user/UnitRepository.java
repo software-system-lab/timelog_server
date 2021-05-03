@@ -17,4 +17,6 @@ public interface UnitRepository {
     void removeActivityType(UnitInterface user) throws DatabaseErrorException, ActivityTypeNotExistException;
     UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException;
     void insertTeamToUnit(UnitInterface team) throws DatabaseErrorException;
+    void addRoleRelation(String teamID, Map<UUID,Role> memberRoleMap) throws DatabaseErrorException;
 }
+
