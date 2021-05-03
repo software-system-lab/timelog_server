@@ -11,8 +11,6 @@ import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.connect.UnitInterface;
-import ssl.ois.timelog.model.unit.Unit;
-import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseOutput;
@@ -175,7 +173,7 @@ public class ActivityStepDefinition {
         EditActivityTypeUseCaseInput editActivityTypeUseCaseInput = new EditActivityTypeUseCaseInput();
         EditActivityTypeUseCaseOutput editActivityTypeUseCaseOutput = new EditActivityTypeUseCaseOutput();
 
-        editActivityTypeUseCaseInput.setUserID(this.userID);
+        editActivityTypeUseCaseInput.setUnitID(this.userID);
         editActivityTypeUseCaseInput.setTargetActivityTypeName(this.activityTypeName);
         editActivityTypeUseCaseInput.setActivtiyTypeName(newActivityTypeName);
         editActivityTypeUseCaseInput.setIsEnable(false);
