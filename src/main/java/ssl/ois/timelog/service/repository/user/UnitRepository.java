@@ -9,7 +9,7 @@ import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException
 
 import java.util.UUID;
 
-public interface UserRepository {
+public interface UnitRepository {
     void save(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException;
     UnitInterface findByUserID(String userID) throws DatabaseErrorException;
     void addActivityType(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException;

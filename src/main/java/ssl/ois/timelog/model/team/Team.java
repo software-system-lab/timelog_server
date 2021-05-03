@@ -1,6 +1,7 @@
 package ssl.ois.timelog.model.team;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
@@ -12,71 +13,25 @@ import ssl.ois.timelog.service.exception.team.MemberNotInGroupException;
 
 public class Team extends Unit {
 
-    private List<UUID> memberIdList;
-    private UUID leaderId;
-
-
-	public UUID getLeaderId() {
-		return this.leaderId;
-	}
-
-	public void setLeaderId(UUID leaderId) {
-		this.leaderId = leaderId;
-	}
+//    private List<UUID> memberIdList;
+//    private UUID leaderId;
+    private Map<UUID, Role> memberRoleMap;
 
     public Team(UUID id) {
         super(id);
     }
 
-    public Team(UUID id, List<UUID> memberIdList) {
-        super(id);
-        this.memberIdList = memberIdList;
-    }
-
-    public Team(UUID id, List<ActivityType> activityTypeList, List<UUID> memberIdList) {
+    public Team(UUID id, List<ActivityType> activityTypeList, Map<UUID, Role> memberRoleMap) {
         super(id, activityTypeList);
-        this.memberIdList = memberIdList;
+        this.memberRoleMap = memberRoleMap;
     }
 
-    @Override
-    public void addMemberToTeam(UUID memberTarget) throws DuplicateMemberException {
-        if(this.isUserExist(memberTarget)) {
-            throw new DuplicateMemberException();
+    public UUID getLeaderId() {
+        UUID leaderID = null;
+        for(Map.Entry<UUID, Role> entry : memberRoleMap.entrySet()) {
+            if (entry.getValue().equals(Role.LEADER))
+                leaderID = entry.getKey();
         }
-        else {
-            this.memberIdList.add(memberTarget);
-        }
-    }
-
-    @Override
-    public void deleteMemberFromTeam(UUID memberTarget) throws MemberNotInGroupException {
-        if(!this.isUserExist(memberTarget)) {
-            throw new MemberNotInGroupException();
-        }
-        this.memberIdList.removeIf(member -> member.equals(memberTarget));
-    }
-
-    @Override
-    public List<UUID>  getMemberTeamList(UUID targetMember) {
-	    return this.memberIdList;
-    }
-
-    @Override
-    public void addTimebox(Timebox timebox) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<Timebox> getTimeboxList() throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
-
-    private boolean isUserExist(UUID memberTarget) {
-        for(UUID member: this.memberIdList) {
-            if(member.equals(memberTarget)) {
-                return true;
-            }
-        }
-        return false;
+        return leaderID;
     }
 }

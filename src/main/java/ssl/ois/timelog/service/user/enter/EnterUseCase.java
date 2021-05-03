@@ -3,14 +3,13 @@ package ssl.ois.timelog.service.user.enter;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.log.Log;
-import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.user.InitUserDataErrorException;
-import ssl.ois.timelog.service.repository.user.UserRepository;
+import ssl.ois.timelog.service.repository.user.UnitRepository;
 
 import java.util.UUID;
 
@@ -20,11 +19,11 @@ import java.util.ArrayList;
 
 @Service
 public class EnterUseCase {
-    private UserRepository userRepository;
+    private UnitRepository unitRepository;
     private LogRepository logRepository;
 
-    public EnterUseCase(UserRepository userRepository, LogRepository logRepository) {
-        this.userRepository = userRepository;
+    public EnterUseCase(UnitRepository unitRepository, LogRepository logRepository) {
+        this.unitRepository = unitRepository;
         this.logRepository = logRepository;
     }
 
@@ -33,28 +32,28 @@ public class EnterUseCase {
             InitUserDataErrorException {
         try {
             String userID = input.getUserID();
-            UnitInterface user = this.userRepository.findByUserID(userID);
+            UnitInterface user = this.unitRepository.findByUserID(userID);
             if (user == null) {
                 // First time login to Timelog
     
                 // Create User
                 user = new User(UUID.fromString(userID));
-                this.userRepository.save(user);
+                this.unitRepository.save(user);
     
                 // Create default activity type "Other" for the user.
                 ActivityType activityType = new ActivityType("Other", true, false);
                 user.addActivityType(activityType);
-                this.userRepository.addActivityType(user);
+                this.unitRepository.addActivityType(user);
 
                 ActivityType labDuty = new ActivityType("LabDuty", true, false);
                 user.addActivityType(labDuty);
-                this.userRepository.addActivityType(user);
+                this.unitRepository.addActivityType(user);
 
                 ActivityType labProject = new ActivityType("LabProject", true, false);
                 user.addActivityType(labProject);
-                this.userRepository.addActivityType(user);
+                this.unitRepository.addActivityType(user);
 
-                output.setActivityTypeList(this.userRepository.findByUserID(userID).getActivityTypeList());
+                output.setActivityTypeList(this.unitRepository.findByUserID(userID).getActivityTypeList());
                 output.setLogList(new ArrayList<Log>());
             } else {
                 output.setActivityTypeList(user.getActivityTypeList());

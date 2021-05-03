@@ -7,27 +7,27 @@ import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
-import ssl.ois.timelog.service.repository.user.UserRepository;
+import ssl.ois.timelog.service.repository.user.UnitRepository;
 
 import java.util.UUID;
 
 @Service
 public class EditActivityTypeUseCase {
 
-    private UserRepository userRepository;
+    private UnitRepository unitRepository;
 
-    public EditActivityTypeUseCase(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public EditActivityTypeUseCase(UnitRepository unitRepository) {
+        this.unitRepository = unitRepository;
     }
 
     public void execute(EditActivityTypeUseCaseInput input, EditActivityTypeUseCaseOutput output)
             throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
-        UnitInterface user = this.userRepository.findByUserID(input.getUnitID());
-        UUID activityUserMapperID = this.userRepository.findActivityUserMapperID(input.getUnitID(),input.getTargetActivityTypeName());
+        UnitInterface user = this.unitRepository.findByUserID(input.getUnitID());
+        UUID activityUserMapperID = this.unitRepository.findActivityUserMapperID(input.getUnitID(),input.getTargetActivityTypeName());
         ActivityType activityType = new ActivityType(activityUserMapperID,input.getActivityTypeName(), input.getIsEnable(), input.getIsPrivate());
 
         user.editActivityType(input.getTargetActivityTypeName(), activityType);
-        this.userRepository.editActivityType(user);
+        this.unitRepository.editActivityType(user);
         output.setActivityTypeName(activityType.getName());
         output.setIsEnable(activityType.isEnable());
         output.setIsPrivate(activityType.isPrivate());

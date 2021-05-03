@@ -1,20 +1,17 @@
 package ssl.ois.timelog.adapter.repository.memory;
 
-import ssl.ois.timelog.model.user.User;
-import ssl.ois.timelog.service.repository.user.UserRepository;
+import ssl.ois.timelog.service.repository.user.UnitRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.connect.UnitInterface;
-import ssl.ois.timelog.model.unit.Unit;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
 import java.util.UUID;
 
-public class MemoryUserRepository implements UserRepository {
+public class MemoryUnitRepository implements UnitRepository {
     private Map<String, UnitInterface> users;
 
-    public MemoryUserRepository() {
+    public MemoryUnitRepository() {
         this.users = new HashMap<>();
     }
 

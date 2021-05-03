@@ -8,7 +8,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.presenter.log.history.LogHistoryPresenter;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
-import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.repository.memory.MemoryUnitRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
@@ -20,7 +20,7 @@ import ssl.ois.timelog.service.log.history.HistoryLogUseCase;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseInput;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseOutput;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.repository.user.UserRepository;
+import ssl.ois.timelog.service.repository.user.UnitRepository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.text.ParseException;
 
 public class HistoryStepDefinition {
-    private UserRepository userRepository;
+    private UnitRepository unitRepository;
     private LogRepository logRepository;
 
     private String userID;
@@ -37,13 +37,13 @@ public class HistoryStepDefinition {
 
     @Before
     public void setUp() {
-        this.userRepository = new MemoryUserRepository();
+        this.unitRepository = new MemoryUnitRepository();
         this.logRepository = new MemoryLogRepository();
     }
 
     @Given("[History] I log in to Timelog with user ID {string}")
     public void history_I_log_in_to_Timelog_with_user_ID(String userID) {
-        UserLogin loginService = new UserLogin(this.userRepository);
+        UserLogin loginService = new UserLogin(this.unitRepository);
         try {
             loginService.process(userID);
             this.userID = loginService.getUserID();
