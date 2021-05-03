@@ -33,8 +33,8 @@ public class GetMemberOfUseCase {
 
     public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException, InitTeamDataErrorException, DuplicateActivityTypeException {
         try {
-            final String urlGetTeamName = "http://localhost:8080/get/groups/byuser";
-            final String ulrGetTeamUid = "http://localhost:8080/get/teamUid";
+            final String urlGetTeamName = "http://localhost:8080/team/get/memberOf";
+            final String ulrGetTeamUid = "http://localhost:8080/team/get/uuid/team";
             RestTemplate restTemplate = new RestTemplate();
             List<String> result = restTemplate.postForObject(urlGetTeamName, input, List.class);
 

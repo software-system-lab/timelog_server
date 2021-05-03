@@ -18,9 +18,9 @@ public class GetTeamUseCase {
 
     public void execute(GetTeamUseCaseInput input, GetTeamUseCaseOutput output)throws GetTeamErrorException {
         try {
-            final String urlMember = "http://localhost:8080/get/members";
-            final String urlGetUid = "http://localhost:8080/get/uuid";
-            final String urlLeader = "http://localhost:8080/get/leader";
+            final String urlMember = "http://localhost:8080/team/get/members";
+            final String urlGetUid = "http://localhost:8080/team/get/uuid/user";
+            final String urlLeader = "http://localhost:8080/team/get/leader";
 
             RestTemplate restTemplate = new RestTemplate();
             List<String> result = restTemplate.postForObject(urlMember, input, List.class);
