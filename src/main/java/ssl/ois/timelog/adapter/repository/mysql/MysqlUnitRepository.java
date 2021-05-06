@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +20,8 @@ import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
+import ssl.ois.timelog.model.team.Role;
+
 
 public class MysqlUnitRepository implements UnitRepository {
     @Autowired
@@ -116,17 +119,18 @@ public class MysqlUnitRepository implements UnitRepository {
 
     @Override
     public void addRoleRelation(String teamID, Map<UUID,Role> memberRoleMap) {
-        Connection connection = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-            for(Map.Entry<UUID, Role> entry : memberRoleMap.entrySet()) {
-                this.insertRoleRelation(connection, teamID, entry.getKey().toString(), Role.entry.getValue().name());
-            }
-        } catch (SQLException e) {
-            throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
-        }
+        // Connection connection = null;
+        // try {
+        //     connection = this.mysqlDriverAdapter.getConnection();
+            
+        //     for(Map.Entry<UUID, Role> entry : memberRoleMap.entrySet()) {
+        //         // this.insertRoleRelation(connection, teamID, entry.getKey().toString(), Role.entry.getValue().name());
+        //     }
+        // } catch (SQLException e) {
+        //     throw new DatabaseErrorException();
+        // } finally {
+        //     this.mysqlDriverAdapter.closeConnection(connection);
+        // }
     }
 
     @Override

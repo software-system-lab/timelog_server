@@ -17,6 +17,9 @@ import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
 import ssl.ois.timelog.service.manager.AMSManager;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
+import ssl.ois.timelog.model.team.Role;
+import java.util.Map;
 
 
 
@@ -31,19 +34,24 @@ public class GetMemberOfUseCase {
     }
 
     public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException, InitTeamDataErrorException, DuplicateActivityTypeException {
-        List<UUID> teamIdList = this.amsManager.getMemberOf(input.getUsername());
-        for(UUID teamID : teamIdList){
-            UnitInterface team = this.unitRepository.findByUserID(teamID.toString());
-            if(team == null){
-                Map<UUID,Role> memberRoleMap = this.amsManager.getTeamRoleRelation(teamID.toString());
-                team = new Team(teamID,memberRoleMap);
-                this.unitRepository.save(team);
-                this.unitRepository.addRoleRelation(teamID.toString(), memberRoleMap);
-
-                ActivityType activityType = new ActivityType("Other", true, false);
-                team.addActivityType(activityType);
-                this.unitRepository.addActivityType(team);
+        try{
+            Map<UUID,String> teamIdList = this.amsManager.getMemberOf(input.getUsername());
+            for(Map.Entry<UUID, String> teamID : teamIdList.entrySet()) {
+                UnitInterface team = this.unitRepository.findByUserID(teamID.getKey().toString());
+                if(team == null){
+                    Map<UUID,Role> memberRoleMap = this.amsManager.getTeamRoleRelation(teamID.getKey().toString());
+                    team = new Team(teamID.getKey(),memberRoleMap);
+                    this.unitRepository.save(team);
+                    this.unitRepository.addRoleRelation(teamID.getKey().toString(), memberRoleMap);
+    
+                    ActivityType activityType = new ActivityType("Other", true, false);
+                    team.addActivityType(activityType);
+                    this.unitRepository.addActivityType(team);
+                }
+                output.addTeamToList(teamID.getValue(),teamID.getKey());
             }
+        } catch (DatabaseErrorException | ActivityTypeNotExistException e) {
+            throw new InitTeamDataErrorException();
         }
     }
 }

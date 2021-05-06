@@ -24,7 +24,6 @@ public class TeamDashboardUseCase {
 
     public void execute(TeamDashboardUseCaseInput input, TeamDashboardUseCaseOutput output)
             throws ParseException, DatabaseErrorException {
-        System.out.println("-----------------service-------------");        
         Date endDate;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         endDate = dateFormat.parse(input.getEndDate());
@@ -32,7 +31,6 @@ public class TeamDashboardUseCase {
         c.setTime(endDate);
         c.add(Calendar.DATE, 1);
         endDate = c.getTime();
-        System.out.println("-----------------repo-------------");        
         List<Log> logList = this.logRepository.findByPeriodAndTeam(input.getTeamID(),
                 input.getStartDate(), dateFormat.format(endDate));
 
@@ -48,10 +46,7 @@ public class TeamDashboardUseCase {
             logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
             logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
             teamLogDTOList.add(logDTO);
-            System.out.println("-----------------getting log--------------");
-            System.out.println(log.getTitle());
-            System.out.println("-----------------------------");
-
+            
         }
         output.setTeamLogDTOList(teamLogDTOList);
 
@@ -68,9 +63,6 @@ public class TeamDashboardUseCase {
                 logDTO.setTitle(log.getTitle());
                 logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
                 logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
-                System.out.println("-----------------getting member log--------------");
-                System.out.println(log.getTitle());
-                System.out.println("-----------------------------");
                 logDTOList.add(logDTO);
             }
             output.addMemberLog(member.getUsername(), logDTOList);
