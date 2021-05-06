@@ -3,7 +3,7 @@ package ssl.ois.timelog.adapter.repository.memory;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.connect.UnitInterface;
-
+import ssl.ois.timelog.model.team.Role;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

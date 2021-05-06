@@ -204,11 +204,6 @@ public class MysqlLogRepository implements LogRepository {
 
     @Override
     public List<Log> findByPeriodAndTeam(String teamID, String startDate, String endDate) throws DatabaseErrorException {
-        System.out.println("-----------------connecting MYSQL-------------");        
-        System.out.println(teamID);
-        System.out.println(startDate);
-        System.out.println(endDate);
-
         Connection connection = null;
         List<Log> logList = new ArrayList<>();
         try {
@@ -225,7 +220,6 @@ public class MysqlLogRepository implements LogRepository {
                 stmt.setString(1, teamID);
                 stmt.setString(2, startDate);
                 stmt.setString(3, endDate);
-                System.out.println("----------------- getting data -------------");        
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         UUID logID = UUID.fromString(rs.getString("id"));
@@ -238,7 +232,6 @@ public class MysqlLogRepository implements LogRepository {
                         String activityType = rs.getString("activity_type_name");
                         Log log = new Log(logID, uid, title, startTime,
                                 endTime, description, activityType,activityUserMapperID);
-                        System.out.println(title);
                         logList.add(log);
                     }
                 }
@@ -254,12 +247,6 @@ public class MysqlLogRepository implements LogRepository {
 
     @Override
     public List<Log> findByPeriodAndUserIDWithTeamID(String teamID, String userID, String startDate, String endDate) throws DatabaseErrorException {
-        System.out.println("-----------------connecting MYSQL-------------");        
-        System.out.println(teamID);
-        System.out.println(userID);
-        System.out.println(startDate);
-        System.out.println(endDate);
-
         Connection connection = null;
         List<Log> logList = new ArrayList<>();
         try {
@@ -278,7 +265,6 @@ public class MysqlLogRepository implements LogRepository {
                 stmt.setString(2, userID);
                 stmt.setString(3, startDate);
                 stmt.setString(4, endDate);
-                System.out.println("----------------- getting data -------------");        
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         UUID logID = UUID.fromString(rs.getString("id"));
@@ -291,7 +277,6 @@ public class MysqlLogRepository implements LogRepository {
                         String activityType = rs.getString("activity_type_name");
                         Log log = new Log(logID, uid, title, startTime,
                                 endTime, description, activityType,activityUserMapperID);
-                        System.out.println(title);
                         logList.add(log);
                     }
                 }

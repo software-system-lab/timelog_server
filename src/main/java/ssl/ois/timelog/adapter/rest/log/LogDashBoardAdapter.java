@@ -49,21 +49,6 @@ public class LogDashBoardAdapter {
 
     @PostMapping("/team/dashboard")
     public ResponseEntity<TeamDashBoardViewModel> viewTeamDashBoard(@RequestBody TeamDashboardUseCaseInput input) {
-        System.out.println("-----------------server--------------");
-        System.out.println("get team dashboard");
-
-        System.out.println(input.getMemberList().get(0).getUsername());
-        
-        // GetTeamUseCase getTeamUseCase = new GetTeamUseCase();
-        // GetTeamUseCaseInput inputGroup = new GetTeamUseCaseInput();
-        // inputGroup.setGroupname(input.getGroupname());
-        // GetTeamUseCaseOutput outputGroup = new GetTeamUseCaseOutput();
-        // try {
-        //     getTeamUseCase.execute(inputGroup, outputGroup);
-        // } catch (GetTeamErrorException e) {
-        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new TeamDashBoardViewModel());
-        // }
-        // input.setMemberList(outputGroup.getMemberList());
         TeamDashboardUseCase useCase = new TeamDashboardUseCase(this.logRepository);
         TeamDashBoardPresenter presenter = new TeamDashBoardPresenter();
 
