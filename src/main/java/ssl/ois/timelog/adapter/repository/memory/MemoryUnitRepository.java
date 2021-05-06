@@ -35,10 +35,6 @@ public class MemoryUnitRepository implements UnitRepository {
         this.save(user);
     }
 
-    @Override
-    public void addRoleRelation(String teamID, Map<UUID,Role> memberRoleMap) {
-
-    }
 
     @Override
     public UnitInterface findByUserID(String userID) {

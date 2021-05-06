@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
@@ -352,4 +354,45 @@ public class MysqlUnitRepository implements UnitRepository {
         }
     }
 
+    @Override
+    public Role getRole(UUID userID, UUID teamID) throws DatabaseErrorException {
+        Connection connection = null;
+        Role role = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement(
+                "SELECT `role` FROM `role_relation` WHERE `unit_id` = ? AND `team_id` = ?"
+            )) {
+                stmt.setString(1, userID.toString());
+                stmt.setString(2, teamID.toString());
+
+                try (ResultSet rs = stmt.executeQuery()) {
+                    rs.next();
+                    switch(rs.getInt("role")){
+                        case 1:
+                            role = Role.MEMBER;
+                            break;
+                        case 2:
+                            role = Role.LEADER;
+                            break;
+                        case 3:
+                            role = Role.PROFESSOR;
+                            break;
+                        case 4:
+                            role = Role.STAKEHOLDER;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+        return role;
+    }
 }

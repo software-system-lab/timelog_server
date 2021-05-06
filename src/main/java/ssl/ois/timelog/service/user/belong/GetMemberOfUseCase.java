@@ -4,15 +4,13 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.web.client.RestClientException;
 import ssl.ois.timelog.service.exception.team.GetMemberOfErrorException;
-import ssl.ois.timelog.service.exception.DatabaseErrorException;
-import org.springframework.web.client.RestTemplate;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
 import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.team.Team;
-import ssl.ois.timelog.model.unit.Unit;
 import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
 import ssl.ois.timelog.service.manager.AMSManager;
 import ssl.ois.timelog.model.activity.type.ActivityType;
@@ -35,7 +33,7 @@ public class GetMemberOfUseCase {
         for(UUID teamID : teamIdList){
             UnitInterface team = this.unitRepository.findByUserID(teamID.toString());
             if(team == null){
-                Map<UUID,Role> memberRoleMap = this.amsManager.getTeamRoleRelation(teamID.toString());
+                Map<UUID, Role> memberRoleMap = this.amsManager.getTeamRoleRelation(teamID.toString());
                 team = new Team(teamID,memberRoleMap);
                 this.unitRepository.save(team);
                 this.unitRepository.addRoleRelation(teamID.toString(), memberRoleMap);
