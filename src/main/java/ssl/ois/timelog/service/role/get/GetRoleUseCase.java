@@ -1,9 +1,13 @@
 package ssl.ois.timelog.service.role.get;
 import ssl.ois.timelog.service.exception.role.GetRoleErrorException;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
+
+import org.springframework.stereotype.Service;
+
 import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 
+@Service
 public class GetRoleUseCase {
     private UnitRepository unitRepository;
 
