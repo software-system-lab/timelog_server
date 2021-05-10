@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,7 +21,6 @@ import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
-import ssl.ois.timelog.model.team.Role;
 
 
 public class MysqlUnitRepository implements UnitRepository {
@@ -120,19 +118,19 @@ public class MysqlUnitRepository implements UnitRepository {
     }
 
     @Override
-    public void addRoleRelation(String teamID, Map<UUID,Role> memberRoleMap) {
-        // Connection connection = null;
-        // try {
-        //     connection = this.mysqlDriverAdapter.getConnection();
+    public void addRoleRelation(String teamID, Map<UUID,Role> memberRoleMap) throws DatabaseErrorException {
+        Connection connection = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
             
-        //     for(Map.Entry<UUID, Role> entry : memberRoleMap.entrySet()) {
-        //         // this.insertRoleRelation(connection, teamID, entry.getKey().toString(), Role.entry.getValue().name());
-        //     }
-        // } catch (SQLException e) {
-        //     throw new DatabaseErrorException();
-        // } finally {
-        //     this.mysqlDriverAdapter.closeConnection(connection);
-        // }
+            for(Map.Entry<UUID, Role> entry : memberRoleMap.entrySet()) {
+                this.insertRoleRelation(connection, teamID, entry.getKey().toString(), entry.getValue().name());
+            }
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
     }
 
     @Override
@@ -174,9 +172,7 @@ public class MysqlUnitRepository implements UnitRepository {
                 rs.next();
 
                 return rs.getInt(1) == 1;
-            } catch (SQLException e) {
-                throw e;
-            } 
+            }
         }
     }
 
@@ -194,9 +190,7 @@ public class MysqlUnitRepository implements UnitRepository {
             try (ResultSet rs = stmt.executeQuery()) {
                 rs.next();
                 return rs.getInt(1) == 1;
-            } catch (SQLException e) {
-                throw e;
-            } 
+            }
         }
     }
 
@@ -220,9 +214,7 @@ public class MysqlUnitRepository implements UnitRepository {
 
                         activityTypeList.add(activityType);
                     }
-                } catch (SQLException e) {
-                    throw e;
-                } 
+                }
             }
         return activityTypeList;
     }
@@ -234,9 +226,7 @@ public class MysqlUnitRepository implements UnitRepository {
             stmt.setString(1, activityType.getName());
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw e;
-        } 
+        }
     }
 
     private void addActivityTypeUserMapper(Connection connection, String userID, ActivityType activityType)
@@ -253,9 +243,7 @@ public class MysqlUnitRepository implements UnitRepository {
             stmt.setInt(5, activityType.isPrivate() ? 1 : 0);
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw e;
-        } 
+        }
     }
 
     private void updateActivityTypeUserMapper(Connection connection, String userID, ActivityType activityType)
@@ -273,9 +261,7 @@ public class MysqlUnitRepository implements UnitRepository {
 
             stmt.executeUpdate();
 
-        } catch (SQLException e) {
-            throw e;
-        } 
+        }
     }
 
     private void removeActivityTypeUserMapper(Connection connection, String userID, String targetActivityTypeName)
@@ -291,9 +277,7 @@ public class MysqlUnitRepository implements UnitRepository {
             stmt.setString(3, targetActivityTypeName);
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw e;
-        } 
+        }
     }
 
     private void insertRoleRelation(Connection connection, String teamID, String userID, String role) throws SQLException {
@@ -305,9 +289,7 @@ public class MysqlUnitRepository implements UnitRepository {
             stmt.setString(3, role);
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw e;
-        } 
+        }
     }
 
     @Override
@@ -338,28 +320,7 @@ public class MysqlUnitRepository implements UnitRepository {
     }
 
     @Override
-    public void insertTeamToUnit(UnitInterface team) throws DatabaseErrorException {
-        Connection connection = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-
-            try (PreparedStatement stmt = connection.prepareStatement(
-                "INSERT IGNORE INTO `unit`(`id`) VALUES (?)"
-            )) {
-                stmt.setString(1, team.getID().toString());
-
-                stmt.executeUpdate();
-            }
-
-        } catch (SQLException e) {
-            throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
-        }
-    }
-
-    @Override
-    public Role getRole(UUID userID, UUID teamID) throws DatabaseErrorException {
+    public Role getRole(String userID, String teamID) throws DatabaseErrorException {
         Connection connection = null;
         Role role = null;
         try {
@@ -368,8 +329,8 @@ public class MysqlUnitRepository implements UnitRepository {
             try (PreparedStatement stmt = connection.prepareStatement(
                 "SELECT `role` FROM `role_relation` WHERE `unit_id` = ? AND `team_id` = ?"
             )) {
-                stmt.setString(1, userID.toString());
-                stmt.setString(2, teamID.toString());
+                stmt.setString(1, userID);
+                stmt.setString(2, teamID);
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     rs.next();

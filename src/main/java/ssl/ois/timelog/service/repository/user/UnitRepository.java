@@ -15,12 +15,9 @@ public interface UnitRepository {
     void addActivityType(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException;
     void editActivityType(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException;
     void removeActivityType(UnitInterface user) throws DatabaseErrorException, ActivityTypeNotExistException;
-    UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException;
-    void insertTeamToUnit(UnitInterface team) throws DatabaseErrorException;
-    
+    UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException;    
     default void addRoleRelation(String teamID, Map<UUID, Role> memberRoleMap) throws DatabaseErrorException {
-
     }
-    Role getRole(UUID userID, UUID teamID) throws DatabaseErrorException;
+    Role getRole(String userID, String teamID) throws DatabaseErrorException;
 }
 

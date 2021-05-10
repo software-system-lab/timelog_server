@@ -6,6 +6,8 @@ import java.util.UUID;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
+import ssl.ois.timelog.service.exception.team.DuplicateMemberException;
+import ssl.ois.timelog.service.exception.team.MemberNotInGroupException;
 
 public interface UnitInterface {
     void addActivityType(ActivityType activityType) throws DuplicateActivityTypeException;
@@ -15,4 +17,7 @@ public interface UnitInterface {
     UUID getID();
     ActivityType getOperatedActivityType();
     String getTargetActivityTypeName();
+    void addMemberToTeam(UUID targetMember) throws UnsupportedOperationException, DuplicateMemberException;
+    void deleteMemberFromTeam(UUID targetMember) throws UnsupportedOperationException, MemberNotInGroupException;
+    List<UUID>  getMemberTeamList(UUID targetMember) throws UnsupportedOperationException, MemberNotInGroupException;
 }

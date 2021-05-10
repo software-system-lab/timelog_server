@@ -1,6 +1,6 @@
 package ssl.ois.timelog.service.role.get;
 
-import javax.management.relation.Role;
+import ssl.ois.timelog.model.team.Role;
 
 public class GetRoleUseCaseOutput {
     private Role role;
@@ -8,6 +8,7 @@ public class GetRoleUseCaseOutput {
     public GetRoleUseCaseOutput(Role role){
         this.role = role;
     }
+    public GetRoleUseCaseOutput(){}
 
     public Role getRole(){
         return this.role;

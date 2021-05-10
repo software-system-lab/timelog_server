@@ -6,11 +6,6 @@ public class GetRoleUseCaseInput {
     private UUID userID;
     private UUID teamID;
 
-    public GetRoleUseCaseInput(UUID userID, UUID teamID){
-        this.userID = userID;
-        this.teamID = teamID;
-    }
-
     public UUID getUserID(){
         return userID;
     }

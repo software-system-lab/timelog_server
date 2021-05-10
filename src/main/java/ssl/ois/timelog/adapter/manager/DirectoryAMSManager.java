@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.HashMap;
 import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
 import ssl.ois.timelog.service.exception.team.GetMemberOfErrorException;
+import ssl.ois.timelog.service.exception.AMSErrorException;
 import ssl.ois.timelog.model.team.Role;
 import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class DirectoryAMSManager implements AMSManager {
 
     }
 
-    public Map<UUID,String>  getMemberOf(String username)throws GetMemberOfErrorException, InitTeamDataErrorException{
+    public Map<UUID,String> getMemberOf(String username)throws AMSErrorException{
         Map<UUID,String> teamList = new HashMap<>();
         try {
             final String url = this.url + "/team/get/memberOf";
@@ -34,12 +35,12 @@ public class DirectoryAMSManager implements AMSManager {
                 teamList.put(UUID.fromString(uid),each.get("name"));
             }
         } catch (RestClientException e) {
-            throw new GetMemberOfErrorException();
+            throw new AMSErrorException();
         } 
         return teamList;
     }
 
-    public Map<UUID, Role> getTeamRoleRelation(String teamId) throws InitTeamDataErrorException{
+    public Map<UUID, Role> getTeamRoleRelation(String teamId) throws AMSErrorException{
         Map<UUID, Role> memberRoleMap = new HashMap<>();
         try {
             final String url = this.url + "/team/get/members";
@@ -54,7 +55,7 @@ public class DirectoryAMSManager implements AMSManager {
                 }
             }
         } catch (RestClientException e) {
-            throw new InitTeamDataErrorException();
+            throw new AMSErrorException();
         } 
         return memberRoleMap;
     }

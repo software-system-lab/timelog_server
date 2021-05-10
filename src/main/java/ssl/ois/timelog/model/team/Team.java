@@ -29,4 +29,8 @@ public class Team extends Unit {
         }
         return leaderID;
     }
+
+    public Map<UUID, Role> getMemberRoleMap(){
+        return memberRoleMap;
+    }
 }

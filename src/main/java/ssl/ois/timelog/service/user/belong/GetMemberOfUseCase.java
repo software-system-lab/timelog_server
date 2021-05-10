@@ -18,8 +18,8 @@ import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.model.team.Role;
 import java.util.Map;
-
-
+import ssl.ois.timelog.service.exception.AMSErrorException;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 
 @Service
 public class GetMemberOfUseCase {
@@ -31,7 +31,7 @@ public class GetMemberOfUseCase {
         this.amsManager = amsManager;
     }
 
-    public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException, InitTeamDataErrorException, DuplicateActivityTypeException {
+    public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException,InitTeamDataErrorException {
         try{
             Map<UUID,String> teamIdList = this.amsManager.getMemberOf(input.getUsername());
             for(Map.Entry<UUID, String> teamID : teamIdList.entrySet()) {
@@ -48,7 +48,9 @@ public class GetMemberOfUseCase {
                 }
                 output.addTeamToList(teamID.getValue(),teamID.getKey());
             }
-        } catch (DatabaseErrorException | ActivityTypeNotExistException e) {
+        } catch (AMSErrorException  e) {
+            throw new GetMemberOfErrorException();
+        } catch (DatabaseErrorException | ActivityTypeNotExistException | DuplicateActivityTypeException e) {
             throw new InitTeamDataErrorException();
         }
     }
