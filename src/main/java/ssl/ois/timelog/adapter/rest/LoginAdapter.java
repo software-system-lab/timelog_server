@@ -55,7 +55,7 @@ public class LoginAdapter {
 
         try {
             this.getMemberOfUseCase.execute(input, output);
-        } catch (GetMemberOfErrorException | InitTeamDataErrorException | DuplicateActivityTypeException e) {
+        } catch (GetMemberOfErrorException | InitTeamDataErrorException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
 

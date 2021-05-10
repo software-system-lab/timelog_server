@@ -18,7 +18,6 @@ public class GetTeamUseCase {
 
     public void execute(GetTeamUseCaseInput input, GetTeamUseCaseOutput output)throws GetTeamErrorException {
         try {
-            System.out.println("GetTeamUseCase");
             final String urlMember = "http://localhost:8080/team/get/members";
             final String urlGetName = "http://localhost:8080/team/get/name";
             final String urlLeader = "http://localhost:8080/team/get/leader";
@@ -26,7 +25,6 @@ public class GetTeamUseCase {
 
             RestTemplate restTemplate = new RestTemplate();
             List<String> result = restTemplate.postForObject(urlMember, input, List.class);
-            System.out.println(result);
             for(int i = 0; i < result.size(); i++) {
                 String username = restTemplate.postForObject(urlGetName, result.get(i), String.class);
                 UUID userID = UUID.fromString(result.get(i).replaceAll("^\"|\"$", ""));
