@@ -20,7 +20,7 @@ public class RoleRestAdapter {
     @Autowired
     GetRoleUseCase getRoleUseCase;
 
-    @PostMapping("/leader")
+    @PostMapping(value = "/leader")
     public ResponseEntity<Boolean> isLeader(@RequestBody GetRoleUseCaseInput input){
         GetRoleUseCaseOutput output = new GetRoleUseCaseOutput();
         try{
