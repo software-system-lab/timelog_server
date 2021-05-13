@@ -29,6 +29,7 @@ public class GetTeamUseCase {
 
             //Get UUID of members
             RestTemplate restTemplate = new RestTemplate();
+            
             List<String> result = restTemplate.postForObject(urlMember, input, List.class);
 
             //Get Name of Member
