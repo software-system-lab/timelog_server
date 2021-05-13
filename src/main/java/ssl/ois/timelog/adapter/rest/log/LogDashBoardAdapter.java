@@ -19,11 +19,6 @@ import ssl.ois.timelog.service.log.history.HistoryLogUseCaseInput;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.team.dashboard.TeamDashboardUseCase;
 import ssl.ois.timelog.service.team.dashboard.TeamDashboardUseCaseInput;
-import ssl.ois.timelog.service.team.get.GetTeamUseCase;
-import ssl.ois.timelog.service.team.get.GetTeamUseCaseInput;
-import ssl.ois.timelog.service.team.get.GetTeamUseCaseOutput;
-import ssl.ois.timelog.service.exception.team.GetTeamErrorException;
-import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
 
 @RestController
 @RequestMapping("/api/dash-board/")

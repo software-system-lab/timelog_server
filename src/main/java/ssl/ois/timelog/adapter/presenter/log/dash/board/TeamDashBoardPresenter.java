@@ -1,7 +1,6 @@
 package ssl.ois.timelog.adapter.presenter.log.dash.board;
 
 import ssl.ois.timelog.adapter.view.model.log.dash.board.TeamDashBoardViewModel;
-import ssl.ois.timelog.adapter.view.model.log.dash.board.TeamDashBoardViewModel.MemberDashboard;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.log.LogDTO;
 import ssl.ois.timelog.service.team.dashboard.TeamDashboardUseCaseOutputBound;

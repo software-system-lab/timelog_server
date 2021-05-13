@@ -1,7 +1,7 @@
 package ssl.ois.timelog.service.exception;
 
-public class AMSErrorException extends Exception{
-    public AMSErrorException() {
+public class AccountErrorException extends Exception{
+    public AccountErrorException() {
         super("Error occurred during communicating with AMS Server");
     }
 }

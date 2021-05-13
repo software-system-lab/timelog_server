@@ -1,19 +1,16 @@
 package ssl.ois.timelog.adapter.manager;
-import ssl.ois.timelog.service.manager.AMSManager;
+import ssl.ois.timelog.service.manager.AccountManager;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.HashMap;
-import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
-import ssl.ois.timelog.service.exception.team.GetMemberOfErrorException;
-import ssl.ois.timelog.service.exception.AMSErrorException;
+import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.model.team.Role;
 import org.springframework.web.client.RestTemplate;
-import java.util.ArrayList;
 import org.springframework.web.client.RestClientException;
 
-public class DirectoryAMSManager implements AMSManager {
+public class DirectoryAMSManager implements AccountManager {
 
     private String url;
     private RestTemplate restTemplate;
@@ -24,27 +21,32 @@ public class DirectoryAMSManager implements AMSManager {
 
     }
 
-    public Map<UUID,String> getMemberOf(String username)throws AMSErrorException{
+
+    //Get Belonging Teams
+    //Returns Map of Team(UUID) as Index, TeamName(String) as value 
+    public Map<UUID,String> getMemberOf(String username)throws AccountErrorException {
         Map<UUID,String> teamList = new HashMap<>();
         try {
-            final String url = this.url + "/team/get/memberOf";
-            List<LinkedHashMap<String,String>> result = this.restTemplate.postForObject(url, username, List.class);
+            final String requestAddress = this.url + "/team/get/memberOf";
+            List<LinkedHashMap<String,String>> result = this.restTemplate.postForObject(requestAddress, username, List.class);
             for(LinkedHashMap<String,String> each : result) {
                 String uid = each.get("id").replaceAll("^\"|\"$", "");
 
                 teamList.put(UUID.fromString(uid),each.get("name"));
             }
         } catch (RestClientException e) {
-            throw new AMSErrorException();
+            throw new AccountErrorException();
         } 
         return teamList;
     }
 
-    public Map<UUID, Role> getTeamRoleRelation(String teamId) throws AMSErrorException{
+    //Get Team Member and Role
+    //Returns Map of Member(UUID) as index, Role(Role) as value 
+    public Map<UUID, Role> getTeamRoleRelation(String teamId) throws AccountErrorException {
         Map<UUID, Role> memberRoleMap = new HashMap<>();
         try {
-            final String url = this.url + "/team/get/members";
-            List<String> result = this.restTemplate.postForObject(url, teamId, List.class);
+            final String requestAddress = this.url + "/team/get/members";
+            List<String> result = this.restTemplate.postForObject(requestAddress, teamId, List.class);
             memberRoleMap.put(this.getLeader(teamId), Role.LEADER);
 
             for(String uid :result){
@@ -55,16 +57,18 @@ public class DirectoryAMSManager implements AMSManager {
                 }
             }
         } catch (RestClientException e) {
-            throw new AMSErrorException();
+            throw new AccountErrorException();
         } 
         return memberRoleMap;
     }
 
+    //Get Team's Leader
+    //Returns UUID of Leader
     private UUID getLeader(String teamId) {
         UUID leaderID = null;
         try {
-            final String url = this.url + "/team/get/leader";
-            String result = this.restTemplate.postForObject(url, teamId, String.class);
+            final String requestAddress = this.url + "/team/get/leader";
+            String result = this.restTemplate.postForObject(requestAddress, teamId, String.class);
             leaderID = this.getUidFromName(result);
         } catch (RestClientException e) {
             //throw exception
@@ -72,11 +76,13 @@ public class DirectoryAMSManager implements AMSManager {
         return leaderID;
     }
 
+    //Get User's UUID
+    //Returns UUID of the user
     private UUID getUidFromName(String cn) {
         UUID id = null;
         try {
-            final String url = this.url + "/team/get/uuid/user";
-            String result = this.restTemplate.postForObject(url, cn, String.class);
+            final String requestAddress = this.url + "/team/get/uuid/user";
+            String result = this.restTemplate.postForObject(requestAddress, cn, String.class);
             String uid = result.replaceAll("^\"|\"$", "");
             id = UUID.fromString(uid);
         } catch (RestClientException e) {

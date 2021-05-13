@@ -58,7 +58,7 @@ public class MysqlUnitRepository implements UnitRepository {
 
             if(this.isExistInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName())) {
                 if(this.isDeletedInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName())){
-                    this.updateActivityTypeUserMapper(connection, user.getID().toString(), user.getOperatedActivityType());
+                    this.updateActivityTypeUserMapper(connection, user.getOperatedActivityType());
                 }
                 else{
                     throw new DuplicateActivityTypeException();
@@ -90,7 +90,7 @@ public class MysqlUnitRepository implements UnitRepository {
                 throw new DuplicateActivityTypeException();
             }
             this.addActivityType(connection, user.getOperatedActivityType());
-            this.updateActivityTypeUserMapper(connection, user.getID().toString(), user.getOperatedActivityType());
+            this.updateActivityTypeUserMapper(connection, user.getOperatedActivityType());
 
         } catch (SQLException e) {
             throw new DatabaseErrorException();
@@ -246,7 +246,7 @@ public class MysqlUnitRepository implements UnitRepository {
         }
     }
 
-    private void updateActivityTypeUserMapper(Connection connection, String userID, ActivityType activityType)
+    private void updateActivityTypeUserMapper(Connection connection, ActivityType activityType)
             throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(
             "UPDATE `activity_user_mapper` " + 

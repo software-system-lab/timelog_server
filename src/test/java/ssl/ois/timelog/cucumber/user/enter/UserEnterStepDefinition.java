@@ -44,7 +44,7 @@ public class UserEnterStepDefinition {
 
     @When("I first time enter Timelog")
     public void i_first_time_enter_Timelog() {
-        EnterUseCase enterUseCase = new EnterUseCase(this.unitRepository, this.logRepository);
+        EnterUseCase enterUseCase = new EnterUseCase(this.unitRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         enterUseCaseInput.setUserID(this.userID);
         this.enterUseCaseOutput = new EnterUseCaseOutput();
@@ -98,7 +98,7 @@ public class UserEnterStepDefinition {
 
     @Given("I have entered the Timelog with user ID {string} before")
     public void i_have_entered_the_Timelog_with_user_ID_before(String userID) {
-        EnterUseCase enterUseCase = new EnterUseCase(this.unitRepository, this.logRepository);
+        EnterUseCase enterUseCase = new EnterUseCase(this.unitRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         enterUseCaseOutput = new EnterUseCaseOutput();
 
@@ -138,7 +138,7 @@ public class UserEnterStepDefinition {
 
     @When("I enter the Timelog with same user ID again")
     public void i_enter_the_Timelog_with_same_user_ID_again() {
-        EnterUseCase enterUseCase = new EnterUseCase(this.unitRepository, this.logRepository);
+        EnterUseCase enterUseCase = new EnterUseCase(this.unitRepository);
         EnterUseCaseInput enterUseCaseInput = new EnterUseCaseInput();
         this.enterUseCaseOutput = new EnterUseCaseOutput();
 

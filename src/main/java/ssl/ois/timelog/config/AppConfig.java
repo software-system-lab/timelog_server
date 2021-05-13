@@ -12,7 +12,7 @@ import ssl.ois.timelog.adapter.repository.mysql.MysqlLogRepository;
 import ssl.ois.timelog.adapter.repository.mysql.MysqlUnitRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
-import ssl.ois.timelog.service.manager.AMSManager;
+import ssl.ois.timelog.service.manager.AccountManager;
 import ssl.ois.timelog.adapter.manager.DirectoryAMSManager;
 
 
@@ -37,7 +37,7 @@ public class AppConfig {
     private String amsPort;
 
     @Bean 
-    public AMSManager getAMSManager() {
+    public AccountManager getAMSManager() {
         return new DirectoryAMSManager(this.amsHost, this.amsPort);
     } 
 

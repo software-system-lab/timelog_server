@@ -3,7 +3,6 @@ package ssl.ois.timelog.service.team.dashboard;
 import ssl.ois.timelog.service.log.LogDTO;
 
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
 
 public interface TeamDashboardUseCaseOutput {
