@@ -18,7 +18,6 @@ import ssl.ois.timelog.service.user.belong.GetMemberOfUseCase;
 import ssl.ois.timelog.service.user.belong.GetMemberOfUseCaseInput;
 import ssl.ois.timelog.service.user.belong.GetMemberOfUseCaseOutput;
 import ssl.ois.timelog.service.exception.team.GetMemberOfErrorException;
-import ssl.ois.timelog.service.team.get.GetTeamUseCase;
 import ssl.ois.timelog.service.team.get.GetTeamUseCaseInput;
 import ssl.ois.timelog.service.team.get.GetTeamUseCaseOutput;
 import ssl.ois.timelog.service.exception.team.GetTeamErrorException;

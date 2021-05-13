@@ -31,4 +31,40 @@ public class RoleRestAdapter {
 
         return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals(Role.LEADER));
     }
+
+    @PostMapping("/member")
+    public ResponseEntity<Boolean> isMember(@RequestBody GetRoleUseCaseInput input){
+        GetRoleUseCaseOutput output = new GetRoleUseCaseOutput();
+        try{
+            getRoleUseCase.execute(input, output);
+        }catch(GetRoleErrorException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals(Role.MEMBER));
+    }
+
+    @PostMapping("/professor")
+    public ResponseEntity<Boolean> isProfessor(@RequestBody GetRoleUseCaseInput input){
+        GetRoleUseCaseOutput output = new GetRoleUseCaseOutput();
+        try{
+            getRoleUseCase.execute(input, output);
+        }catch(GetRoleErrorException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals(Role.PROFESSOR));
+    }
+
+    @PostMapping("/stakeholder")
+    public ResponseEntity<Boolean> isStakeHolder(@RequestBody GetRoleUseCaseInput input){
+        GetRoleUseCaseOutput output = new GetRoleUseCaseOutput();
+        try{
+            getRoleUseCase.execute(input, output);
+        }catch(GetRoleErrorException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals(Role.STAKEHOLDER));
+    }
 }

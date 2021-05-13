@@ -9,7 +9,6 @@ import ssl.ois.timelog.model.connect.UnitInterface;
 import ssl.ois.timelog.model.timebox.Timebox;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
-import ssl.ois.timelog.service.exception.team.DuplicateMemberException;
 import ssl.ois.timelog.service.exception.team.MemberNotInGroupException;
 
 public abstract class Unit implements UnitInterface {
@@ -94,14 +93,6 @@ public abstract class Unit implements UnitInterface {
     }
 
     public List<Timebox> getTimeboxList() throws UnsupportedOperationException{
-        throw new UnsupportedOperationException();
-    }
-
-    public void addMemberToTeam(UUID targetMember) throws UnsupportedOperationException, DuplicateMemberException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void deleteMemberFromTeam(UUID targetMember) throws UnsupportedOperationException, MemberNotInGroupException {
         throw new UnsupportedOperationException();
     }
 
