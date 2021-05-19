@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 import java.util.HashMap;
 import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.model.team.Role;
@@ -60,6 +61,32 @@ public class DirectoryAMSManager implements AccountManager {
             throw new AccountErrorException();
         } 
         return memberRoleMap;
+    }
+
+    //Get UUID From Name
+    //Returns UUID of Name
+    public UUID getTeamIdByTeamName(String teamName) throws AccountErrorException{
+        UUID id = null;
+        try {
+            final String requestAddress = this.url + "/team/get/uuid/user";
+            String result = this.restTemplate.postForObject(requestAddress, teamName, String.class);
+            String uid = result.replaceAll("^\"|\"$", "");
+            id = UUID.fromString(uid);
+        } catch (RestClientException e){
+            throw new AccountErrorException();
+        }
+        return id;
+    }
+
+    public String getNameById(String id) throws AccountErrorException{
+        String result;
+        try{
+            final String requestAddress = this.url + "/team/get/name";
+            result = this.restTemplate.postForObject(requestAddress, id, String.class);
+        }catch (RestClientException e){
+            throw new AccountErrorException();
+        }
+        return result;
     }
 
     //Get Team's Leader
