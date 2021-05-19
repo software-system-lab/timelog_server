@@ -23,6 +23,7 @@ import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOut
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
+import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
 
 @RestController
 @RequestMapping("/api/activity")
@@ -68,7 +69,7 @@ public class ActivityRestAdapter {
         input.setUnitIdList(requestBody.getUnitIdList());
         try {
             listActivityTypeUseCase.execute(input, output);
-        } catch (DatabaseErrorException e) {
+        } catch (DatabaseErrorException | GetActivityTypeErrorException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
