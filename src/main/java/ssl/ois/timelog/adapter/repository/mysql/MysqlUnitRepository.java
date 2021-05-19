@@ -87,7 +87,12 @@ public class MysqlUnitRepository implements UnitRepository {
             }
             if(this.isExistInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName()) &&
                     !user.getOperatedActivityType().getName().equals(user.getTargetActivityTypeName())) {
-                throw new DuplicateActivityTypeException();
+                    if(this.isDeletedInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName())){
+                        this.updateActivityTypeUserMapper(connection, user.getOperatedActivityType());
+                    }
+                    else{
+                        throw new DuplicateActivityTypeException();
+                    }
             }
             this.addActivityType(connection, user.getOperatedActivityType());
             this.updateActivityTypeUserMapper(connection, user.getOperatedActivityType());
