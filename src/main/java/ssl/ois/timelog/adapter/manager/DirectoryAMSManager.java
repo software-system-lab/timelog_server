@@ -49,7 +49,7 @@ public class DirectoryAMSManager implements AccountManager {
             final String requestAddress = this.url + "/team/get/members";
             List<String> result = this.restTemplate.postForObject(requestAddress, teamId, List.class);
             memberRoleMap.put(this.getLeader(teamId), Role.LEADER);
-
+            
             for(String uid :result){
                 uid = uid.replaceAll("^\"|\"$", "");
                 UUID userID = UUID.fromString(uid);
