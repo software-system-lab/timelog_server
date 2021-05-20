@@ -34,6 +34,7 @@ public class GetMemberOfUseCase {
             for(Map.Entry<UUID, String> teamID : teamIdList.entrySet()) {
                 UnitInterface team = this.unitRepository.findByUserID(teamID.getKey().toString());
                 if(team == null){
+                    System.out.println("TeamID - unitRepository.findByUserID");
                     Map<UUID,Role> memberRoleMap = this.accountManager.getTeamRoleRelation(teamID.getKey().toString());
                     team = new Team(teamID.getKey(),memberRoleMap);
                     this.unitRepository.save(team);

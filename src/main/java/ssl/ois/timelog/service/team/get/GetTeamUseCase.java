@@ -48,6 +48,7 @@ public class GetTeamUseCase {
             //--------------------------------------------------------------
 
             //Get UUID of members
+            System.out.println("TeamID getTeamIdByTeamName");
             Map<UUID, Role> teamMap = accountManager.getTeamRoleRelation(teamId.toString());
             
             
