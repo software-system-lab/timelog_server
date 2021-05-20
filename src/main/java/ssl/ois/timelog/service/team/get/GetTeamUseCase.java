@@ -37,24 +37,26 @@ public class GetTeamUseCase {
             UUID teamId = accountManager.getTeamIdByTeamName(input.getGroupname());
 
 
+            //--------------------------------------------------------------
+            List<String> result = restTemplate.postForObject(urlMember, input, List.class);
+
+            //Get Name of Member
+            for(int i = 0; i < result.size(); i++) {
+                System.out.println(result.get(i));
+            }
+            //--------------------------------------------------------------
+
             //Get UUID of members
             Map<UUID, Role> teamMap = accountManager.getTeamRoleRelation(teamId.toString());
             
             for(Map.Entry<UUID, Role> entry:teamMap.entrySet()){
                 if(entry.getValue().equals(Role.LEADER)){
+                    System.out.println(accountManager.getNameById("\""+entry.getKey().toString()+"\""));
                     output.setLeader(accountManager.getNameById("\""+entry.getKey().toString()+"\""), entry.getKey());
                 }
                 output.addMemberToList(accountManager.getNameById("\""+entry.getKey().toString()+"\""), entry.getKey());
             }
-            // List<String> result = restTemplate.postForObject(urlMember, input, List.class);
-
-            // //Get Name of Member
-            // for(int i = 0; i < result.size(); i++) {
-            //     String username = restTemplate.postForObject(urlGetName, result.get(i), String.class);
-            //     UUID userID = UUID.fromString(result.get(i).replaceAll("^\"|\"$", ""));
-
-            //     output.addMemberToList(username , userID);
-            // }
+            
 
             // //Get Leader 
             // String leaderUsername = restTemplate.postForObject(urlLeader, input, String.class);
