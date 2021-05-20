@@ -67,6 +67,7 @@ public class LoginAdapter {
         try {
             this.getTeamUseCase.execute(input, output);
         } catch (GetTeamErrorException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);

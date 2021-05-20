@@ -37,29 +37,28 @@ public class GetTeamUseCase {
             UUID teamId = accountManager.getTeamIdByTeamName(input.getGroupname());
 
 
-            //--------------------------------------------------------------
-            List<String> result = restTemplate.postForObject(urlMember, input, List.class);
+            // //--------------------------------------------------------------
+            // List<String> result = restTemplate.postForObject(urlMember, input, List.class);
 
-            //Get Name of Member
-            System.out.println("OK Template");
-            for(int i = 0; i < result.size(); i++) {
-                System.out.println(result.get(i));
-            }
-            //--------------------------------------------------------------
+            // //Get Name of Member
+            // for(int i = 0; i < result.size(); i++) {
+            //     System.out.println(result.get(i));
+            // }
+            // //--------------------------------------------------------------
 
             //Get UUID of members
-            System.out.println("TeamID getTeamIdByTeamName");
-            System.out.println(teamId.toString());
-            Map<UUID, Role> teamMap = accountManager.getTeamRoleRelation(teamId.toString());
+            Map<UUID, Role> teamMap = accountManager.getTeamRoleRelation(input.getGroupname());
+            for(Map.Entry<UUID, Role> entry:teamMap.entrySet()){
+            }
             
             
-            System.out.println("New Template");
             for(Map.Entry<UUID, Role> entry:teamMap.entrySet()){
                 if(entry.getValue().equals(Role.LEADER)){
-                    System.out.println(accountManager.getNameById("\""+entry.getKey().toString()+"\""));
-                    output.setLeader(accountManager.getNameById("\""+entry.getKey().toString()+"\""), entry.getKey());
+                    // output.setLeader(accountManager.getNameById("\""+entry.getKey().toString()+"\""), entry.getKey());
+                    output.setLeader(accountManager.getNameById(entry.getKey().toString()), entry.getKey());
+
                 }
-                output.addMemberToList(accountManager.getNameById("\""+entry.getKey().toString()+"\""), entry.getKey());
+                output.addMemberToList(accountManager.getNameById(entry.getKey().toString()), entry.getKey());
             }
             
 

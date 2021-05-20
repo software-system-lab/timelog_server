@@ -70,6 +70,7 @@ public class ActivityRestAdapter {
         try {
             listActivityTypeUseCase.execute(input, output);
         } catch (DatabaseErrorException | GetActivityTypeErrorException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);

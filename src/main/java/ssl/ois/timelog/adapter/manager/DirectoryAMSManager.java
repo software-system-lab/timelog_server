@@ -36,6 +36,7 @@ public class DirectoryAMSManager implements AccountManager {
                 teamList.put(UUID.fromString(uid),each.get("name"));
             }
         } catch (RestClientException e) {
+            e.printStackTrace();
             throw new AccountErrorException();
         } 
         return teamList;
@@ -43,17 +44,17 @@ public class DirectoryAMSManager implements AccountManager {
 
     //Get Team Member and Role
     //Returns Map of Member(UUID) as index, Role(Role) as value 
-    public Map<UUID, Role> getTeamRoleRelation(String teamId) throws AccountErrorException {
+    public Map<UUID, Role> getTeamRoleRelation(String teamName) throws AccountErrorException {
         Map<UUID, Role> memberRoleMap = new HashMap<>();
         try {
             final String requestAddress = this.url + "/team/get/members";
-            List<String> result = this.restTemplate.postForObject(requestAddress, teamId, List.class);
-            memberRoleMap.put(this.getLeader(teamId), Role.LEADER);
-            
+            List<String> result = this.restTemplate.postForObject(requestAddress, teamName, List.class);
+            memberRoleMap.put(this.getLeader(teamName), Role.LEADER);
+
             for(String uid :result){
                 uid = uid.replaceAll("^\"|\"$", "");
                 UUID userID = UUID.fromString(uid);
-                if(memberRoleMap.get(userID)!=null){
+                if(memberRoleMap.get(userID)==null){
                     memberRoleMap.put(userID, Role.MEMBER);
                 }
             }
@@ -91,12 +92,14 @@ public class DirectoryAMSManager implements AccountManager {
 
     //Get Team's Leader
     //Returns UUID of Leader
-    private UUID getLeader(String teamId) {
+    private UUID getLeader(String teamName) {
         UUID leaderID = null;
+        
         try {
             final String requestAddress = this.url + "/team/get/leader";
-            String result = this.restTemplate.postForObject(requestAddress, teamId, String.class);
-            leaderID = this.getUidFromName(result);
+            String result = this.restTemplate.postForObject(requestAddress, teamName, String.class);
+
+            leaderID = this.getUidFromName(result.replace("\"", ""));
         } catch (RestClientException e) {
             //throw exception
         } 
