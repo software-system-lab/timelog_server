@@ -42,9 +42,9 @@ public class GetTeamUseCase {
             
             for(Map.Entry<UUID, Role> entry:teamMap.entrySet()){
                 if(entry.getValue().equals(Role.LEADER)){
-                    output.setLeader(accountManager.getNameById("\'"+entry.getKey().toString()+"\'"), entry.getKey());
+                    output.setLeader(accountManager.getNameById("\""+entry.getKey().toString()+"\""), entry.getKey());
                 }
-                output.addMemberToList(accountManager.getNameById("\'"+entry.getKey().toString()+"\'"), entry.getKey());
+                output.addMemberToList(accountManager.getNameById("\""+entry.getKey().toString()+"\""), entry.getKey());
             }
             // List<String> result = restTemplate.postForObject(urlMember, input, List.class);
 
