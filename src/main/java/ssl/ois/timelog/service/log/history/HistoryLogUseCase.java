@@ -66,7 +66,7 @@ public class HistoryLogUseCase {
                 logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
                 logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
                 if(teamMapperIdMap.containsKey(log.getActivityUserMapperID())){
-                    logDTO.setActivityTypeName(teamMapperIdMap.get(log.getActivityUserMapperID()));
+                    logDTO.setTeamName(teamMapperIdMap.get(log.getActivityUserMapperID()));
                 }
                 logDTOList.add(logDTO);
             }
@@ -81,7 +81,7 @@ public class HistoryLogUseCase {
                         logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
                         logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
                         if(teamMapperIdMap.containsKey(log.getActivityUserMapperID())){
-                            logDTO.setActivityTypeName(teamMapperIdMap.get(log.getActivityUserMapperID()));
+                            logDTO.setTeamName(teamMapperIdMap.get(log.getActivityUserMapperID()));
                         }
                         logDTOList.add(logDTO);
                     }
