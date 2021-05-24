@@ -5,8 +5,9 @@ import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
+
+import java.util.List;
 import java.util.Map;
-import ssl.ois.timelog.model.team.Role;
 import java.util.UUID;
 
 public interface UnitRepository {
@@ -17,6 +18,9 @@ public interface UnitRepository {
     void removeActivityType(UnitInterface user) throws DatabaseErrorException, ActivityTypeNotExistException;
     UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException;    
     default void addRoleRelation(String teamID, Map<UUID, Role> memberRoleMap) throws DatabaseErrorException {
+    }
+    default List<UUID> getMapperIDListByUnitID(String unitID) throws DatabaseErrorException {
+        return null;
     }
     Role getRole(String userID, String teamID) throws DatabaseErrorException;
 }

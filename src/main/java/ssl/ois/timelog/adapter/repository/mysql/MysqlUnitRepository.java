@@ -164,6 +164,33 @@ public class MysqlUnitRepository implements UnitRepository {
         return user;
     }
 
+    @Override
+    public List<UUID> getMapperIDListByUnitID(String unitID) throws DatabaseErrorException{
+        List<UUID> mapperIDList = new ArrayList<>();
+        Connection connection = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement(
+                "SELECT `id` FROM `activity_user_mapper` WHERE activity_user_mapper.unit_id = ?" +
+                " AND activity_user_mapper.is_deleted = 0 "
+            )) {
+                stmt.setString(1, unitID);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while(rs.next()){
+                        UUID activityUserMapperID = UUID.fromString(rs.getString("id"));
+                        mapperIDList.add(activityUserMapperID);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+        return mapperIDList;
+    }
+
     private boolean isExistInMapper(Connection connection, String userID, String activityTypeName) throws SQLException {
         try (PreparedStatement stmt = connection.prepareStatement(
             "SELECT COUNT(*) FROM `activity_user_mapper` " +

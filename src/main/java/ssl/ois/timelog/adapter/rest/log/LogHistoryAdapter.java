@@ -8,27 +8,34 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ssl.ois.timelog.adapter.presenter.log.history.LogHistoryPresenter;
 import ssl.ois.timelog.adapter.view.model.log.history.LogHistoryViewModel;
+import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCase;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseInput;
+import ssl.ois.timelog.service.manager.AccountManager;
 import ssl.ois.timelog.service.repository.log.LogRepository;
+import ssl.ois.timelog.service.repository.user.UnitRepository;
 
 @RestController
 @RequestMapping("/api/log/history")
 public class LogHistoryAdapter {
     @Autowired
     private LogRepository logRepository;
+    @Autowired
+    private UnitRepository unitRepository;
+    @Autowired
+    private AccountManager accountManager;
 
     @PostMapping(value = "")
     public ResponseEntity<LogHistoryViewModel> history(@RequestBody HistoryLogUseCaseInput input) {
-        HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository);
+        HistoryLogUseCase useCase = new HistoryLogUseCase(logRepository, unitRepository, accountManager);
         LogHistoryPresenter output = new LogHistoryPresenter();
 
         try {
             useCase.execute(input, output);
         } catch (ParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LogHistoryViewModel());
-        } catch (DatabaseErrorException e) {
+        } catch (DatabaseErrorException | AccountErrorException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LogHistoryViewModel());
         }
         return ResponseEntity.status(HttpStatus.OK).body(output.build());

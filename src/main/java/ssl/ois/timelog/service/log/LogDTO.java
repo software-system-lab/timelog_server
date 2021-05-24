@@ -1,13 +1,14 @@
 package ssl.ois.timelog.service.log;
 
 public class LogDTO {
-    private String id;
-    private String userID;
+    private String id;                          //LogID
+    private String userID;                      //UserID
     private String title;
-    private String startTime;
+    private String startTime;                   
     private String endTime;
     private String description;
     private String activityTypeName;
+    private String teamName = "Personal";
 
     public String getId() {
         return id;
@@ -65,4 +66,11 @@ public class LogDTO {
         this.activityTypeName = activityTypeName;
     }
 
+    public String getTeamName(){
+        return teamName;
+    }
+    
+    public void setTeamName(String teamName){
+        this.teamName = teamName;
+    }
 }
