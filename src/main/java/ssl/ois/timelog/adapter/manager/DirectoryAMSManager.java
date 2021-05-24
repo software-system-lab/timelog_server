@@ -84,6 +84,7 @@ public class DirectoryAMSManager implements AccountManager {
         try{
             final String requestAddress = this.url + "/team/get/name";
             result = this.restTemplate.postForObject(requestAddress, id, String.class);
+            result.replaceAll("^\"|\"$", "");
         }catch (RestClientException e){
             throw new AccountErrorException();
         }
