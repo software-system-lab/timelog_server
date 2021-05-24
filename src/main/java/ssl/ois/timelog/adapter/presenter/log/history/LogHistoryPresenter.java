@@ -15,6 +15,7 @@ public class LogHistoryPresenter extends HistoryLogUseCaseOutputBound {
             logItem.setTitle(log.getTitle());
             logItem.setStartTime(log.getStartTime());
             logItem.setEndTime(log.getEndTime());
+            logItem.setTeamName(log.getTeamName());
             viewModel.addItem(logItem);
         }
         return viewModel;
