@@ -32,8 +32,8 @@ public class DirectoryAMSManager implements AccountManager {
             List<LinkedHashMap<String,String>> result = this.restTemplate.postForObject(requestAddress, username, List.class);
             for(LinkedHashMap<String,String> each : result) {
                 String uid = each.get("id").replaceAll("^\"|\"$", "");
-
-                teamList.put(UUID.fromString(uid),each.get("name"));
+                String name = each.get("name").replaceAll("^\"|\"$", "");
+                teamList.put(UUID.fromString(uid),name);
             }
         } catch (RestClientException e) {
             e.printStackTrace();
