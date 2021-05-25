@@ -25,26 +25,9 @@ public class GetTeamUseCase {
 
     public void execute(GetTeamUseCaseInput input, GetTeamUseCaseOutput output)throws GetTeamErrorException {
         try {
-            final String urlMember = "http://localhost:8080/team/get/members";
-            final String urlGetName = "http://localhost:8080/team/get/name";
-            final String urlLeader = "http://localhost:8080/team/get/leader";
-            final String urlGetUid = "http://localhost:8080/team/get/uuid/user";
-
-
-            
             RestTemplate restTemplate = new RestTemplate();
 
             UUID teamId = accountManager.getTeamIdByTeamName(input.getGroupname());
-
-
-            // //--------------------------------------------------------------
-            // List<String> result = restTemplate.postForObject(urlMember, input, List.class);
-
-            // //Get Name of Member
-            // for(int i = 0; i < result.size(); i++) {
-            //     System.out.println(result.get(i));
-            // }
-            // //--------------------------------------------------------------
 
             //Get UUID of members
             Map<UUID, Role> teamMap = accountManager.getTeamRoleRelation(input.getGroupname());
@@ -54,24 +37,12 @@ public class GetTeamUseCase {
             
             for(Map.Entry<UUID, Role> entry:teamMap.entrySet()){
                 if(entry.getValue().equals(Role.LEADER)){
-                    // output.setLeader(accountManager.getNameById("\""+entry.getKey().toString()+"\""), entry.getKey());
                     output.setLeader(accountManager.getNameById(entry.getKey().toString()), entry.getKey());
 
                 }
                 output.addMemberToList(accountManager.getNameById(entry.getKey().toString()), entry.getKey());
             }
             
-
-            // //Get Leader 
-            // String leaderUsername = restTemplate.postForObject(urlLeader, input, String.class);
-            // leaderUsername = leaderUsername.replaceAll("^\"|\"$", "");
-
-            // //Get UUID Of Leader
-            // String leaderUid = restTemplate.postForObject(urlGetUid, leaderUsername, String.class);
-            // leaderUid = leaderUid.replaceAll("^\"|\"$", "");
-
-            // UUID leaderID = UUID.fromString(leaderUid);
-            // output.setLeader(leaderUsername, leaderID);
         } catch (AccountErrorException e) {
             throw new GetTeamErrorException();
         }
