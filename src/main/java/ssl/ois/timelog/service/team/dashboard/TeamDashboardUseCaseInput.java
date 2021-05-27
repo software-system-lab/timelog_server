@@ -1,8 +1,6 @@
 package ssl.ois.timelog.service.team.dashboard;
 import java.util.List;
 import java.util.UUID;
-import java.util.ArrayList;
-import javafx.util.Pair; 
 import ssl.ois.timelog.service.team.Person;
 
 
