@@ -35,10 +35,12 @@ public class AppConfig {
     private String amsHost;
     @Value("${ams.port}")
     private String amsPort;
+    @Value("${ams.protocol}")
+    private String amsProtocol;
 
     @Bean 
     public AccountManager getAMSManager() {
-        return new DirectoryAMSManager(this.amsHost, this.amsPort);
+        return new DirectoryAMSManager(this.amsProtocol,this.amsHost, this.amsPort);
     } 
 
     @Bean
