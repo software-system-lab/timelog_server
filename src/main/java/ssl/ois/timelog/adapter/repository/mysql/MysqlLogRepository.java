@@ -68,7 +68,7 @@ public class MysqlLogRepository implements LogRepository {
                 stmt.setString(5, log.getActivityUserMapperID().toString());
                 stmt.setString(6, targetID);
                 stmt.setString(7, log.getUserID().toString());
-                
+
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {

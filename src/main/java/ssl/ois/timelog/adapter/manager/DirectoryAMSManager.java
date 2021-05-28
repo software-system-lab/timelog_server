@@ -25,10 +25,10 @@ public class DirectoryAMSManager implements AccountManager {
 
     //Get Belonging Teams
     //Returns Map of Team(UUID) as Index, TeamName(String) as value 
-    public Map<UUID,String> getMemberOf(String username)throws AccountErrorException {
+    public Map<UUID,String> getBelongingTeams(String username)throws AccountErrorException {
         Map<UUID,String> teamList = new HashMap<>();
         try {
-            final String requestAddress = this.url + "/team/get/memberOf";
+            final String requestAddress = this.url + "/team/get/belonging-teams";
             List<LinkedHashMap<String,String>> result = this.restTemplate.postForObject(requestAddress, username, List.class);
             for(LinkedHashMap<String,String> each : result) {
                 String uid = each.get("id").replaceAll("^\"|\"$", "");
@@ -37,7 +37,7 @@ public class DirectoryAMSManager implements AccountManager {
             }
         } catch (RestClientException e) {
             e.printStackTrace();
-            throw new AccountErrorException();
+            throw new AccountErrorException(e.toString());
         } 
         return teamList;
     }
@@ -59,7 +59,7 @@ public class DirectoryAMSManager implements AccountManager {
                 }
             }
         } catch (RestClientException e) {
-            throw new AccountErrorException();
+            throw new AccountErrorException(e.toString());
         } 
         return memberRoleMap;
     }
@@ -74,7 +74,7 @@ public class DirectoryAMSManager implements AccountManager {
             String uid = result.replaceAll("^\"|\"$", "");
             id = UUID.fromString(uid);
         } catch (RestClientException e){
-            throw new AccountErrorException();
+            throw new AccountErrorException(e.toString());
         }
         return id;
     }
@@ -85,7 +85,7 @@ public class DirectoryAMSManager implements AccountManager {
             final String requestAddress = this.url + "/team/get/name";
             result = this.restTemplate.postForObject(requestAddress, id, String.class).replaceAll("^\"|\"$", "");
         }catch (RestClientException e){
-            throw new AccountErrorException();
+            throw new AccountErrorException(e.toString());
         }
         return result;
     }
@@ -99,7 +99,7 @@ public class DirectoryAMSManager implements AccountManager {
             final String requestAddress = this.url + "/team/get/leader";
             String result = this.restTemplate.postForObject(requestAddress, teamName, String.class);
 
-            leaderID = this.getUidFromName(result.replace("\"", ""));
+            leaderID = this.getUserIdByUserName(result.replace("\"", ""));
         } catch (RestClientException e) {
             //throw exception
         } 
@@ -108,7 +108,7 @@ public class DirectoryAMSManager implements AccountManager {
 
     //Get User's UUID
     //Returns UUID of the user
-    private UUID getUidFromName(String cn) {
+    private UUID getUserIdByUserName(String cn) {
         UUID id = null;
         try {
             final String requestAddress = this.url + "/team/get/uuid/user";

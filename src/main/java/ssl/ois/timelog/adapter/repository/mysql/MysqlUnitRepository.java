@@ -128,8 +128,8 @@ public class MysqlUnitRepository implements UnitRepository {
         try {
             connection = this.mysqlDriverAdapter.getConnection();
             
-            for(Map.Entry<UUID, Role> entry : memberRoleMap.entrySet()) {
-                this.insertRoleRelation(connection, teamID, entry.getKey().toString(), entry.getValue().name());
+            for(Map.Entry<UUID, Role> user : memberRoleMap.entrySet()) {
+                this.insertRoleRelation(connection, teamID, user.getKey().toString(), user.getValue().name());
             }
         } catch (SQLException e) {
             throw new DatabaseErrorException();
@@ -139,7 +139,7 @@ public class MysqlUnitRepository implements UnitRepository {
     }
 
     @Override
-    public UnitInterface findByUserID(String userID) throws DatabaseErrorException{
+    public UnitInterface findByUnitID(String userID) throws DatabaseErrorException{
         Connection connection = null;
         Unit user = null;
         try {
@@ -366,22 +366,7 @@ public class MysqlUnitRepository implements UnitRepository {
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     rs.next();
-                    switch(rs.getInt("role")){
-                        case 1:
-                            role = Role.MEMBER;
-                            break;
-                        case 2:
-                            role = Role.LEADER;
-                            break;
-                        case 3:
-                            role = Role.PROFESSOR;
-                            break;
-                        case 4:
-                            role = Role.STAKEHOLDER;
-                            break;
-                        default:
-                            break;
-                    }
+                    role = rs.getInt("role");
                 }
             }
 

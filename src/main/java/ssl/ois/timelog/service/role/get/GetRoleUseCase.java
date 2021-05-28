@@ -20,7 +20,7 @@ public class GetRoleUseCase {
             Role role = this.unitRepository.getRole(input.getUserID().toString(), input.getTeamID().toString());
             output.setRole(role);
         } catch (DatabaseErrorException e) {
-            throw new GetRoleErrorException();
+            throw new GetRoleErrorException(e.toString());
         }
         
     }
