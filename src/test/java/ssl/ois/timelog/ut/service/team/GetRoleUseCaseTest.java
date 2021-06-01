@@ -81,7 +81,7 @@ public class GetRoleUseCaseTest {
             fail(e.getMessage());
         }
 
-        assertEquals(Role.LEADER, output.getRole());
+        assertEquals(Role.LEADER.toString(), output.getRole());
     }
 
     @Test
@@ -95,7 +95,7 @@ public class GetRoleUseCaseTest {
             fail(e.getMessage());
         }
 
-        assertEquals(Role.MEMBER, output.getRole());
+        assertEquals(Role.MEMBER.toString(), output.getRole());
     }
 
     @Test
@@ -109,7 +109,7 @@ public class GetRoleUseCaseTest {
             fail(e.getMessage());
         }
 
-        assertEquals(Role.PROFESSOR, output.getRole());
+        assertEquals(Role.PROFESSOR.toString(), output.getRole());
     }
 
     @Test
@@ -123,6 +123,6 @@ public class GetRoleUseCaseTest {
             fail(e.getMessage());
         }
 
-        assertEquals(Role.STAKEHOLDER, output.getRole());
+        assertEquals(Role.STAKEHOLDER.toString(), output.getRole());
     }
 }
