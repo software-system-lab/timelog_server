@@ -8,7 +8,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUnitRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
 import ssl.ois.timelog.service.timebox.add.AddTimeboxUseCase;
@@ -19,7 +19,7 @@ public class TimeboxStepDefinition {
 
     private UnitRepository unitRepository;
     private String userID;
-    private UnitInterface user;
+    private Unit user;
 
     @Before
     public void setup() {

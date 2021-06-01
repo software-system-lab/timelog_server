@@ -1,7 +1,7 @@
 package ssl.ois.timelog.model.team;
 
 public enum Role {
-    MEMBER = 1,
+    MEMBER,
     LEADER,
     PROFESSOR,
     STAKEHOLDER

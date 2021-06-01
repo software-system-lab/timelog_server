@@ -1,7 +1,7 @@
 package ssl.ois.timelog.service.user.enter;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
@@ -28,7 +28,7 @@ public class EnterUseCase {
             InitUserDataErrorException {
         try {
             String userID = input.getUserID();
-            UnitInterface user = this.unitRepository.findByUserID(userID);
+            Unit user = this.unitRepository.findByUnitID(userID);
             if (user == null) {
                 // First time login to Timelog
     
@@ -49,7 +49,7 @@ public class EnterUseCase {
                 user.addActivityType(labProject);
                 this.unitRepository.addActivityType(user);
 
-                output.setActivityTypeList(this.unitRepository.findByUserID(userID).getActivityTypeList());
+                output.setActivityTypeList(this.unitRepository.findByUnitID(userID).getActivityTypeList());
                 output.setLogList(new ArrayList<>());
             } else {
                 output.setActivityTypeList(user.getActivityTypeList());

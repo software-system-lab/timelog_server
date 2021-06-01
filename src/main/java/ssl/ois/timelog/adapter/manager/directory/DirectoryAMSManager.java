@@ -1,4 +1,4 @@
-package ssl.ois.timelog.adapter.manager;
+package ssl.ois.timelog.adapter.manager.directory;
 import ssl.ois.timelog.service.manager.AccountManager;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -79,6 +79,7 @@ public class DirectoryAMSManager implements AccountManager {
         return id;
     }
 
+    //get any name by any id
     public String getNameById(String id) throws AccountErrorException{
         String result;
         try{

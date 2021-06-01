@@ -2,8 +2,7 @@ package ssl.ois.timelog.service.activity.type.list;
 
 import org.springframework.stereotype.Service;
 
-import org.springframework.web.client.RestTemplate;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
@@ -24,8 +23,7 @@ public class ListActivityTypeUseCase {
     public void execute(ListActivityTypeUseCaseInput input, ListActivityTypeUseCaseOutput output)
             throws DatabaseErrorException, GetActivityTypeErrorException {
         for(int i = 0 ; i < input.getUnitIdList().size(); i++){
-            UnitInterface user = this.unitRepository.findByUserID(input.getUnitIdList().get(i));
-            RestTemplate restTemplate = new RestTemplate();
+            Unit user = this.unitRepository.findByUnitID(input.getUnitIdList().get(i));
             String userName = "";
             try{
                 userName = amsManager.getNameById(input.getUnitIdList().get(i));

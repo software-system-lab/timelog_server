@@ -6,9 +6,9 @@ import java.util.UUID;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.timebox.Timebox;
-import ssl.ois.timelog.model.unit.Unit;
+import ssl.ois.timelog.model.unit.AbstractUnit;
 
-public class User extends Unit{
+public class User extends AbstractUnit{
 
     private List<Timebox> timeboxList;
 

@@ -14,7 +14,7 @@ import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUnitRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
@@ -64,7 +64,7 @@ public class UserEnterStepDefinition {
 
         // verify that the activity type is actually stored
         try {
-            List<ActivityType> activityTypeListFromRepo = this.unitRepository.findByUserID(this.userID).getActivityTypeList();
+            List<ActivityType> activityTypeListFromRepo = this.unitRepository.findByUnitID(this.userID).getActivityTypeList();
             assertEquals(3, activityTypeListFromRepo.size());
 
             boolean containsType1 = false;
@@ -117,7 +117,7 @@ public class UserEnterStepDefinition {
     public void there_is_an_activity_type_in_my_activity_type_list(String activityTypeName) {
         ActivityType activityType = new ActivityType(activityTypeName, true, false);
         try {
-            UnitInterface user = this.unitRepository.findByUserID(this.userID);
+            Unit user = this.unitRepository.findByUnitID(this.userID);
             user.addActivityType(activityType);
             this.unitRepository.addActivityType(user);
         } catch (Exception e) {

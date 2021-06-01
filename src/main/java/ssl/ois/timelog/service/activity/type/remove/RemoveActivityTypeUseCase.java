@@ -2,12 +2,11 @@ package ssl.ois.timelog.service.activity.type.remove;
 
 import org.springframework.stereotype.Service;
 
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
-import java.util.UUID;
 
 @Service
 public class RemoveActivityTypeUseCase {
@@ -20,8 +19,7 @@ public class RemoveActivityTypeUseCase {
 
     public void execute(RemoveActivityTypeUseCaseInput input, RemoveActivityTypeUseCaseOutput output)
             throws DatabaseErrorException, ActivityTypeNotExistException, DuplicateActivityTypeException {
-        UnitInterface user = this.unitRepository.findByUserID(input.getUserID());
-        UUID activityUserMapperID = this.unitRepository.findActivityUserMapperID(input.getUserID(),input.getActivityTypeName());
+        Unit user = this.unitRepository.findByUnitID(input.getUserID());
 
         user.removeActivityType(input.getActivityTypeName());
 

@@ -46,10 +46,10 @@ public class HistoryLogUseCase {
         Map<UUID, String> teamMapperIdMap = new HashMap<>();
 
         //TeamID/TeamName
-        Map<UUID, String> belongTeams = accountManager.getMemberOf(accountManager.getNameById(input.getUserID()));
+        Map<UUID, String> belongTeams = accountManager.getBelongingTeams(accountManager.getNameById(input.getUserID()));
 
         for(Map.Entry<UUID, String> entry: belongTeams.entrySet()){
-            for(UUID id : unitRepository.getMapperIDListByUnitID(entry.getKey().toString())){
+            for(UUID id : unitRepository.getActivityMapperIDListByUnitID(entry.getKey().toString())){
                 teamMapperIdMap.put(id, entry.getValue());
             }
         }

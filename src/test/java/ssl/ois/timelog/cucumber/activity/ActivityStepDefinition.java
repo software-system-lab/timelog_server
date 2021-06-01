@@ -10,7 +10,7 @@ import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUnitRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseOutput;
@@ -30,7 +30,7 @@ import io.cucumber.java.en.Then;
 public class ActivityStepDefinition {
 
     private UnitRepository unitRepository;
-    private UnitInterface user;
+    private Unit user;
     private String userID;
     private String activityTypeName;
     private boolean errorOccurred;
@@ -81,7 +81,7 @@ public class ActivityStepDefinition {
     public void is_in_my_activity_type_list(String activityTypeName) {
         try {
             boolean found = false;
-            for (ActivityType activityType: this.unitRepository.findByUserID(this.userID).getActivityTypeList()) {
+            for (ActivityType activityType: this.unitRepository.findByUnitID(this.userID).getActivityTypeList()) {
                 if(activityType.getName().equals(activityTypeName)) {
                     found = true;
                 }

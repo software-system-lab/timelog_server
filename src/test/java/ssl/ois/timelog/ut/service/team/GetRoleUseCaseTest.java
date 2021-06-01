@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ssl.ois.timelog.adapter.repository.memory.MemoryUnitRepository;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.team.Team;
 import ssl.ois.timelog.model.user.User;
@@ -28,9 +28,9 @@ public class GetRoleUseCaseTest {
     private GetRoleUseCaseInput input;
     private GetRoleUseCaseOutput output;
     private GetRoleUseCase getRoleUseCase;
-    private Map<String, UnitInterface> users;
+    private Map<String, Unit> users;
     private Map<UUID, Role> memberRoleMap;
-    private List<UnitInterface> teams;
+    private List<Unit> teams;
     private UUID memberID;              //8e0f3043-85d7-4c7b-9ac9-cfb1149270b9
     private UUID leaderID;              //5a39fabf-f969-4dfb-8878-f1b1bbe7188b
     private UUID professorID;           //7be599c9-0cb1-42f6-9ec3-95bfc446c42e

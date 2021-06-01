@@ -5,14 +5,15 @@ import java.util.Map;
 import java.util.UUID;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.unit.Unit;
+import ssl.ois.timelog.model.connect.Unit;
+import ssl.ois.timelog.model.unit.AbstractUnit;
 
 
-public class Team extends Unit {
+public class Team extends AbstractUnit {
     private Map<UUID, Role> memberRoleMap;
 
     public Team(UUID id, Map<UUID, Role> memberRoleMap) {
-        super(id);        
+        super(id);
         this.memberRoleMap = memberRoleMap;
     }
 

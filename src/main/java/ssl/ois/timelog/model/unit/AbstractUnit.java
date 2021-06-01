@@ -2,28 +2,29 @@ package ssl.ois.timelog.model.unit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
+import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.timebox.Timebox;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
-import ssl.ois.timelog.service.exception.team.MemberNotInGroupException;
 
-public abstract class Unit implements UnitInterface {
+public abstract class AbstractUnit implements Unit {
 
     private UUID id;
     private List<ActivityType> activityTypeList;
     private ActivityType operatedActivityType;
     private String targetActivityName;
 
-    protected Unit(UUID id) {
+    protected AbstractUnit(UUID id) {
         this.id = id;
         this.activityTypeList = new ArrayList<>();
     }
 
-    protected Unit(UUID id, List<ActivityType> activityTypeList) {
+    protected AbstractUnit(UUID id, List<ActivityType> activityTypeList) {
         this.id = id;
         this.activityTypeList = activityTypeList;
     }
@@ -96,7 +97,7 @@ public abstract class Unit implements UnitInterface {
         throw new UnsupportedOperationException();
     }
 
-    public List<UUID>  getMemberTeamList(UUID targetMember) throws UnsupportedOperationException, MemberNotInGroupException {
+    public Map<UUID, Role> getMemberRoleMap() throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import ssl.ois.timelog.service.exception.team.GetMemberOfErrorException;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.team.Team;
 import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
@@ -30,9 +30,9 @@ public class GetMemberOfUseCase {
 
     public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException,InitTeamDataErrorException {
         try{
-            Map<UUID,String> teamIdList = this.accountManager.getMemberOf(input.getUsername());
+            Map<UUID,String> teamIdList = this.accountManager.getBelongingTeams(input.getUsername());
             for(Map.Entry<UUID, String> teamID : teamIdList.entrySet()) {
-                UnitInterface team = this.unitRepository.findByUserID(teamID.getKey().toString());
+                Unit team = this.unitRepository.findByUnitID(teamID.getKey().toString());
                 if(team == null){
                     Map<UUID,Role> memberRoleMap = this.accountManager.getTeamRoleRelation(teamID.getValue());
                     team = new Team(teamID.getKey(),memberRoleMap);

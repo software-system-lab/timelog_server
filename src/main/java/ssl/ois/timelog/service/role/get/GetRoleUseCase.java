@@ -4,7 +4,7 @@ import ssl.ois.timelog.service.repository.user.UnitRepository;
 
 import org.springframework.stereotype.Service;
 
-import ssl.ois.timelog.model.team.Role;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 
 @Service
@@ -16,12 +16,26 @@ public class GetRoleUseCase {
     }
 
     public void execute(GetRoleUseCaseInput input, GetRoleUseCaseOutput output) throws GetRoleErrorException{
+
         try{
-            Role role = this.unitRepository.getRole(input.getUserID().toString(), input.getTeamID().toString());
-            output.setRole(role);
-        } catch (DatabaseErrorException e) {
+            Unit team = unitRepository.findByUnitID(input.getTeamID().toString());
+            if(team.getMemberRoleMap().get(input.getUserID()) == null){
+                throw new GetRoleErrorException("User is not in the Team!");
+            }
+            output.setRole(team.getMemberRoleMap().get(input.getUserID()));
+        } catch (DatabaseErrorException e){
             throw new GetRoleErrorException(e.toString());
         }
+
+        // try{
+        //     //getmap
+        //     //search map
+        //     //get role
+        //     Role role = this.unitRepository.getRole(input.getUserID().toString(), input.getTeamID().toString());
+        //     output.setRole(role);
+        // } catch (DatabaseErrorException e) {
+        //     throw new GetRoleErrorException(e.toString());
+        // }
         
     }
 }

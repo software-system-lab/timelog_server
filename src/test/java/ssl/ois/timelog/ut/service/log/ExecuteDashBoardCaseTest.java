@@ -14,7 +14,7 @@ import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.history.*;
 import ssl.ois.timelog.service.manager.AccountManager;
-import ssl.ois.timelog.adapter.manager.DirectoryAMSManager;
+import ssl.ois.timelog.adapter.manager.directory.DirectoryAMSManager;
 import ssl.ois.timelog.adapter.presenter.log.history.LogHistoryPresenter;
 import java.util.ArrayList;
 import java.util.List;

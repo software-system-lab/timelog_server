@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,9 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.team.Role;
-import ssl.ois.timelog.model.unit.Unit;
+import ssl.ois.timelog.model.team.Team;
+import ssl.ois.timelog.model.unit.AbstractUnit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
@@ -28,12 +30,9 @@ public class MysqlUnitRepository implements UnitRepository {
     private MysqlDriverAdapter mysqlDriverAdapter;
 
     @Override
-    public void save(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException,
+    public void save(Unit user) throws DatabaseErrorException, DuplicateActivityTypeException,
             ActivityTypeNotExistException {
-        Connection connection = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()){
             try (PreparedStatement stmt = connection.prepareStatement(
                 "INSERT IGNORE INTO `unit`(`id`) VALUES (?)"
             )) {
@@ -44,17 +43,12 @@ public class MysqlUnitRepository implements UnitRepository {
 
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
     }
 
     @Override
-    public void addActivityType(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException{
-        Connection connection = null;
-
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
+    public void addActivityType(Unit user) throws DatabaseErrorException, DuplicateActivityTypeException{
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()){
 
             if(this.isExistInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName())) {
                 if(this.isDeletedInMapper(connection, user.getID().toString(), user.getOperatedActivityType().getName())){
@@ -71,17 +65,12 @@ public class MysqlUnitRepository implements UnitRepository {
 
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
     }
 
     @Override
-    public void editActivityType(UnitInterface user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
-        Connection connection = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-
+    public void editActivityType(Unit user) throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()){
             if(!this.isExistInMapper(connection, user.getID().toString(), user.getTargetActivityTypeName())) {
                 throw new ActivityTypeNotExistException(user.getOperatedActivityType().getName());
             }
@@ -99,77 +88,62 @@ public class MysqlUnitRepository implements UnitRepository {
 
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
     }
 
     @Override
-    public void removeActivityType(UnitInterface user) throws DatabaseErrorException, ActivityTypeNotExistException {
-        Connection connection = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-
+    public void removeActivityType(Unit user) throws DatabaseErrorException, ActivityTypeNotExistException {
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()){
             if(!this.isExistInMapper(connection, user.getID().toString(), user.getTargetActivityTypeName())) {
                 throw new ActivityTypeNotExistException(user.getTargetActivityTypeName());
             }
             this.removeActivityTypeUserMapper(connection, user.getID().toString(), user.getTargetActivityTypeName());
-
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
     }
 
     @Override
     public void addRoleRelation(String teamID, Map<UUID,Role> memberRoleMap) throws DatabaseErrorException {
-        Connection connection = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-            
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()){
             for(Map.Entry<UUID, Role> user : memberRoleMap.entrySet()) {
                 this.insertRoleRelation(connection, teamID, user.getKey().toString(), user.getValue().name());
             }
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
     }
 
     @Override
-    public UnitInterface findByUnitID(String userID) throws DatabaseErrorException{
-        Connection connection = null;
-        Unit user = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-
+    public Unit findByUnitID(String unitID) throws DatabaseErrorException{
+        Unit unit = null;
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()){
             try (PreparedStatement stmt = connection.prepareStatement(
                 "SELECT * FROM `unit` WHERE `id` = ?"
             )) {
-                stmt.setString(1, userID);
+                stmt.setString(1, unitID);
 
-                try (ResultSet rs = stmt.executeQuery()) {
+                try (ResultSet rs = stmt.executeQuery()){
                     if(rs.next()) {
-                        user = new User(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, userID));
+                        if(!getMemberRoleOfTeam(connection, unitID).isEmpty()){
+                            unit = new Team(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, unitID), getMemberRoleOfTeam(connection, unitID));
+                        }
+                        else{
+                            unit = new User(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, unitID));
+                        }
                     }
                 }
             }
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
-        return user;
+        return unit;
     }
 
     @Override
-    public List<UUID> getMapperIDListByUnitID(String unitID) throws DatabaseErrorException{
-        List<UUID> mapperIDList = new ArrayList<>();
-        Connection connection = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
+    public List<UUID> getActivityMapperIDListByUnitID(String unitID) throws DatabaseErrorException{
+        List<UUID> activityMapperIDList = new ArrayList<>();
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()){
 
             try (PreparedStatement stmt = connection.prepareStatement(
                 "SELECT `id` FROM `activity_user_mapper` WHERE activity_user_mapper.unit_id = ?" +
@@ -179,16 +153,14 @@ public class MysqlUnitRepository implements UnitRepository {
                 try (ResultSet rs = stmt.executeQuery()) {
                     while(rs.next()){
                         UUID activityUserMapperID = UUID.fromString(rs.getString("id"));
-                        mapperIDList.add(activityUserMapperID);
+                        activityMapperIDList.add(activityUserMapperID);
                     }
                 }
             }
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
-        return mapperIDList;
+        return activityMapperIDList;
     }
 
     private boolean isExistInMapper(Connection connection, String userID, String activityTypeName) throws SQLException {
@@ -249,6 +221,24 @@ public class MysqlUnitRepository implements UnitRepository {
                 }
             }
         return activityTypeList;
+    }
+
+    private Map<UUID, Role> getMemberRoleOfTeam(Connection connection, String unitID) throws SQLException {
+        Map<UUID, Role> memberRoleMap = new HashMap<>();
+        try(PreparedStatement stmt = connection.prepareStatement(
+            "SELECT * FROM `role_relation` WHERE team_id = ?"
+        )){
+            stmt.setString(1, unitID);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                while(rs.next()){
+                    UUID id = UUID.fromString(rs.getString("unit_id"));
+                    Role role = Role.values()[rs.getInt("role")];
+                    memberRoleMap.put(id, role);
+                }
+            }
+        }
+        return memberRoleMap;
     }
 
     private void addActivityType(Connection connection, ActivityType activityType) throws SQLException {
@@ -326,10 +316,8 @@ public class MysqlUnitRepository implements UnitRepository {
 
     @Override
     public UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException {
-        Connection connection = null;
         UUID activityUserMapperID = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()){
             if(this.isExistInMapper(connection, userID, activityTypeName)) {
                 try (PreparedStatement stmt = connection.prepareStatement(
                         "SELECT `id` FROM `activity_user_mapper` WHERE `unit_id` = ? AND `activity_type_name` = ?")) {
@@ -345,19 +333,16 @@ public class MysqlUnitRepository implements UnitRepository {
             }
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
         return activityUserMapperID;
     }
 
+
+
     @Override
     public Role getRole(String userID, String teamID) throws DatabaseErrorException {
-        Connection connection = null;
         Role role = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()){
             try (PreparedStatement stmt = connection.prepareStatement(
                 "SELECT `role` FROM `role_relation` WHERE `unit_id` = ? AND `team_id` = ?"
             )) {
@@ -366,14 +351,12 @@ public class MysqlUnitRepository implements UnitRepository {
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     rs.next();
-                    role = rs.getInt("role");
+                    role = Role.values()[rs.getInt("role")];
                 }
             }
 
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
         return role;
     }

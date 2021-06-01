@@ -4,7 +4,7 @@ package ssl.ois.timelog.cucumber.common;
 import java.util.UUID;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
@@ -13,7 +13,7 @@ import ssl.ois.timelog.service.repository.user.UnitRepository;
 
 public class UserLogin {
     private String userID;
-    private UnitInterface user;
+    private Unit user;
     private UnitRepository unitRepository;
 
     public UserLogin(UnitRepository unitRepository) {
@@ -22,7 +22,7 @@ public class UserLogin {
 
     public void process(String userID)
             throws DatabaseErrorException, DuplicateActivityTypeException, ActivityTypeNotExistException {
-        this.user = this.unitRepository.findByUserID(userID);
+        this.user = this.unitRepository.findByUnitID(userID);
         if (this.user == null) {
             this.user = new User(UUID.fromString(userID));
             this.unitRepository.save(this.user);
@@ -47,7 +47,7 @@ public class UserLogin {
         return userID;
     }
 
-    public UnitInterface getUser() {
+    public Unit getUser() {
         return this.user;
     }
 }
