@@ -3,75 +3,54 @@ package ssl.ois.timelog.adapter.repository.memory;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.connect.Unit;
-import ssl.ois.timelog.model.team.Role;
-import ssl.ois.timelog.model.team.Team;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class MemoryUnitRepository implements UnitRepository {
     /*
-    users Map<String, UnitInterface> UUID, user
+    users Map<String, Unit> UUID, unit
     */
-    private Map<String, Unit> users;
-    private List<Unit> teams;
+    private Map<String, Unit> units;
 
     public MemoryUnitRepository() {
-        this.users = new HashMap<>();
-        this.teams = new ArrayList<>();
+        this.units = new HashMap<>();
     }
 
     @Override
-    public void save(Unit user) {
-        this.users.put(user.getID().toString(), user);
+    public void save(Unit unit) {
+        this.units.put(unit.getID().toString(), unit);
     }
 
     @Override
-    public void addActivityType(Unit user) {
-        this.save(user);
+    public void addActivityType(Unit unit) {
+        this.save(unit);
     }
 
     @Override
-    public void editActivityType(Unit user) {
-        this.save(user);
+    public void editActivityType(Unit unit) {
+        this.save(unit);
     }
 
     @Override
-    public void removeActivityType(Unit user)  {
-        this.save(user);
+    public void removeActivityType(Unit unit)  {
+        this.save(unit);
     }
 
     @Override
-    public Unit findByUnitID(String userID) {
-        return this.users.get(userID);
+    public Unit findByUnitID(String unitID) {
+        return this.units.get(unitID);
     }
 
     @Override
-    public UUID findActivityUserMapperID(String userID, String activityTypeName) {
-        UUID activityUserMapperID = null;
-        for(final ActivityType activityType: this.findByUnitID(userID).getActivityTypeList()){
+    public UUID findActivityUserMapperID(String unitID, String activityTypeName) {
+        UUID activityUnitMapperID = null;
+        for(final ActivityType activityType: this.findByUnitID(unitID).getActivityTypeList()){
             if(activityType.getName().equals(activityTypeName)){
-                activityUserMapperID = activityType.getId();
+                activityUnitMapperID = activityType.getId();
             }
         }
-        return activityUserMapperID;
-    }
-
-    @Override
-    public Role getRole(String userID, String teamID){
-        for(Unit team : this.teams){
-            if(team.getID().toString().equals(teamID)){
-                return ((Team)team).getMemberRoleMap().get(UUID.fromString(userID));
-            }
-        }
-        return null;
-    }
-
-    public void init(Map<String, Unit> users, List<Unit> teams){
-        this.users = users;
-        this.teams = teams;
+        return activityUnitMapperID;
     }
 }

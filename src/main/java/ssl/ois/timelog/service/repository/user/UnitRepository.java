@@ -22,6 +22,5 @@ public interface UnitRepository {
     default List<UUID> getActivityMapperIDListByUnitID(String unitID) throws DatabaseErrorException {
         return null;
     }
-    Role getRole(String userID, String teamID) throws DatabaseErrorException;
 }
 

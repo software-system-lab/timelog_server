@@ -336,28 +336,4 @@ public class MysqlUnitRepository implements UnitRepository {
         }
         return activityUserMapperID;
     }
-
-
-
-    @Override
-    public Role getRole(String userID, String teamID) throws DatabaseErrorException {
-        Role role = null;
-        try (Connection connection = this.mysqlDriverAdapter.getConnection()){
-            try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT `role` FROM `role_relation` WHERE `unit_id` = ? AND `team_id` = ?"
-            )) {
-                stmt.setString(1, userID);
-                stmt.setString(2, teamID);
-
-                try (ResultSet rs = stmt.executeQuery()) {
-                    rs.next();
-                    role = Role.values()[rs.getInt("role")];
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new DatabaseErrorException();
-        }
-        return role;
-    }
 }

@@ -1,15 +1,15 @@
 package ssl.ois.timelog.ut.service.team;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
+import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.role.GetRoleErrorException;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
 import ssl.ois.timelog.service.role.get.*;
@@ -30,7 +30,7 @@ public class GetRoleUseCaseTest {
     private GetRoleUseCase getRoleUseCase;
     private Map<String, Unit> users;
     private Map<UUID, Role> memberRoleMap;
-    private List<Unit> teams;
+    private Unit team;
     private UUID memberID;              //8e0f3043-85d7-4c7b-9ac9-cfb1149270b9
     private UUID leaderID;              //5a39fabf-f969-4dfb-8878-f1b1bbe7188b
     private UUID professorID;           //7be599c9-0cb1-42f6-9ec3-95bfc446c42e
@@ -45,7 +45,6 @@ public class GetRoleUseCaseTest {
         getRoleUseCase = new GetRoleUseCase(unitRepository);
         this.users = new HashMap<>();
         this.memberRoleMap = new HashMap<>();
-        this.teams = new ArrayList<>();
 
         memberID = UUID.fromString("8e0f3043-85d7-4c7b-9ac9-cfb1149270b9");
         leaderID = UUID.fromString("5a39fabf-f969-4dfb-8878-f1b1bbe7188b");
@@ -62,10 +61,13 @@ public class GetRoleUseCaseTest {
         memberRoleMap.put(leaderID, Role.LEADER);
         memberRoleMap.put(professorID, Role.PROFESSOR);
         memberRoleMap.put(stakeHolderID, Role.STAKEHOLDER);
+        team = new Team(teamID, memberRoleMap);
 
-        teams.add(new Team(teamID, memberRoleMap));
-
-        ((MemoryUnitRepository)this.unitRepository).init(this.users, this.teams);
+        try{
+            unitRepository.save(team);
+        }catch(ActivityTypeNotExistException | DatabaseErrorException | DuplicateActivityTypeException e){
+            fail(e.getMessage());
+        }
     }
 
     @Test
