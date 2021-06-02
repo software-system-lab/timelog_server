@@ -3,7 +3,7 @@ package ssl.ois.timelog.service;
 public abstract class DTO {
     private String id;
 
-    public DTO(String id) {
+    protected DTO(String id) {
         this.id = id;
     }
 

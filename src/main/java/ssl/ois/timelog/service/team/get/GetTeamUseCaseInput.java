@@ -1,8 +1,5 @@
 package ssl.ois.timelog.service.team.get;
 
-import java.util.List;
-import java.util.UUID;
-
 public class GetTeamUseCaseInput {
     private String groupname;
 

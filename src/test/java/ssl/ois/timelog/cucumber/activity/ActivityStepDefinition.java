@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.repository.memory.MemoryUnitRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCase;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseInput;
 import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseOutput;
@@ -23,28 +23,28 @@ import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOut
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
-import ssl.ois.timelog.service.repository.user.UserRepository;
+import ssl.ois.timelog.service.repository.user.UnitRepository;
 import io.cucumber.java.en.Then;
 
 
 public class ActivityStepDefinition {
 
-    private UserRepository userRepository;
-    private UnitInterface user;
+    private UnitRepository unitRepository;
+    private Unit user;
     private String userID;
     private String activityTypeName;
     private boolean errorOccurred;
 
     @Before
     public void setup() {
-        this.userRepository = new MemoryUserRepository();
+        this.unitRepository = new MemoryUnitRepository();
 
         this.errorOccurred = false;
     }
 
     @Given("[Activity] I log in to Timelog with user ID {string}")
     public void activity_i_log_in_to_Timelog_with_user_ID(String userID) {
-        UserLogin userLoginService = new UserLogin(this.userRepository);
+        UserLogin userLoginService = new UserLogin(this.unitRepository);
         try {
             userLoginService.process(userID);
             this.userID = userLoginService.getUserID();
@@ -61,7 +61,7 @@ public class ActivityStepDefinition {
 
     @When("I add it to my activity type list")
     public void i_add_it_to_my_activity_type_list() {
-        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.userRepository);
+        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.unitRepository);
         AddActivityTypeUseCaseInput addActivityTypeUseCaseInput = new AddActivityTypeUseCaseInput();
         AddActivityTypeUseCaseOutput addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
 
@@ -81,7 +81,7 @@ public class ActivityStepDefinition {
     public void is_in_my_activity_type_list(String activityTypeName) {
         try {
             boolean found = false;
-            for (ActivityType activityType: this.userRepository.findByUserID(this.userID).getActivityTypeList()) {
+            for (ActivityType activityType: this.unitRepository.findByUnitID(this.userID).getActivityTypeList()) {
                 if(activityType.getName().equals(activityTypeName)) {
                     found = true;
                 }
@@ -94,7 +94,7 @@ public class ActivityStepDefinition {
 
     @Given("I have already had {string} in my activity type list")
     public void i_have_already_had_in_my_activity_type_lis(String activityTypeName) {
-        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.userRepository);
+        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.unitRepository);
         AddActivityTypeUseCaseInput addActivityTypeUseCaseInput = new AddActivityTypeUseCaseInput();
         AddActivityTypeUseCaseOutput addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
 
@@ -114,7 +114,7 @@ public class ActivityStepDefinition {
 
     @When("I add an activity type with same name")
     public void i_add_an_activity_type_with_same_name() {
-        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.userRepository);
+        AddActivityTypeUseCase addActivityTypeUseCase = new AddActivityTypeUseCase(this.unitRepository);
         AddActivityTypeUseCaseInput addActivityTypeUseCaseInput = new AddActivityTypeUseCaseInput();
         AddActivityTypeUseCaseOutput addActivityTypeUseCaseOutput = new AddActivityTypeUseCaseOutput();
 
@@ -140,7 +140,7 @@ public class ActivityStepDefinition {
     @When("I remove it from my activity type list")
     public void i_remove_it_from_my_activity_type_list() {
         RemoveActivityTypeUseCase removeActivityTypeUseCase = new RemoveActivityTypeUseCase(
-                this.userRepository);
+                this.unitRepository);
         RemoveActivityTypeUseCaseInput removeActivityTypeUseCaseInput = new RemoveActivityTypeUseCaseInput();
         RemoveActivityTypeUseCaseOutput removeActivityTypeUseCaseOutput = new RemoveActivityTypeUseCaseOutput();
 
@@ -169,7 +169,7 @@ public class ActivityStepDefinition {
 
     @When("I change the activity name to {string} and set its state to disabled and private")
     public void i_change_the_activity_name_to_and_set_its_state_to_disabled_and_private(String newActivityTypeName) {
-        EditActivityTypeUseCase editActivityTypeUseCase = new EditActivityTypeUseCase(this.userRepository);
+        EditActivityTypeUseCase editActivityTypeUseCase = new EditActivityTypeUseCase(this.unitRepository);
         EditActivityTypeUseCaseInput editActivityTypeUseCaseInput = new EditActivityTypeUseCaseInput();
         EditActivityTypeUseCaseOutput editActivityTypeUseCaseOutput = new EditActivityTypeUseCaseOutput();
 

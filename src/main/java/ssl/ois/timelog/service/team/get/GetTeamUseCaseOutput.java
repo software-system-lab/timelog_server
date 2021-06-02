@@ -1,10 +1,8 @@
 package ssl.ois.timelog.service.team.get;
 
-import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.service.team.Person;
 import java.util.List;
 import java.util.UUID;
-import java.lang.String;
 import java.util.ArrayList;
 
 
@@ -17,8 +15,7 @@ public class GetTeamUseCaseOutput {
 	}
 
 	public void setLeader(String username, UUID userID) {
-		Person leader = new Person(username, userID);
-		this.leader = leader;
+		this.leader = new Person(username, userID);
 	}
 
     public GetTeamUseCaseOutput(){

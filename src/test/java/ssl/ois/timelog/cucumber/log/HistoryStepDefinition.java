@@ -8,8 +8,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.presenter.log.history.LogHistoryPresenter;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
-import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.repository.memory.MemoryUnitRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
+import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.LogDTO;
@@ -19,8 +20,9 @@ import ssl.ois.timelog.service.log.add.AddLogUseCaseOutput;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCase;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseInput;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseOutput;
+import ssl.ois.timelog.service.manager.AccountManager;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.repository.user.UserRepository;
+import ssl.ois.timelog.service.repository.user.UnitRepository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -29,21 +31,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.text.ParseException;
 
 public class HistoryStepDefinition {
-    private UserRepository userRepository;
+    private UnitRepository unitRepository;
     private LogRepository logRepository;
+    private AccountManager accountManager;
 
     private String userID;
     private HistoryLogUseCaseOutput output;
 
     @Before
     public void setUp() {
-        this.userRepository = new MemoryUserRepository();
+        this.unitRepository = new MemoryUnitRepository();
         this.logRepository = new MemoryLogRepository();
     }
 
     @Given("[History] I log in to Timelog with user ID {string}")
     public void history_I_log_in_to_Timelog_with_user_ID(String userID) {
-        UserLogin loginService = new UserLogin(this.userRepository);
+        UserLogin loginService = new UserLogin(this.unitRepository);
         try {
             loginService.process(userID);
             this.userID = loginService.getUserID();
@@ -72,7 +75,7 @@ public class HistoryStepDefinition {
 
     @When("[History] I request for the history between {string} and {string}")
     public void i_request_for_the_history_between_and(String startDate, String endDate) {
-        HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository);
+        HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository, unitRepository, accountManager);
         HistoryLogUseCaseInput input = new HistoryLogUseCaseInput();
         this.output = new LogHistoryPresenter();
 
@@ -82,7 +85,7 @@ public class HistoryStepDefinition {
 
         try {
             useCase.execute(input, this.output);
-        } catch (ParseException | DatabaseErrorException e) {
+        } catch (ParseException | DatabaseErrorException | AccountErrorException e) {
             fail(e.getMessage());
         }
     }
@@ -110,7 +113,7 @@ public class HistoryStepDefinition {
     @When("[History] I request for the history between {string} and {string} with activity type {string} selected")
     public void history_I_request_for_the_history_between_and_with_activity_type_selected(
             String startDate, String endDate, String activityType) {
-        HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository);
+        HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository, unitRepository, accountManager);
         HistoryLogUseCaseInput input = new HistoryLogUseCaseInput();
         this.output = new LogHistoryPresenter();
         List<String> filterList = new ArrayList<>();
@@ -123,7 +126,7 @@ public class HistoryStepDefinition {
 
         try {
             useCase.execute(input, this.output);
-        } catch (ParseException | DatabaseErrorException e) {
+        } catch (ParseException | DatabaseErrorException | AccountErrorException e) {
             fail(e.getMessage());
         }
     }

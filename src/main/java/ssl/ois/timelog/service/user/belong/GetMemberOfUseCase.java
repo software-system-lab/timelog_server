@@ -3,63 +3,52 @@ package ssl.ois.timelog.service.user.belong;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-import org.springframework.web.client.RestClientException;
 import ssl.ois.timelog.service.exception.team.GetMemberOfErrorException;
-import ssl.ois.timelog.service.exception.DatabaseErrorException;
-import ssl.ois.timelog.service.user.belong.GetMemberOfUseCaseInput;
-import ssl.ois.timelog.service.user.belong.GetMemberOfUseCaseOutput;
-import org.springframework.web.client.RestTemplate;
-import ssl.ois.timelog.service.repository.user.UserRepository;
-import ssl.ois.timelog.model.connect.UnitInterface;
+import ssl.ois.timelog.service.repository.user.UnitRepository;
+import ssl.ois.timelog.model.connect.Unit;
+import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.team.Team;
 import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
+import ssl.ois.timelog.service.manager.AccountManager;
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
-
-
+import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
+import ssl.ois.timelog.service.exception.AccountErrorException;
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 
 @Service
 public class GetMemberOfUseCase {
-    private UserRepository userRepository;
+    private UnitRepository unitRepository;
+    private AccountManager accountManager;
 
-    public GetMemberOfUseCase(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public GetMemberOfUseCase(UnitRepository unitRepository, AccountManager accountManager) {
+        this.unitRepository = unitRepository;
+        this.accountManager = accountManager;
     }
 
-    public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException, InitTeamDataErrorException, DuplicateActivityTypeException {
-        try {
-            final String urlGetTeamName = "http://localhost:8080/team/get/memberOf";
-            final String ulrGetTeamUid = "http://localhost:8080/team/get/uuid/team";
-            RestTemplate restTemplate = new RestTemplate();
-            List<String> result = restTemplate.postForObject(urlGetTeamName, input, List.class);
-
-            for(int i = 0; i < result.size(); i++) {
-                String uid = restTemplate.postForObject(ulrGetTeamUid, result.get(i), String.class);
-                uid = uid.replaceAll("^\"|\"$", "");
-                UUID teamID = UUID.fromString(uid);
-
-                UnitInterface team = this.userRepository.findByUserID(uid);
+    public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException,InitTeamDataErrorException {
+        try{
+            Map<UUID,String> teamIdList = this.accountManager.getBelongingTeams(input.getUsername());
+            for(Map.Entry<UUID, String> teamID : teamIdList.entrySet()) {
+                Unit team = this.unitRepository.findByUnitID(teamID.getKey().toString());
                 if(team == null){
-                    team = new Team(teamID);
-                    this.userRepository.insertTeamToUnit(team);
+                    Map<UUID,Role> memberRoleMap = this.accountManager.getTeamRoleRelation(teamID.getValue());
+                    team = new Team(teamID.getKey(),memberRoleMap);
+                    this.unitRepository.save(team);
+                    this.unitRepository.addRoleRelation(teamID.getKey().toString(), memberRoleMap);
 
                     ActivityType activityType = new ActivityType("Other", true, false);
                     team.addActivityType(activityType);
-                    this.userRepository.addActivityType(team);
+                    this.unitRepository.addActivityType(team);
                 }
-                output.addTeamToList(result.get(i) , teamID);
+                output.addTeamToList(teamID.getValue(),teamID.getKey());
             }
-        } catch (RestClientException e) {
-            System.out.println(e);
+        } catch (AccountErrorException e) {
             throw new GetMemberOfErrorException();
-        } catch (DatabaseErrorException | DuplicateActivityTypeException e) {
-            System.out.println(e);
+        } catch (DatabaseErrorException | ActivityTypeNotExistException | DuplicateActivityTypeException e) {
             throw new InitTeamDataErrorException();
-        } 
+        }
     }
 }

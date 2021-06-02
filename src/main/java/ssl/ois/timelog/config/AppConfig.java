@@ -8,11 +8,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
+import ssl.ois.timelog.adapter.manager.directory.DirectoryAMSManager;
 import ssl.ois.timelog.adapter.repository.mysql.MysqlLogRepository;
-import ssl.ois.timelog.adapter.repository.mysql.MysqlUserRepository;
+import ssl.ois.timelog.adapter.repository.mysql.MysqlUnitRepository;
 import ssl.ois.timelog.service.repository.log.LogRepository;
-import ssl.ois.timelog.service.repository.user.UserRepository;
-
+import ssl.ois.timelog.service.repository.user.UnitRepository;
+import ssl.ois.timelog.service.manager.AccountManager;
 
 import java.util.Arrays;
 
@@ -29,6 +30,17 @@ public class AppConfig {
     private String mysqlUser;
     @Value("${mysql.password}")
     private String mysqlPasswd;
+    @Value("${ams.host}")
+    private String amsHost;
+    @Value("${ams.port}")
+    private String amsPort;
+    @Value("${ams.protocol}")
+    private String amsProtocol;
+
+    @Bean 
+    public AccountManager getAMSManager() {
+        return new DirectoryAMSManager(this.amsProtocol,this.amsHost, this.amsPort);
+    } 
 
     @Bean
     public LogRepository getLogRepository() {
@@ -36,8 +48,8 @@ public class AppConfig {
     }
 
     @Bean
-    public UserRepository getUserRepository() {
-        return new MysqlUserRepository();
+    public UnitRepository getUserRepository() {
+        return new MysqlUnitRepository();
     }
 
     @Bean

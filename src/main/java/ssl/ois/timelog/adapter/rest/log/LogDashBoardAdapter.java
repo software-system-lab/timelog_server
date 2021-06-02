@@ -13,27 +13,29 @@ import ssl.ois.timelog.adapter.presenter.log.dash.board.LogDashBoardPresenter;
 import ssl.ois.timelog.adapter.view.model.log.dash.board.LogDashBoardViewModel;
 import ssl.ois.timelog.adapter.presenter.log.dash.board.TeamDashBoardPresenter;
 import ssl.ois.timelog.adapter.view.model.log.dash.board.TeamDashBoardViewModel;
+import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCase;
 import ssl.ois.timelog.service.log.history.HistoryLogUseCaseInput;
+import ssl.ois.timelog.service.manager.AccountManager;
 import ssl.ois.timelog.service.repository.log.LogRepository;
+import ssl.ois.timelog.service.repository.user.UnitRepository;
 import ssl.ois.timelog.service.team.dashboard.TeamDashboardUseCase;
 import ssl.ois.timelog.service.team.dashboard.TeamDashboardUseCaseInput;
-import ssl.ois.timelog.service.team.get.GetTeamUseCase;
-import ssl.ois.timelog.service.team.get.GetTeamUseCaseInput;
-import ssl.ois.timelog.service.team.get.GetTeamUseCaseOutput;
-import ssl.ois.timelog.service.exception.team.GetTeamErrorException;
-import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
 
 @RestController
 @RequestMapping("/api/dash-board/")
 public class LogDashBoardAdapter {
     @Autowired
     private LogRepository logRepository;
+    @Autowired
+    private UnitRepository unitRepository;
+    @Autowired
+    private AccountManager accountManager;
 
     @PostMapping("/spent-time")
     public ResponseEntity<LogDashBoardViewModel> viewLogDashBoard(@RequestBody HistoryLogUseCaseInput input) {
-        HistoryLogUseCase useCase = new HistoryLogUseCase(this.logRepository);
+        HistoryLogUseCase useCase = new HistoryLogUseCase(logRepository, unitRepository, accountManager);
 
         LogDashBoardPresenter presenter = new LogDashBoardPresenter();
 
@@ -42,7 +44,7 @@ public class LogDashBoardAdapter {
             return ResponseEntity.status(HttpStatus.OK).body(presenter.build());
         } catch (ParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LogDashBoardViewModel());
-        } catch (DatabaseErrorException e) {
+        } catch (DatabaseErrorException | AccountErrorException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LogDashBoardViewModel());
         }
     }

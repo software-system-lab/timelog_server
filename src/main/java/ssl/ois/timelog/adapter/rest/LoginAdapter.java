@@ -18,7 +18,6 @@ import ssl.ois.timelog.service.user.belong.GetMemberOfUseCase;
 import ssl.ois.timelog.service.user.belong.GetMemberOfUseCaseInput;
 import ssl.ois.timelog.service.user.belong.GetMemberOfUseCaseOutput;
 import ssl.ois.timelog.service.exception.team.GetMemberOfErrorException;
-import ssl.ois.timelog.service.team.get.GetTeamUseCase;
 import ssl.ois.timelog.service.team.get.GetTeamUseCaseInput;
 import ssl.ois.timelog.service.team.get.GetTeamUseCaseOutput;
 import ssl.ois.timelog.service.exception.team.GetTeamErrorException;
@@ -55,7 +54,7 @@ public class LoginAdapter {
 
         try {
             this.getMemberOfUseCase.execute(input, output);
-        } catch (GetMemberOfErrorException | InitTeamDataErrorException | DuplicateActivityTypeException e) {
+        } catch (GetMemberOfErrorException | InitTeamDataErrorException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
 
@@ -68,6 +67,7 @@ public class LoginAdapter {
         try {
             this.getTeamUseCase.execute(input, output);
         } catch (GetTeamErrorException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
