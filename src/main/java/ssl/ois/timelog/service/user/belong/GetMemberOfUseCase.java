@@ -36,12 +36,11 @@ public class GetMemberOfUseCase {
                 if(team == null){
                     Map<UUID,Role> memberRoleMap = this.accountManager.getTeamRoleRelation(teamID.getValue());
                     team = new Team(teamID.getKey(),memberRoleMap);
-                    this.unitRepository.save(team);
-                    this.unitRepository.addRoleRelation(teamID.getKey().toString(), memberRoleMap);
-
                     ActivityType activityType = new ActivityType("Other", true, false);
                     team.addActivityType(activityType);
-                    this.unitRepository.addActivityType(team);
+                    this.unitRepository.save(team);
+                    // this.unitRepository.addRoleRelation(teamID.getKey().toString(), memberRoleMap);
+                    // this.unitRepository.addActivityType(team);
                 }
                 output.addTeamToList(teamID.getValue(),teamID.getKey());
             }

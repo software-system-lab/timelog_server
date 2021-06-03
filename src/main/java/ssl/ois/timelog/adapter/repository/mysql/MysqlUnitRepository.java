@@ -233,7 +233,7 @@ public class MysqlUnitRepository implements UnitRepository {
             try(ResultSet rs = stmt.executeQuery()){
                 while(rs.next()){
                     UUID id = UUID.fromString(rs.getString("unit_id"));
-                    Role role = Role.values()[rs.getInt("role")];
+                    Role role = Role.values()[rs.getInt("role")-1];
                     memberRoleMap.put(id, role);
                 }
             }

@@ -73,16 +73,18 @@ public class HistoryLogUseCase {
         } else {
             for (Log log: logList) {
                 for(String filterName: input.getFilterList()) {
-                    if(log.getActivityTypeName().equals(filterName)) {
+                    String teamName = "Personal";
+                    if(teamMapperIdMap.containsKey(log.getActivityUserMapperID())){
+                        teamName = teamMapperIdMap.get(log.getActivityUserMapperID());
+                    }
+                    if(log.getActivityTypeName().equals(filterName)|| teamName.equals(filterName)) {
                         LogDTO logDTO = new LogDTO();
                         logDTO.setId(log.getID().toString());
                         logDTO.setActivityTypeName(log.getActivityTypeName());
                         logDTO.setTitle(log.getTitle());
                         logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
                         logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
-                        if(teamMapperIdMap.containsKey(log.getActivityUserMapperID())){
-                            logDTO.setTeamName(teamMapperIdMap.get(log.getActivityUserMapperID()));
-                        }
+                        logDTO.setTeamName(teamName);
                         logDTOList.add(logDTO);
                     }
                 }
