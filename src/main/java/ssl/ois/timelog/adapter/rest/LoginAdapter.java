@@ -23,6 +23,8 @@ import ssl.ois.timelog.service.team.get.GetTeamUseCaseOutput;
 import ssl.ois.timelog.service.exception.team.GetTeamErrorException;
 import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
 
+import java.util.logging.Logger;
+
 
 @RestController
 @RequestMapping("/api")
@@ -38,10 +40,13 @@ public class LoginAdapter {
 
     @PostMapping(value = "/login")
     public ResponseEntity<EnterUseCaseOutput> enterTimelog(@RequestBody EnterUseCaseInput input) {
+        Logger logger = Logger.getLogger(this.getClass().toString() + ", Method: POST, route: /api/login");
         EnterUseCaseOutput output = new EnterUseCaseOutput();
+        logger.info("user: " + input.getUserID() + " login.");
         try {
             this.enterUseCase.execute(input, output);
         } catch (DuplicateActivityTypeException | InitUserDataErrorException e) {
+            logger.warning(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
 

@@ -3,6 +3,7 @@ package ssl.ois.timelog.adapter.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class MysqlDriverAdapter {
     private String host;
@@ -22,6 +23,8 @@ public class MysqlDriverAdapter {
 
     public Connection getConnection() throws SQLException {
         final String url = this.host + "/" + this.database + "?useUnicode=true&characterEncoding=UTF-8";
+        Logger logger = Logger.getLogger(this.getClass().toString() + "::getConnection");
+        logger.info(url);
         return DriverManager.getConnection(url, this.user, this.password);
     }
 

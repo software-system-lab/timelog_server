@@ -14,6 +14,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 @Service
 public class EnterUseCase {
@@ -26,6 +27,7 @@ public class EnterUseCase {
 
     public void execute(EnterUseCaseInput input, EnterUseCaseOutput output) throws DuplicateActivityTypeException,
             InitUserDataErrorException {
+        Logger logger = Logger.getLogger(this.getClass().toString());
         try {
             String userID = input.getUserID();
             Unit user = this.unitRepository.findByUnitID(userID);
@@ -55,6 +57,7 @@ public class EnterUseCase {
                 output.setActivityTypeList(user.getActivityTypeList());
             }
         } catch (DatabaseErrorException | ActivityTypeNotExistException e) {
+            logger.warning(e.getMessage());
             throw new InitUserDataErrorException(input.getUserID());
         }
     }

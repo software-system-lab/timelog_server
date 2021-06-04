@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -116,6 +117,7 @@ public class MysqlUnitRepository implements UnitRepository {
 
     @Override
     public Unit findByUnitID(String unitID) throws DatabaseErrorException{
+        Logger logger = Logger.getLogger(this.getClass().toString() + "::findByUnitID");
         Unit unit = null;
         try (Connection connection = this.mysqlDriverAdapter.getConnection()){
             try (PreparedStatement stmt = connection.prepareStatement(
@@ -135,6 +137,7 @@ public class MysqlUnitRepository implements UnitRepository {
                 }
             }
         } catch (SQLException e) {
+            logger.warning(e.getMessage());
             throw new DatabaseErrorException();
         }
         return unit;
