@@ -4,8 +4,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import java.util.HashMap;
+import java.util.Iterator;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.model.team.Role;
 import org.springframework.web.client.RestTemplate;
@@ -87,6 +92,31 @@ public class DirectoryAMSManager implements AccountManager {
             result = this.restTemplate.postForObject(requestAddress, id, String.class).replaceAll("^\"|\"$", "");
         }catch (RestClientException e){
             throw new AccountErrorException(e.toString());
+        }
+        return result;
+    }
+
+    //Get Member role of Unit 
+    //If it is not Team, return null instead
+    public Map<UUID,Role> getMemberRoleOfTeam(String unitID) throws AccountErrorException{
+        JsonArray request = null;
+        Map<UUID,Role> result = new HashMap<>();
+        try{
+            final String requestAddress = this.url + "/team/member/role";
+            request = this.restTemplate.postForObject(requestAddress, unitID, JsonArray.class);
+        }catch (RestClientException e){
+            throw new AccountErrorException(e.toString());
+        }
+        //not a team
+        if(request.isJsonNull()){
+            return null;
+        }
+        else{
+            Iterator<JsonElement> iter = request.iterator();
+            while(iter.hasNext()){
+                JsonObject curr = iter.next().getAsJsonObject();
+                result.put(UUID.fromString(curr.get("id").toString()), Role.valueOf(curr.get("role").toString()));
+            }
         }
         return result;
     }
