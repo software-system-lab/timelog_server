@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.logging.log4j.CloseableThreadContext.Instance;
+
 import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.team.Team;
@@ -49,5 +51,24 @@ public class MemoryAMSManager implements AccountManager {
             }
         }
         throw new AccountErrorException("Cant found " + id);
+    }
+
+    public Map<UUID,Role> getMemberRoleOfTeam(String unitID) throws AccountErrorException{
+        Unit targetUnit = null;
+        for(Map.Entry<String, Unit> pair: directory.entrySet()){
+            if(pair.getValue().getID().toString().equals(unitID)){
+                targetUnit = pair.getValue();
+                break;
+            }
+        }
+        if(targetUnit == null){
+            throw new AccountErrorException("Cant found " + unitID);
+        }
+        else if(targetUnit instanceof Team){
+            return targetUnit.getMemberRoleMap();
+        }
+        else{
+            return null;
+        }
     }
 }

@@ -10,4 +10,5 @@ public interface AccountManager {
     Map<UUID, Role> getTeamRoleRelation(String teamName)throws AccountErrorException;
     UUID getTeamIdByTeamName(String teamName) throws AccountErrorException;
     String getNameById(String id) throws AccountErrorException;
+    Map<UUID,Role> getMemberRoleOfTeam(String unitID) throws AccountErrorException;
 }

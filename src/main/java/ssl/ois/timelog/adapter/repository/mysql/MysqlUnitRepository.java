@@ -18,17 +18,21 @@ import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.team.Team;
-import ssl.ois.timelog.model.unit.AbstractUnit;
 import ssl.ois.timelog.model.user.User;
+import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
+import ssl.ois.timelog.service.manager.AccountManager;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
 
 
 public class MysqlUnitRepository implements UnitRepository {
     @Autowired
     private MysqlDriverAdapter mysqlDriverAdapter;
+
+    @Autowired
+    private AccountManager accountManager;
 
     @Override
     public void save(Unit user) throws DatabaseErrorException, DuplicateActivityTypeException,
@@ -127,8 +131,8 @@ public class MysqlUnitRepository implements UnitRepository {
 
                 try (ResultSet rs = stmt.executeQuery()){
                     if(rs.next()) {
-                        if(!getMemberRoleOfTeam(connection, unitID).isEmpty()){
-                            unit = new Team(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, unitID), getMemberRoleOfTeam(connection, unitID));
+                        if(!getMemberRoleOfTeam(unitID).isEmpty()){
+                            unit = new Team(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, unitID), getMemberRoleOfTeam(unitID));
                         }
                         else{
                             unit = new User(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, unitID));
@@ -136,7 +140,7 @@ public class MysqlUnitRepository implements UnitRepository {
                     }
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | AccountErrorException e) {
             logger.warning(e.getMessage());
             throw new DatabaseErrorException();
         }
@@ -226,21 +230,9 @@ public class MysqlUnitRepository implements UnitRepository {
         return activityTypeList;
     }
 
-    private Map<UUID, Role> getMemberRoleOfTeam(Connection connection, String unitID) throws SQLException {
+    private Map<UUID, Role> getMemberRoleOfTeam(String unitID) throws AccountErrorException{
         Map<UUID, Role> memberRoleMap = new HashMap<>();
-        try(PreparedStatement stmt = connection.prepareStatement(
-            "SELECT * FROM `role_relation` WHERE team_id = ?"
-        )){
-            stmt.setString(1, unitID);
-
-            try(ResultSet rs = stmt.executeQuery()){
-                while(rs.next()){
-                    UUID id = UUID.fromString(rs.getString("unit_id"));
-                    Role role = Role.values()[rs.getInt("role")-1];
-                    memberRoleMap.put(id, role);
-                }
-            }
-        }
+        memberRoleMap = accountManager.getMemberRoleOfTeam(unitID);
         return memberRoleMap;
     }
 

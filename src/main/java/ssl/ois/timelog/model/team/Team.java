@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import ssl.ois.timelog.model.activity.type.ActivityType;
-import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.unit.AbstractUnit;
 
 
