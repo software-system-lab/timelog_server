@@ -28,6 +28,7 @@ public class DirectoryAMSManager implements AccountManager {
     public Map<UUID,String> getBelongingTeams(String username)throws AccountErrorException {
         Map<UUID,String> teamList = new HashMap<>();
         try {
+            // final String requestAddress = this.url + "/team/get/memberOf";
             final String requestAddress = this.url + "/team/get/belonging-teams";
             List<LinkedHashMap<String,String>> result = this.restTemplate.postForObject(requestAddress, username, List.class);
             for(LinkedHashMap<String,String> each : result) {
@@ -49,9 +50,11 @@ public class DirectoryAMSManager implements AccountManager {
         try {
             final String requestAddress = this.url + "/team/get/members";
             List<String> result = this.restTemplate.postForObject(requestAddress, teamName, List.class);
+            System.out.println(this.getLeader(teamName));
             memberRoleMap.put(this.getLeader(teamName), Role.LEADER);
 
             for(String uid :result){
+                System.out.println(uid);
                 uid = uid.replaceAll("^\"|\"$", "");
                 UUID userID = UUID.fromString(uid);
                 if(memberRoleMap.get(userID)==null){
@@ -85,6 +88,7 @@ public class DirectoryAMSManager implements AccountManager {
         try{
             final String requestAddress = this.url + "/team/get/name";
             result = this.restTemplate.postForObject(requestAddress, id, String.class).replaceAll("^\"|\"$", "");
+            System.out.println(result);
         }catch (RestClientException e){
             throw new AccountErrorException(e.toString());
         }
@@ -100,8 +104,10 @@ public class DirectoryAMSManager implements AccountManager {
             final String requestAddress = this.url + "/team/get/leader";
             String result = this.restTemplate.postForObject(requestAddress, teamName, String.class);
 
-            leaderID = this.getUserIdByUserName(result.replace("\"", ""));
+            System.out.println(result);
+            leaderID = UUID.fromString(result.replaceAll("^\"|\"$", ""));
         } catch (RestClientException e) {
+            System.out.println(e.getMessage());
             //throw exception
         } 
         return leaderID;
