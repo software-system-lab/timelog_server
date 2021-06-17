@@ -55,11 +55,9 @@ public class DirectoryAMSManager implements AccountManager {
         try {
             final String requestAddress = this.url + "/team/get/members";
             List<String> result = this.restTemplate.postForObject(requestAddress, teamName, List.class);
-            System.out.println(this.getLeader(teamName));
             memberRoleMap.put(this.getLeader(teamName), Role.LEADER);
 
             for(String uid :result){
-                System.out.println(uid);
                 uid = uid.replaceAll("^\"|\"$", "");
                 UUID userID = UUID.fromString(uid);
                 if(memberRoleMap.get(userID)==null){
@@ -91,9 +89,8 @@ public class DirectoryAMSManager implements AccountManager {
     public String getNameById(String id) throws AccountErrorException{
         String result;
         try{
-            final String requestAddress = this.url + "/team/get/name";
+            final String requestAddress = this.url + "/get/name";
             result = this.restTemplate.postForObject(requestAddress, id, String.class).replaceAll("^\"|\"$", "");
-            System.out.println(result);
         }catch (RestClientException e){
             throw new AccountErrorException(e.toString());
         }
@@ -103,24 +100,17 @@ public class DirectoryAMSManager implements AccountManager {
     //Get Member role of Unit 
     //If it is not Team, return null instead
     public Map<UUID,Role> getMemberRoleOfTeam(String unitID) throws AccountErrorException{
-        JsonArray request = null;
         Map<UUID,Role> result = new HashMap<>();
         try{
             final String requestAddress = this.url + "/team/member/role";
-            request = this.restTemplate.postForObject(requestAddress, unitID, JsonArray.class);
-        }catch (RestClientException e){
-            throw new AccountErrorException(e.toString());
-        }
-        //not a team
-        if(request.isJsonNull()){
-            return null;
-        }
-        else{
-            Iterator<JsonElement> iter = request.iterator();
-            while(iter.hasNext()){
-                JsonObject curr = iter.next().getAsJsonObject();
-                result.put(UUID.fromString(curr.get("id").toString()), Role.valueOf(curr.get("role").toString()));
+            List<LinkedHashMap<String,String>> request = this.restTemplate.postForObject(requestAddress, unitID, List.class);
+            for(LinkedHashMap<String,String> each : request) {     
+                result.put(UUID.fromString(each.get("id").replaceAll("^\"|\"$", "")),Role.valueOf(each.get("role").replaceAll("^\"|\"$", "")));
             }
+        }catch (RestClientException e){
+            System.out.println(e.toString());
+            // throw new AccountErrorException(e.toString());
+            return result;
         }
         return result;
     }
@@ -133,11 +123,8 @@ public class DirectoryAMSManager implements AccountManager {
         try {
             final String requestAddress = this.url + "/team/get/leader";
             String result = this.restTemplate.postForObject(requestAddress, teamName, String.class);
-
-            System.out.println(result);
             leaderID = UUID.fromString(result.replaceAll("^\"|\"$", ""));
         } catch (RestClientException e) {
-            System.out.println(e.getMessage());
             //throw exception
         } 
         return leaderID;

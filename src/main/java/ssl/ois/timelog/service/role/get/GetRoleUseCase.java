@@ -4,6 +4,7 @@ import ssl.ois.timelog.service.repository.user.UnitRepository;
 
 import org.springframework.stereotype.Service;
 
+import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 

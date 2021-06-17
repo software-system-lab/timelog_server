@@ -28,8 +28,7 @@ public class RoleRestAdapter {
         }catch(GetRoleErrorException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals(Role.LEADER));
+        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals("LEADER"));
     }
 
     @PostMapping("/member")
@@ -41,7 +40,7 @@ public class RoleRestAdapter {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals(Role.MEMBER));
+        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals("MEMBER"));
     }
 
     @PostMapping("/professor")
@@ -53,7 +52,7 @@ public class RoleRestAdapter {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals(Role.PROFESSOR));
+        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals("PROFESSOR"));
     }
 
     @PostMapping("/stakeholder")
@@ -65,6 +64,6 @@ public class RoleRestAdapter {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals(Role.STAKEHOLDER));
+        return ResponseEntity.status(HttpStatus.OK).body(output.getRole().equals("STAKEHOLDER"));
     }
 }

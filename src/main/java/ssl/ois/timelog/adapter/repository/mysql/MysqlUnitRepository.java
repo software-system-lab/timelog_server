@@ -131,8 +131,9 @@ public class MysqlUnitRepository implements UnitRepository {
 
                 try (ResultSet rs = stmt.executeQuery()){
                     if(rs.next()) {
-                        if(!getMemberRoleOfTeam(unitID).isEmpty()){
-                            unit = new Team(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, unitID), getMemberRoleOfTeam(unitID));
+                        Map<UUID,Role> memberOfTeam = getMemberRoleOfTeam(unitID);
+                        if(!memberOfTeam.isEmpty()){
+                            unit = new Team(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, unitID), memberOfTeam);
                         }
                         else{
                             unit = new User(UUID.fromString(rs.getString("id")), this.getActivityTypeList(connection, unitID));
