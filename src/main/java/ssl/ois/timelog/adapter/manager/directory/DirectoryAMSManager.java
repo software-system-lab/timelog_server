@@ -123,6 +123,7 @@ public class DirectoryAMSManager implements AccountManager {
         try {
             final String requestAddress = this.url + "/team/get/leader";
             String result = this.restTemplate.postForObject(requestAddress, teamName, String.class);
+            System.out.println(result);
             leaderID = UUID.fromString(result.replaceAll("^\"|\"$", ""));
         } catch (RestClientException e) {
             //throw exception
