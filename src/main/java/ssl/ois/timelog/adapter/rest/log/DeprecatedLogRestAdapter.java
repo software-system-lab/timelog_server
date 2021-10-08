@@ -22,7 +22,7 @@ import ssl.ois.timelog.service.log.edit.EditLogUseCaseOutput;
 
 @RestController
 @RequestMapping("/api/log")
-public class LogRestAdapter {
+public class DeprecatedLogRestAdapter {
     @Autowired
     AddLogUseCase addLogUseCase;
 
@@ -65,7 +65,7 @@ public class LogRestAdapter {
     public ResponseEntity<EditLogUseCaseOutput> editLog(@RequestBody EditLogUseCaseInput requestBody) {
         EditLogUseCaseInput input = new EditLogUseCaseInput();
         EditLogUseCaseOutput output = new EditLogUseCaseOutput();
-        
+
         input.setLogID(requestBody.getLogID());
         input.setUserID(requestBody.getUserID());
         input.setActivityUnitID(requestBody.getActivityUnitID());
@@ -152,11 +152,11 @@ public class LogRestAdapter {
         public String getActivityUnitID() {
             return activityUnitID;
         }
-    
+
     }
 
     private class ResponseOutput {
-        
+
         private String logID;
 
         public String getLogID() {

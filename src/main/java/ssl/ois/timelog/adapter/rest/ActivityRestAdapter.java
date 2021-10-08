@@ -1,118 +1,32 @@
 package ssl.ois.timelog.adapter.rest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCase;
-import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseInput;
-import ssl.ois.timelog.service.activity.type.add.AddActivityTypeUseCaseOutput;
-import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCase;
-import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCaseInput;
-import ssl.ois.timelog.service.activity.type.edit.EditActivityTypeUseCaseOutput;
-import ssl.ois.timelog.service.activity.type.list.ListActivityTypeUseCase;
-import ssl.ois.timelog.service.activity.type.list.ListActivityTypeUseCaseInput;
-import ssl.ois.timelog.service.activity.type.list.ListActivityTypeUseCaseOutput;
-import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCase;
-import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseInput;
-import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOutput;
-import ssl.ois.timelog.service.exception.DatabaseErrorException;
-import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
-import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
-import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
+import javax.servlet.http.HttpServletResponse;
+
+import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/api/activity")
+@RequestMapping("/api/v2/activity")
 public class ActivityRestAdapter {
-    @Autowired
-    AddActivityTypeUseCase addActivityTypeUseCase;
-    
-    @Autowired
-    ListActivityTypeUseCase listActivityTypeUseCase;
-
-    @Autowired
-    EditActivityTypeUseCase editActivityTypeUseCase;
-
-    @Autowired
-    RemoveActivityTypeUseCase removeActivityTypeUseCase;
-
-
-    @PostMapping(value = "/add")
-    public ResponseEntity<AddActivityTypeUseCaseOutput> addActivity(
-            @RequestBody AddActivityTypeUseCaseInput requestBody) {
-        AddActivityTypeUseCaseInput input = new AddActivityTypeUseCaseInput();
-        AddActivityTypeUseCaseOutput output = new AddActivityTypeUseCaseOutput();
-
-        input.setUserID(requestBody.getUserID());
-        input.setIsEnable(requestBody.getIsEnable());
-        input.setIsPrivate(requestBody.getIsPrivate());
-        input.setActivityTypeName(requestBody.getActivityTypeName());
-        try {
-            addActivityTypeUseCase.execute(input, output);
-        } catch (DuplicateActivityTypeException | ActivityTypeNotExistException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
-        } catch (DatabaseErrorException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(output);
+    @PostMapping("/add")
+    public void addPersonActivity(HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
-    @PostMapping(value = "/all")
-    public ResponseEntity<ListActivityTypeUseCaseOutput> listAllActivities(@RequestBody ListActivityTypeUseCaseInput requestBody) {
-        ListActivityTypeUseCaseInput input = new ListActivityTypeUseCaseInput();
-        ListActivityTypeUseCaseOutput output = new ListActivityTypeUseCaseOutput();
-
-        input.setUnitIdList(requestBody.getUnitIdList());
-        try {
-            listActivityTypeUseCase.execute(input, output);
-        } catch (DatabaseErrorException | GetActivityTypeErrorException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(output);
+    @GetMapping("/list")
+    public ResponseEntity<Object> listPersonActivity() {
+        return null;
     }
 
-    @PostMapping(value = "/edit")
-    public ResponseEntity<EditActivityTypeUseCaseOutput> editActivity(
-            @RequestBody EditActivityTypeUseCaseInput requestBody) {
-        EditActivityTypeUseCaseInput input = new EditActivityTypeUseCaseInput();
-        EditActivityTypeUseCaseOutput output = new EditActivityTypeUseCaseOutput();
-
-        input.setUnitID(requestBody.getUnitID());
-        input.setTargetActivityTypeName(requestBody.getTargetActivityTypeName());
-        input.setActivtiyTypeName(requestBody.getActivityTypeName());
-        input.setIsEnable(requestBody.getIsEnable());
-        input.setIsPrivate(requestBody.getIsPrivate());
-
-        try {
-            editActivityTypeUseCase.execute(input, output);
-        } catch (DuplicateActivityTypeException | ActivityTypeNotExistException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
-        } catch (DatabaseErrorException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(output);        
+    @PutMapping("/edit/{activityId}")
+    public void editActivity(@PathVariable String activityId, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 
-    @PostMapping(value = "/remove")
-    public ResponseEntity<RemoveActivityTypeUseCaseOutput> removeActivity(@RequestBody RemoveActivityTypeUseCaseInput requestBody) {
-        RemoveActivityTypeUseCaseInput input = new RemoveActivityTypeUseCaseInput();
-        RemoveActivityTypeUseCaseOutput output = new RemoveActivityTypeUseCaseOutput();
-
-        input.setUserID(requestBody.getUserID());
-        input.setActivityTypeName(requestBody.getActivityTypeName());
-
-        try {
-            removeActivityTypeUseCase.execute(input, output);
-        } catch (DuplicateActivityTypeException | ActivityTypeNotExistException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
-        } catch (DatabaseErrorException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(output);
+    @DeleteMapping("/remove/{activityId}")
+    public void removeActivity(@PathVariable String activityId, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 }
