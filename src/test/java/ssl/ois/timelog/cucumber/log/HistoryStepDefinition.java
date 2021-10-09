@@ -1,15 +1,20 @@
 package ssl.ois.timelog.cucumber.log;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import ssl.ois.timelog.adapter.manager.memory.MemoryAMSManager;
 import ssl.ois.timelog.adapter.presenter.log.history.LogHistoryPresenter;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUnitRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
+import ssl.ois.timelog.model.connect.Unit;
+import ssl.ois.timelog.model.team.Role;
+import ssl.ois.timelog.model.team.Team;
 import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
@@ -29,6 +34,7 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.ParseException;
+import java.util.UUID;
 
 public class HistoryStepDefinition {
     private UnitRepository unitRepository;
@@ -42,6 +48,7 @@ public class HistoryStepDefinition {
     public void setUp() {
         this.unitRepository = new MemoryUnitRepository();
         this.logRepository = new MemoryLogRepository();
+        this.accountManager = new MemoryAMSManager(new HashMap<>());
     }
 
     @Given("[History] I log in to Timelog with user ID {string}")
@@ -50,6 +57,14 @@ public class HistoryStepDefinition {
         try {
             loginService.process(userID);
             this.userID = loginService.getUserID();
+            HashMap<String, Unit> amsService = new HashMap<String, Unit>();
+            HashMap<UUID, Role> memberRoleMap = new HashMap<UUID, Role>();
+            memberRoleMap.put(UUID.fromString(this.userID), Role.MEMBER);
+            Team team = new Team(UUID.randomUUID(), memberRoleMap);
+            System.out.println(team.getMemberRoleMap());
+            amsService.put("team1", team);
+            amsService.put("current user", loginService.getUser());
+            this.accountManager = new MemoryAMSManager(amsService);
         } catch (Exception e) {
             fail(e.getMessage());
         }

@@ -23,10 +23,7 @@ public class MysqlLogRepository implements LogRepository {
 
     @Override
     public void addLog(Log log) throws SaveLogErrorException {
-        Connection connection = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement(
                 "INSERT INTO `log`" + 
                 "(`id`, `user_id`, `title`, `start_time`, `end_time`, `description`, `activity_type`, `activity_user_mapper_id`) " + 
@@ -45,17 +42,12 @@ public class MysqlLogRepository implements LogRepository {
             }
         } catch (SQLException e) {
             throw new SaveLogErrorException(log.getTitle());
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
     }
 
     @Override
     public void updateLog(Log log, String targetID) throws GetLogErrorException, SaveLogErrorException {
-        Connection connection = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement(
                 "UPDATE `log`" + 
                 "SET `title`= ?, `start_time`= ?, `end_time`= ?, `activity_type`= ?, `activity_user_mapper_id`= ? " + 
@@ -73,18 +65,13 @@ public class MysqlLogRepository implements LogRepository {
             }
         } catch (SQLException e) {
             throw new SaveLogErrorException(log.getTitle());
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
     }
 
     @Override
     public Log findByID(String id) throws GetLogErrorException {
-        Connection connection = null;
         Log log = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement(
                 "SELECT `log`.* , `activity`.`user_id` ,  `activity`.`activity_type_name` +" +
                 " FROM `log` ,`activity_user_mapper` as `activity`" +
@@ -110,17 +97,13 @@ public class MysqlLogRepository implements LogRepository {
             }
         } catch (SQLException e) {
             throw new GetLogErrorException(id);
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
         return log;
     }
 
     @Override
     public Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException {
-        Connection connection = null;
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()) {
 
             try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM `log` WHERE `id` = ?")) {
                 stmt.setString(1, logID);
@@ -128,19 +111,14 @@ public class MysqlLogRepository implements LogRepository {
             }
         } catch (SQLException e) {
             return false;
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
         return true;
     }
 
     @Override
     public List<Log> findByPeriod(String userID, String startDate, String endDate) throws DatabaseErrorException {
-        Connection connection = null;
         List<Log> logList = new ArrayList<>();
-        try {
-            connection = this.mysqlDriverAdapter.getConnection();
-            
+        try (Connection connection = this.mysqlDriverAdapter.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement(
                 "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
                 "FROM `log`, `activity_user_mapper` as `activity`" +
@@ -171,8 +149,6 @@ public class MysqlLogRepository implements LogRepository {
 
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
         }
         return logList;
     }
@@ -196,9 +172,7 @@ public class MysqlLogRepository implements LogRepository {
             }
         } catch (SQLException e) {
             throw new DatabaseErrorException();
-        } finally {
-            this.mysqlDriverAdapter.closeConnection(connection);
-        }            
+        }
         return activityUserMapperID;
     }
 

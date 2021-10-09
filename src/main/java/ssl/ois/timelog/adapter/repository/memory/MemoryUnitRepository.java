@@ -1,12 +1,11 @@
 package ssl.ois.timelog.adapter.repository.memory;
 
+import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
 import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.connect.Unit;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MemoryUnitRepository implements UnitRepository {
     /*
@@ -52,5 +51,10 @@ public class MemoryUnitRepository implements UnitRepository {
             }
         }
         return activityUnitMapperID;
+    }
+
+    @Override
+    public List<UUID> getActivityMapperIDListByUnitID(String unitID) throws DatabaseErrorException {
+        return new ArrayList<>();
     }
 }

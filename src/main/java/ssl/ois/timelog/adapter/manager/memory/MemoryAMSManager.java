@@ -23,8 +23,11 @@ public class MemoryAMSManager implements AccountManager {
         UUID userID = directory.get(username).getID();
         Map<UUID, String> belongingTeams = new HashMap<>();
         for(Map.Entry<String, Unit> pair: directory.entrySet()){
-            if(((Team)pair.getValue()).getMemberRoleMap().get(userID) != null){
-                belongingTeams.put(pair.getValue().getID(), pair.getKey());
+            if(pair.getValue() instanceof Team){
+                if (((Team)pair.getValue()).getMemberRoleMap().get(userID) != null){
+                    pair.getValue().getMemberRoleMap().get(userID);
+                    belongingTeams.put(pair.getValue().getID(), pair.getKey());
+                }
             }
         }
         return belongingTeams;
