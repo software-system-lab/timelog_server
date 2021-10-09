@@ -38,4 +38,5 @@ public class HistoryLogUseCaseInput {
     public void setFilterList(List<String> filterList) {
         this.filterList = filterList;
     }
+
 }

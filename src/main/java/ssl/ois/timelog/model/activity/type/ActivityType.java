@@ -49,5 +49,4 @@ public class ActivityType {
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
     }
-
 }

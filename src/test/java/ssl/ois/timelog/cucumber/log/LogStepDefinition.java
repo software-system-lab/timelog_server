@@ -12,7 +12,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
-import ssl.ois.timelog.adapter.repository.memory.MemoryUserRepository;
+import ssl.ois.timelog.adapter.repository.memory.MemoryUnitRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.repository.log.LogRepository;
@@ -23,11 +23,11 @@ import ssl.ois.timelog.service.log.add.*;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCase;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseInput;
 import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseOutput;
-import ssl.ois.timelog.service.repository.user.UserRepository;
+import ssl.ois.timelog.service.repository.user.UnitRepository;
 import io.cucumber.java.en.Then;
 
 public class LogStepDefinition {
-    private UserRepository userRepository;
+    private UnitRepository unitRepository;
     private LogRepository logRepository;
     private String title;
     private String startTime;
@@ -39,13 +39,13 @@ public class LogStepDefinition {
 
     @Before
     public void setup() {
-        this.userRepository = new MemoryUserRepository();
+        this.unitRepository = new MemoryUnitRepository();
         this.logRepository = new MemoryLogRepository();
     }
 
     @Given("[Log] I log in to Timelog with user ID {string}")
     public void log_i_log_in_to_Timelog_with_user_ID(String userID) {
-        UserLogin userLoginService = new UserLogin(this.userRepository);
+        UserLogin userLoginService = new UserLogin(this.unitRepository);
         try {
             userLoginService.process(userID);
             this.userID = userLoginService.getUserID();
@@ -74,6 +74,7 @@ public class LogStepDefinition {
         addLogUseCaseInput.setEndTime(this.endTime);
         addLogUseCaseInput.setDescription(this.description);
         addLogUseCaseInput.setActivityTypeName(activityTypeName);
+        addLogUseCaseInput.setActivityUnitID(this.userID);
 
         try {
             usecase.execute(addLogUseCaseInput, addLogUseCaseOutput);

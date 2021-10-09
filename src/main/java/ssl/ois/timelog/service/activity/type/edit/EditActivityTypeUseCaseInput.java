@@ -5,8 +5,7 @@ public class EditActivityTypeUseCaseInput {
     private String activityTypeName;
     private Boolean isEnable;
     private Boolean isPrivate;
-    private String userID;
-    private String activityUserMapperID;
+    private String unitID;
 
     public String getTargetActivityTypeName() {
         return this.targetActivityTypeName;
@@ -40,19 +39,11 @@ public class EditActivityTypeUseCaseInput {
         this.isPrivate = isPrivate;
     }
 
-    public String getUserID() {
-        return this.userID;
+    public String getUnitID() {
+        return this.unitID;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    public String getActivityUserMapperID() {
-        return activityUserMapperID;
-    }
-
-    public void setActivityUserMapperID(String activityUserMapperID) {
-        this.activityUserMapperID = activityUserMapperID;
+    public void setUnitID(String unitID) {
+        this.unitID = unitID;
     }
 }

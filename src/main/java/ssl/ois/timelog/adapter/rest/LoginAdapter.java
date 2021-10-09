@@ -10,31 +10,75 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 import ssl.ois.timelog.service.exception.user.InitUserDataErrorException;
+import ssl.ois.timelog.service.team.get.GetTeamUseCase;
 import ssl.ois.timelog.service.user.enter.EnterUseCase;
 import ssl.ois.timelog.service.user.enter.EnterUseCaseInput;
 import ssl.ois.timelog.service.user.enter.EnterUseCaseOutput;
+import ssl.ois.timelog.service.user.belong.GetMemberOfUseCase;
+import ssl.ois.timelog.service.user.belong.GetMemberOfUseCaseInput;
+import ssl.ois.timelog.service.user.belong.GetMemberOfUseCaseOutput;
+import ssl.ois.timelog.service.exception.team.GetMemberOfErrorException;
+import ssl.ois.timelog.service.team.get.GetTeamUseCaseInput;
+import ssl.ois.timelog.service.team.get.GetTeamUseCaseOutput;
+import ssl.ois.timelog.service.exception.team.GetTeamErrorException;
+import ssl.ois.timelog.service.exception.team.InitTeamDataErrorException;
+
+import java.util.logging.Logger;
+
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 @RestController
-@RequestMapping("/api/login")
+@RequestMapping("/api")
 public class LoginAdapter {
     @Autowired
     EnterUseCase enterUseCase;
 
     private static Log logger = LogFactory.getLog(LoginAdapter.class.getName());
+    @Autowired
+    GetMemberOfUseCase getMemberOfUseCase;
 
-    @PostMapping(value = "")
+    @Autowired
+    GetTeamUseCase getTeamUseCase;
+
+    @PostMapping(value = "/login")
     public ResponseEntity<EnterUseCaseOutput> enterTimelog(@RequestBody EnterUseCaseInput input) {
+        Logger logger = Logger.getLogger(this.getClass().toString() + ", Method: POST, route: /api/login");
         EnterUseCaseOutput output = new EnterUseCaseOutput();
+        logger.info("user: " + input.getUserID() + " login.");
         try {
             this.enterUseCase.execute(input, output);
         } catch (DuplicateActivityTypeException | InitUserDataErrorException e) {
-            logger.error(e);
+            logger.warning(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
         }
 
+        return ResponseEntity.status(HttpStatus.OK).body(output);
+    }
+
+    @PostMapping(value = "/belong")
+    public ResponseEntity<GetMemberOfUseCaseOutput> getMemberOfList(@RequestBody GetMemberOfUseCaseInput input) {
+        GetMemberOfUseCaseOutput output = new GetMemberOfUseCaseOutput();
+
+        try {
+            this.getMemberOfUseCase.execute(input, output);
+        } catch (GetMemberOfErrorException | InitTeamDataErrorException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(output);
+    }
+
+    @PostMapping(value = "/group")
+    public ResponseEntity<GetTeamUseCaseOutput> getTeam (@RequestBody GetTeamUseCaseInput input) {
+        GetTeamUseCaseOutput output = new GetTeamUseCaseOutput();
+        try {
+            this.getTeamUseCase.execute(input, output);
+        } catch (GetTeamErrorException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(output);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(output);
     }
 }

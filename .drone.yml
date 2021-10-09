@@ -25,7 +25,7 @@ name: rancher_cluster_token
 ---
 kind: pipeline
 type: docker
-name: Test
+name: Analysis
 
 steps:
 - name: Run test
@@ -40,15 +40,14 @@ steps:
   commands:
   - mvn test
 
-# - name: Sonar Scanner
-#   image: aosapps/drone-sonar-plugin
-#   settings:
-#     sonar_token:
-#       from_secret: sonar_project_token
-#     sonar_host:
-#       from_secret:
-#         sonar_url
-#     ver: 1.0
+- name: Sonar Scanner
+  image: aosapps/drone-sonar-plugin
+  settings:
+    sonar_token:
+      from_secret: sonar_project_token
+    sonar_host:
+      from_secret: sonar_url
+
 
 trigger:
   branch:
@@ -65,7 +64,7 @@ steps:
 - name: Publish Docker Image
   image: plugins/docker
   settings:
-    repo: nightlord851108/timelog_server
+    repo: ssl1321ois/timelog_server
     tags:
       ${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
     username:
@@ -102,30 +101,11 @@ steps:
         rancher_cluster_token
   commands:
   - cd kustomize/overlays/production
-  - kustomize edit set image nightlord851108/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
+  - kustomize edit set image ssl1321ois/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
   - kustomize build . | kubectl apply --server=$${KUBE_CLUSTER_URL}  --token=$${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=ois-production -f -
   when:
     branch:
     - master
-    event:
-    - push
-
-- name: Deploy Beta
-  image: nightlord851108/kustomize
-  environment:
-    KUBE_CLUSTER_URL:
-      from_secret:
-        rancher_kube_cluster_url
-    CLUSTER_TOKEN:
-      from_secret:
-        rancher_cluster_token
-  commands:
-  - cd kustomize/overlays/beta
-  - kustomize edit set image nightlord851108/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
-  - kustomize build . | kubectl apply --server=$${KUBE_CLUSTER_URL}  --token=$${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=ois-beta -f -
-  when:
-    branch:
-    - beta
     event:
     - push
 
@@ -134,4 +114,3 @@ depends_on:
 trigger:
   branch:
   - master
-  - beta

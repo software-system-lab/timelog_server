@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.model.activity.type.ActivityType;
+import ssl.ois.timelog.model.unit.AbstractUnit;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
 

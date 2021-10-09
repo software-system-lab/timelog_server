@@ -23,6 +23,7 @@ import ssl.ois.timelog.service.activity.type.remove.RemoveActivityTypeUseCaseOut
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
 import ssl.ois.timelog.service.exception.activity.ActivityTypeNotExistException;
 import ssl.ois.timelog.service.exception.activity.DuplicateActivityTypeException;
+import ssl.ois.timelog.service.exception.activity.GetActivityTypeErrorException;
 
 @RestController
 @RequestMapping("/api/activity")
@@ -65,11 +66,11 @@ public class ActivityRestAdapter {
         ListActivityTypeUseCaseInput input = new ListActivityTypeUseCaseInput();
         ListActivityTypeUseCaseOutput output = new ListActivityTypeUseCaseOutput();
 
-        input.setUserID(requestBody.getUserID());
-        
+        input.setUnitIdList(requestBody.getUnitIdList());
         try {
             listActivityTypeUseCase.execute(input, output);
-        } catch (DatabaseErrorException e) {
+        } catch (DatabaseErrorException | GetActivityTypeErrorException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(output);
         }
         return ResponseEntity.status(HttpStatus.OK).body(output);
@@ -81,7 +82,7 @@ public class ActivityRestAdapter {
         EditActivityTypeUseCaseInput input = new EditActivityTypeUseCaseInput();
         EditActivityTypeUseCaseOutput output = new EditActivityTypeUseCaseOutput();
 
-        input.setUserID(requestBody.getUserID());
+        input.setUnitID(requestBody.getUnitID());
         input.setTargetActivityTypeName(requestBody.getTargetActivityTypeName());
         input.setActivtiyTypeName(requestBody.getActivityTypeName());
         input.setIsEnable(requestBody.getIsEnable());

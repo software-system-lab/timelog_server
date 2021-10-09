@@ -1,13 +1,19 @@
 package ssl.ois.timelog.service.activity.type.list;
 
-public class ListActivityTypeUseCaseInput {
-    private String userID;
+import java.util.List;
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+public class ListActivityTypeUseCaseInput {
+    private List<String> unitIdList;
+
+    public void addUnitId(String unitId) {
+        this.unitIdList.add(unitId);
     }
 
-    public String getUserID() {
-        return this.userID;
+    public void setUnitIdList(List<String> unitIdList) {
+        this.unitIdList = unitIdList;
+    }
+
+    public List<String> getUnitIdList(){
+        return this.unitIdList;
     }
 }

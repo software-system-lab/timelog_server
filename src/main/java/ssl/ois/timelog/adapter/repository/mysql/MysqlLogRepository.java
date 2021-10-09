@@ -120,9 +120,9 @@ public class MysqlLogRepository implements LogRepository {
         List<Log> logList = new ArrayList<>();
         try (Connection connection = this.mysqlDriverAdapter.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT `log`.* ,`activity`.`user_id`,`activity`.`activity_type_name`" +
+                "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
                 "FROM `log`, `activity_user_mapper` as `activity`" +
-                "WHERE `activity`.`user_id` = ? " +
+                "WHERE `log`.`user_id` = ? " +
                 "AND `log`.`activity_user_mapper_id` = `activity`.`id`" +
                 "AND `log`.`start_time` >= ? " +
                 "AND `log`.`end_time` < ? ")) {
@@ -138,7 +138,7 @@ public class MysqlLogRepository implements LogRepository {
                         String endTime = rs.getString("end_time").replace("-","/");
                         String description = rs.getString("description");
                         UUID activityUserMapperID = UUID.fromString(rs.getString("activity_user_mapper_id"));
-                        UUID uid = UUID.fromString(rs.getString("user_id"));
+                        UUID uid = UUID.fromString(rs.getString("unit_id"));
                         String activityType = rs.getString("activity_type_name");
                         Log log = new Log(logID, uid, title, startTime,
                                 endTime, description, activityType,activityUserMapperID);
@@ -154,14 +154,14 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException {
+    public UUID findActivityUserMapperID(String unitID, String activityTypeName) throws DatabaseErrorException {
         UUID activityUserMapperID;
         try (Connection connection = this.mysqlDriverAdapter.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT `id` FROM `activity_user_mapper` WHERE `user_id` = ? " +
-                "AND `activity_type_name` = ?")) {
+                    "SELECT `id` FROM `activity_user_mapper` WHERE `unit_id` = ? " +
+                            "AND `activity_type_name` = ?")) {
 
-                stmt.setString(1, userID);
+                stmt.setString(1, unitID);
                 stmt.setString(2, activityTypeName);
                 try (ResultSet rs = stmt.executeQuery()) {
                     rs.next();
@@ -172,5 +172,93 @@ public class MysqlLogRepository implements LogRepository {
             throw new DatabaseErrorException();
         }
         return activityUserMapperID;
+    }
+
+    @Override
+    public List<Log> findByPeriodAndTeam(String teamID, String startDate, String endDate) throws DatabaseErrorException {
+        Connection connection = null;
+        List<Log> logList = new ArrayList<>();
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+            
+            try (PreparedStatement stmt = connection.prepareStatement(
+                "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
+                "FROM `log`, `activity_user_mapper` as `activity`" +
+                "WHERE `activity`.`unit_id` = ? " +
+                "AND `log`.`activity_user_mapper_id` = `activity`.`id`" +
+                "AND `log`.`start_time` >= ? " +
+                "AND `log`.`end_time` < ? ")) {
+
+                stmt.setString(1, teamID);
+                stmt.setString(2, startDate);
+                stmt.setString(3, endDate);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        UUID logID = UUID.fromString(rs.getString("id"));
+                        String title = rs.getString("title");
+                        String startTime = rs.getString("start_time").replace("-","/");
+                        String endTime = rs.getString("end_time").replace("-","/");
+                        String description = rs.getString("description");
+                        UUID activityUserMapperID = UUID.fromString(rs.getString("activity_user_mapper_id"));
+                        UUID uid = UUID.fromString(rs.getString("unit_id"));
+                        String activityType = rs.getString("activity_type_name");
+                        Log log = new Log(logID, uid, title, startTime,
+                                endTime, description, activityType,activityUserMapperID);
+                        logList.add(log);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+        return logList;
+    }
+
+    @Override
+    public List<Log> findByPeriodAndUserIDWithTeamID(String teamID, String userID, String startDate, String endDate) throws DatabaseErrorException {
+        Connection connection = null;
+        List<Log> logList = new ArrayList<>();
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+            
+            try (PreparedStatement stmt = connection.prepareStatement(
+                "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
+                "FROM `log`, `activity_user_mapper` as `activity`" +
+                "WHERE `activity`.`unit_id` = ? " +
+                "AND `log`.`activity_user_mapper_id` = `activity`.`id`" +
+                "AND `log`.`user_id` = ? " +
+                "AND `log`.`start_time` >= ? " +
+                "AND `log`.`end_time` < ? ")) {
+
+                stmt.setString(1, teamID);
+                stmt.setString(2, userID);
+                stmt.setString(3, startDate);
+                stmt.setString(4, endDate);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        UUID logID = UUID.fromString(rs.getString("id"));
+                        String title = rs.getString("title");
+                        String startTime = rs.getString("start_time").replace("-","/");
+                        String endTime = rs.getString("end_time").replace("-","/");
+                        String description = rs.getString("description");
+                        UUID activityUserMapperID = UUID.fromString(rs.getString("activity_user_mapper_id"));
+                        UUID uid = UUID.fromString(rs.getString("unit_id"));
+                        String activityType = rs.getString("activity_type_name");
+                        Log log = new Log(logID, uid, title, startTime,
+                                endTime, description, activityType,activityUserMapperID);
+                        logList.add(log);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+        return logList;
     }
 }

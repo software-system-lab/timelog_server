@@ -21,6 +21,7 @@ public class LogHistoryViewModel {
     public static class LogItem {
         private String id;
         private String activityTypeName;
+        private String teamName;
         private String title;
         private String startTime;
         private String endTime;
@@ -35,6 +36,14 @@ public class LogHistoryViewModel {
 
         public void setActivityTypeName(String activityTypeName) {
             this.activityTypeName = activityTypeName;
+        }
+
+        public String getTeamName(){
+            return teamName;
+        }
+
+        public void setTeamName(String teamName){
+            this.teamName = teamName;
         }
 
         public String getTitle() {

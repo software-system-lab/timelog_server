@@ -46,6 +46,7 @@ public class LogRestAdapter {
         input.setEndTime(requestBody.getEndTime());
         input.setDescription(requestBody.getDescription());
         input.setActivityTypeName(requestBody.getActivityTypeName());
+        input.setActivityUnitID(requestBody.getActivityUnitID());
 
         try {
             this.addLogUseCase.execute(input, output);
@@ -64,9 +65,10 @@ public class LogRestAdapter {
     public ResponseEntity<EditLogUseCaseOutput> editLog(@RequestBody EditLogUseCaseInput requestBody) {
         EditLogUseCaseInput input = new EditLogUseCaseInput();
         EditLogUseCaseOutput output = new EditLogUseCaseOutput();
-
+        
         input.setLogID(requestBody.getLogID());
         input.setUserID(requestBody.getUserID());
+        input.setActivityUnitID(requestBody.getActivityUnitID());
         input.setTitle(requestBody.getTitle());
         input.setStartTime(requestBody.getStartTime());
         input.setEndTime(requestBody.getEndTime());
@@ -112,6 +114,7 @@ public class LogRestAdapter {
         private String endTime;
         private String description;
         private String activityTypeName;
+        private String activityUnitID;
 
         public NewLogRequestInput(String userID, String title, String startTime, String endTime, String description, String activityTypeName) {
             this.userID = userID;
@@ -145,6 +148,11 @@ public class LogRestAdapter {
         public String getActivityTypeName() {
             return activityTypeName;
         }
+
+        public String getActivityUnitID() {
+            return activityUnitID;
+        }
+    
     }
 
     private class ResponseOutput {
