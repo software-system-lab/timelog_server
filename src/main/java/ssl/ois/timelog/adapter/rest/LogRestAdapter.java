@@ -1,15 +1,19 @@
 package ssl.ois.timelog.adapter.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-import ssl.ois.timelog.adapter.view.model.log.history.LogHistoryViewModel;
-import ssl.ois.timelog.service.exception.AccountErrorException;
-import ssl.ois.timelog.service.exception.DatabaseErrorException;
-import ssl.ois.timelog.service.log.team.list.ListTeamLogUseCase;
-import ssl.ois.timelog.service.log.team.list.ListTeamLogUseCaseInput;
-import ssl.ois.timelog.service.log.team.list.ListTeamLogUseCaseOutput;
+import ssl.ois.timelog.exception.log.GetLogErrorException;
+import ssl.ois.timelog.service.log.add.AddLogUseCaseInput;
+import ssl.ois.timelog.exception.AccountErrorException;
+import ssl.ois.timelog.exception.DatabaseErrorException;
+import ssl.ois.timelog.exception.log.SaveLogErrorException;
+import ssl.ois.timelog.service.log.add.AddLogUseCase;
+import ssl.ois.timelog.service.log.edit.EditLogUseCase;
+import ssl.ois.timelog.service.log.edit.EditLogUseCaseInput;
+import ssl.ois.timelog.service.log.list.ListLogUseCase;
+import ssl.ois.timelog.service.log.list.ListLogUseCaseInput;
+import ssl.ois.timelog.service.log.list.ListLogUseCaseOutput;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
@@ -19,46 +23,75 @@ import java.text.ParseException;
 public class LogRestAdapter {
 
     @Autowired
-    private ListTeamLogUseCase listTeamLogUseCase;
+    @Qualifier("listTeamLogUseCase")
+    private ListLogUseCase listTeamLogUseCase;
 
-    @GetMapping("/person/list")
-    public ResponseEntity<Object> listPersonLog() {
-        return null;
-    }
+    @Autowired
+    @Qualifier("addLogUseCase")
+    private AddLogUseCase addLogUseCase;
 
-    @GetMapping("/team/list")
-    public ResponseEntity<ListTeamLogUseCaseOutput> listTeamLog(@RequestParam String teamId, @RequestParam String startDate, @RequestParam String endDate) {
-        System.out.println("/team/list");
-        ListTeamLogUseCaseInput input = new ListTeamLogUseCaseInput();
-        ListTeamLogUseCaseOutput output = new ListTeamLogUseCaseOutput();
+    @Autowired
+    @Qualifier("editLogUseCase")
+    private EditLogUseCase editLogUseCase;
 
-        input.setTeamId(teamId);
+    @GetMapping("/list")
+    public ListLogUseCaseOutput listTeamLog(
+            @RequestParam String unitId,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            HttpServletResponse response) {
+        ListLogUseCaseInput input = new ListLogUseCaseInput();
+        ListLogUseCaseOutput output = new ListLogUseCaseOutput();
+
+        input.setUnitId(unitId);
         input.setStartDate(startDate);
         input.setEndDate(endDate);
 
         try {
             this.listTeamLogUseCase.execute(input, output);
         } catch (ParseException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } catch (DatabaseErrorException | AccountErrorException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(output);
+        return output;
     }
 
-    @PostMapping("/person/add")
-    public void addPersonLog(HttpServletResponse response) {
-        response.setStatus(HttpServletResponse.SC_CREATED);
-    }
+    @PostMapping("/add")
+    public void addPersonLog(
+            @RequestBody AddLogUseCaseInput requestBody,
+            HttpServletResponse response) {
 
-    @PostMapping("/team/add")
-    public void addTeamLog(HttpServletResponse response) {
+        try {
+            this.addLogUseCase.execute(requestBody);
+        } catch (SaveLogErrorException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
     @PutMapping("/edit/{logId}")
-    public void editLog(@PathVariable String logId, HttpServletResponse response){
+    public void editLog(
+            @PathVariable String logId,
+            @RequestBody EditLogUseCaseInput input,
+            HttpServletResponse response){
+
+        try {
+            this.editLogUseCase.execute(input);
+        } catch (GetLogErrorException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } catch (SaveLogErrorException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (ParseException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 

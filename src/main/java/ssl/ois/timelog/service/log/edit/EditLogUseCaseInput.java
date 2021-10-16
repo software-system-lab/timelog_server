@@ -1,41 +1,32 @@
 package ssl.ois.timelog.service.log.edit;
 
 public class EditLogUseCaseInput {
-    private String logID;
-    private String userID;
-    private String activityUnitID;
+    private String id;
     private String title;
     private String startTime;
     private String endTime;
     private String description;
-    private String activityTypeName;
+    private String activityTypeId;
 
-    public EditLogUseCaseInput() {
-        //empty constructor
+    public EditLogUseCaseInput(){}
+
+    public EditLogUseCaseInput(
+            String id, String title, String startTime, String endTime,
+            String description, String activityTypeId, String createBy) {
+        this.id = id;
+        this.title = title;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.description = description;
+        this.activityTypeId = activityTypeId;
     }
 
-    public String getLogID() {
-        return logID;
+    public String getId() {
+        return id;
     }
 
-    public void setLogID(String logID) {
-        this.logID = logID;
-    }
-
-    public String getUserID() {
-        return userID;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    public String getActivityUnitID() {
-        return activityUnitID;
-    }
-
-    public void setActivityUnitID(String activityUnitID) {
-        this.activityUnitID = activityUnitID;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -70,12 +61,11 @@ public class EditLogUseCaseInput {
         this.description = description;
     }
 
-    public String getActivityTypeName() {
-        return activityTypeName;
+    public String getActivityTypeId() {
+        return activityTypeId;
     }
 
-    public void setActivityTypeName(String activityTypeName) {
-        this.activityTypeName = activityTypeName;
+    public void setActivityTypeId(String activityTypeId) {
+        this.activityTypeId = activityTypeId;
     }
-
 }

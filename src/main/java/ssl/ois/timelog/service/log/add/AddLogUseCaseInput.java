@@ -1,33 +1,32 @@
 package ssl.ois.timelog.service.log.add;
 
 public class AddLogUseCaseInput {
-    private String userID;
+    private String unitId;
     private String title;
     private String startTime;
     private String endTime;
     private String description;
-    private String activityTypeName;
-    private String activityUnitID;
+    private String activityTypeId;
+    private String createBy;
 
-    public AddLogUseCaseInput() {
-    }
+    public AddLogUseCaseInput(){}
 
-    public AddLogUseCaseInput(String userID, String activityUnitID, String title, String startTime, String endTime, String description, String activityTypeName) {
-        this.userID = userID;
+    public AddLogUseCaseInput(String unitId, String title, String startTime, String endTime, String description, String activityTypeId, String createBy) {
+        this.unitId = unitId;
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
         this.description = description;
-        this.activityTypeName = activityTypeName;
-        this.activityUnitID = activityUnitID;
+        this.activityTypeId = activityTypeId;
+        this.createBy = createBy;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getUnitId() {
+        return unitId;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUnitId(String unitId) {
+        this.unitId = unitId;
     }
 
     public String getTitle() {
@@ -62,19 +61,19 @@ public class AddLogUseCaseInput {
         this.description = description;
     }
 
-    public String getActivityTypeName() {
-        return activityTypeName;
+    public String getActivityTypeId() {
+        return activityTypeId;
     }
 
-    public void setActivityTypeName(String activityTypeName) {
-        this.activityTypeName = activityTypeName;
+    public void setActivityTypeId(String activityTypeId) {
+        this.activityTypeId = activityTypeId;
     }
 
-    public String getActivityUnitID() {
-        return activityUnitID;
+    public String getCreateBy() {
+        return createBy;
     }
 
-    public void setActivityUnitID(String activityUnitID) {
-        this.activityUnitID = activityUnitID;
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 }

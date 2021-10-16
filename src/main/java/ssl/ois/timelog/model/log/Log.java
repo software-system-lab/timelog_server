@@ -1,73 +1,54 @@
 package ssl.ois.timelog.model.log;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
 public class Log {
-    private final UUID id;
-    private UUID userID;
+    private final String id;
+    private String unitId;
     private String title;
+    private String description;
     private Date startTime;
     private Date endTime;
-    private String description;
+    private String activityTypeId;
     private String activityTypeName;
-    private UUID activityUserMapperID;
+    private String createBy;
 
-    public static final String DATE_FORMAT = "yyyy/MM/dd HH:mm";
-
-    public Log(final UUID logID,
-               final UUID userID,
+    public Log(final String id,
+               final String unitId,
                final String title,
-               final String startTime,
-               final String endTime,
+               final Date startTime,
+               final Date endTime,
                final String description,
+               final String activityTypeId,
                final String activityTypeName,
-               final UUID activityUserMapperID) {
-        this.id = logID;
+               final String createBy) {
+        this.id = id;
+        this.unitId = unitId;
         this.title = title;
-        this.userID = userID;
-        this.activityTypeName = activityTypeName;
         this.description = description;
-        this.activityUserMapperID = activityUserMapperID;
-        final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-        try {
-            this.startTime = dateFormat.parse(startTime);
-        } catch (final ParseException e) {
-            throw new IllegalArgumentException("Invalid Start Time: " + startTime);
-        }
-        try {
-            this.endTime = dateFormat.parse(endTime);
-        } catch (final ParseException e) {
-            throw new IllegalArgumentException("Invalid End Time format: " + endTime);
-        }
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.activityTypeName = activityTypeName;
+        this.activityTypeId = activityTypeId;
+        this.createBy = createBy;
     }
 
-    public Log(final UUID userID,
+    public Log(final String unitId,
                final String title,
-               final String startTime,
-               final String endTime,
+               final Date startTime,
+               final Date endTime,
                final String description,
-               final String activityTypeName,
-               final UUID activityUserMapperID) {
-        this.id = UUID.randomUUID();
+               final String activityTypeId,
+               final String createBy) {
+        this.id = UUID.randomUUID().toString();
+        this.unitId = unitId;
         this.title = title;
-        this.userID = userID;
-        this.activityTypeName = activityTypeName;
         this.description = description;
-        this.activityUserMapperID = activityUserMapperID;
-        final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-        try {
-            this.startTime = dateFormat.parse(startTime);
-        } catch (final ParseException e) {
-            throw new IllegalArgumentException("Invalid Start Time: " + startTime);
-        }
-        try {
-            this.endTime = dateFormat.parse(endTime);
-        } catch (final ParseException e) {
-            throw new IllegalArgumentException("Invalid End Time format: " + endTime);
-        }
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.activityTypeId = activityTypeId;
+        this.createBy = createBy;
     }
 
     public int getMinutes() {
@@ -80,7 +61,7 @@ public class Log {
         return (double)time / (60 * 60 * 1000);
     }
 
-    public UUID getID() {
+    public String getId() {
         return id;
     }
 
@@ -116,6 +97,22 @@ public class Log {
         this.description = description;
     }
 
+    public String getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(final String unitId) {
+        this.unitId = unitId;
+    }
+
+    public String getActivityTypeId() {
+        return activityTypeId;
+    }
+
+    public void setActivityTypeId(final String activityTypeId) {
+        this.activityTypeId = activityTypeId;
+    }
+
     public String getActivityTypeName() {
         return activityTypeName;
     }
@@ -124,21 +121,12 @@ public class Log {
         this.activityTypeName = activityTypeName;
     }
 
-    public UUID getUserID() {
-        return userID;
+    public String getCreateBy() {
+        return createBy;
     }
 
-    public void setUserID(final UUID userID) {
-        this.userID = userID;
+    public void setCreateBy(final String createBy) {
+        this.createBy = createBy;
     }
-
-    public UUID getActivityUserMapperID() {
-        return activityUserMapperID;
-    }
-
-    public void setActivityUserMapperID(final UUID activityUserMapperID) {
-        this.activityUserMapperID = activityUserMapperID;
-    }
-
 
 }

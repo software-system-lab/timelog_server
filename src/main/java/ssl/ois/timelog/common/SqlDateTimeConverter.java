@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SqlDateTimeConverter {
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     private SqlDateTimeConverter() {
         throw new IllegalStateException("Utility class");

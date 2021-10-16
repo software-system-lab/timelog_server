@@ -11,13 +11,13 @@ import java.util.logging.Logger;
 @RequestMapping("/api/v2/activity")
 public class ActivityRestAdapter {
     @PostMapping("/add")
-    public void addPersonActivity(HttpServletResponse response) {
+    public void addActivity(HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Object> listPersonActivity() {
-        return null;
+    public void listActivity(HttpServletResponse response) {
+
     }
 
     @PutMapping("/edit/{activityId}")
