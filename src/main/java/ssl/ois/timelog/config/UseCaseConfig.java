@@ -9,6 +9,7 @@ import ssl.ois.timelog.adapter.repository.log.LogRepository;
 import ssl.ois.timelog.service.log.add.AddLogUseCase;
 import ssl.ois.timelog.service.log.edit.EditLogUseCase;
 import ssl.ois.timelog.service.log.list.ListLogUseCase;
+import ssl.ois.timelog.service.log.remove.RemoveLogUseCase;
 
 @Configuration
 @ComponentScan
@@ -33,5 +34,10 @@ public class UseCaseConfig {
     @Bean(name="editLogUseCase")
     public EditLogUseCase editLogUseCase() {
         return new EditLogUseCase(logRepository);
+    }
+
+    @Bean(name="removeLogUseCase")
+    public RemoveLogUseCase removeLogUseCase() {
+        return new RemoveLogUseCase(logRepository);
     }
 }

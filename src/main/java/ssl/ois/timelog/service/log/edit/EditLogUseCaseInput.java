@@ -12,7 +12,7 @@ public class EditLogUseCaseInput {
 
     public EditLogUseCaseInput(
             String id, String title, String startTime, String endTime,
-            String description, String activityTypeId, String createBy) {
+            String description, String activityTypeId) {
         this.id = id;
         this.title = title;
         this.startTime = startTime;

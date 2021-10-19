@@ -3,10 +3,11 @@ package ssl.ois.timelog.adapter.repository.log;
 import org.springframework.beans.factory.annotation.Autowired;
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 import ssl.ois.timelog.common.SqlDateTimeConverter;
-import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.exception.DatabaseErrorException;
 import ssl.ois.timelog.exception.log.GetLogErrorException;
+import ssl.ois.timelog.exception.log.RemoveLogException;
 import ssl.ois.timelog.exception.log.SaveLogErrorException;
+import ssl.ois.timelog.model.log.Log;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,9 +17,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 public class MysqlLogRepository implements LogRepository{
+
     @Autowired
     private MysqlDriverAdapter mysqlDriverAdapter;
 
@@ -50,7 +51,7 @@ public class MysqlLogRepository implements LogRepository{
         }
     }
 
-    public void updateLog(Log log) throws GetLogErrorException, SaveLogErrorException{
+    public void updateLog(Log log) throws SaveLogErrorException{
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
@@ -64,12 +65,30 @@ public class MysqlLogRepository implements LogRepository{
                 stmt.setString(2, SqlDateTimeConverter.toString(log.getStartTime()));
                 stmt.setString(3, SqlDateTimeConverter.toString(log.getEndTime()));
                 stmt.setString(4, log.getActivityTypeId());
-                stmt.setString(6, log.getId());
+                stmt.setString(5, log.getId());
 
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
             throw new SaveLogErrorException(log.getTitle());
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+    }
+
+    public void removeLog(String id) throws RemoveLogException {
+        Connection connection = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM `log` WHERE log.id = ?")) {
+                stmt.setString(1, id);
+
+                stmt.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            throw new RemoveLogException(id);
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
         }

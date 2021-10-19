@@ -7,9 +7,9 @@ import ssl.ois.timelog.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.model.log.Log;
 
 import java.text.ParseException;
-import java.util.UUID;
 
 public class EditLogUseCase {
+
     private final LogRepository logRepository;
 
     public EditLogUseCase(LogRepository logRepository) {
@@ -20,21 +20,26 @@ public class EditLogUseCase {
         Log log = logRepository.findById(input.getId());
 
         // update log from input
-        log.setTitle(input.getTitle());
-        log.setStartTime(SqlDateTimeConverter.toDate(input.getStartTime()));
-        log.setEndTime(SqlDateTimeConverter.toDate(input.getEndTime()));
-        log.setActivityTypeId(input.getActivityTypeId());
+        if(input.getTitle() != null){
+            log.setTitle(input.getTitle());
+        }
+
+        if(input.getStartTime() != null){
+            log.setStartTime(SqlDateTimeConverter.toDate(input.getStartTime()));
+        }
+
+        if(input.getEndTime() != null){
+            log.setEndTime(SqlDateTimeConverter.toDate(input.getEndTime()));
+        }
+
+        if(input.getActivityTypeId() != null){
+            log.setActivityTypeId(input.getActivityTypeId());
+        }
+
+        if(input.getDescription() != null){
+            log.setDescription(input.getDescription());
+        }
 
         logRepository.updateLog(log);
-
-//        Log log = new Log(
-//                input.getId(),
-//                input.getTitle(),
-//                SqlDateTimeConverter.toDate(input.getStartTime()),
-//                SqlDateTimeConverter.toDate(input.getEndTime()),
-//                input.getDescription(),
-//                input.getActivityTypeId(),
-//                input.getCreateBy()
-//        );
     }
 }

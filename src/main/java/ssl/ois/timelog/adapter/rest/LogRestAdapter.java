@@ -4,16 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ssl.ois.timelog.exception.log.GetLogErrorException;
-import ssl.ois.timelog.service.log.add.AddLogUseCaseInput;
-import ssl.ois.timelog.exception.AccountErrorException;
-import ssl.ois.timelog.exception.DatabaseErrorException;
+import ssl.ois.timelog.exception.log.RemoveLogException;
 import ssl.ois.timelog.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.log.add.AddLogUseCase;
+import ssl.ois.timelog.service.log.add.AddLogUseCaseInput;
 import ssl.ois.timelog.service.log.edit.EditLogUseCase;
 import ssl.ois.timelog.service.log.edit.EditLogUseCaseInput;
 import ssl.ois.timelog.service.log.list.ListLogUseCase;
 import ssl.ois.timelog.service.log.list.ListLogUseCaseInput;
 import ssl.ois.timelog.service.log.list.ListLogUseCaseOutput;
+import ssl.ois.timelog.service.log.remove.RemoveLogUseCase;
+import ssl.ois.timelog.service.log.remove.RemoveLogUseCaseInput;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
@@ -34,6 +35,10 @@ public class LogRestAdapter {
     @Qualifier("editLogUseCase")
     private EditLogUseCase editLogUseCase;
 
+    @Autowired
+    @Qualifier("removeLogUseCase")
+    private RemoveLogUseCase removeLogUseCase;
+
     @GetMapping("/list")
     public ListLogUseCaseOutput listTeamLog(
             @RequestParam String unitId,
@@ -49,13 +54,14 @@ public class LogRestAdapter {
 
         try {
             this.listTeamLogUseCase.execute(input, output);
+            return output;
         } catch (ParseException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
-        return output;
+        return null;
     }
 
     @PostMapping("/add")
@@ -65,13 +71,12 @@ public class LogRestAdapter {
 
         try {
             this.addLogUseCase.execute(requestBody);
+            response.setStatus(HttpServletResponse.SC_CREATED);
         } catch (SaveLogErrorException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-
-        response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
     @PutMapping("/edit/{logId}")
@@ -80,23 +85,33 @@ public class LogRestAdapter {
             @RequestBody EditLogUseCaseInput input,
             HttpServletResponse response){
 
+        input.setId(logId);
+
         try {
             this.editLogUseCase.execute(input);
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } catch (GetLogErrorException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        } catch (SaveLogErrorException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        } catch (ParseException e) {
+        } catch (SaveLogErrorException | ParseException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-
-        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 
     @DeleteMapping("/remove/{logId}")
     public void removeLog(@PathVariable String logId, HttpServletResponse response){
-        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        RemoveLogUseCaseInput input = new RemoveLogUseCaseInput();
+
+        input.setId(logId);
+
+        try {
+            this.removeLogUseCase.execute(input);
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        } catch (RemoveLogException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }
