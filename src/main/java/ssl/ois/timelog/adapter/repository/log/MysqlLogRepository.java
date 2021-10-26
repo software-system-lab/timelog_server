@@ -23,7 +23,7 @@ public class MysqlLogRepository implements LogRepository{
     @Autowired
     private MysqlDriverAdapter mysqlDriverAdapter;
 
-    public void addLog(Log log) throws SaveLogErrorException{
+    public void addLog(Log log) throws SaveLogErrorException {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
@@ -51,7 +51,7 @@ public class MysqlLogRepository implements LogRepository{
         }
     }
 
-    public void updateLog(Log log) throws SaveLogErrorException{
+    public void updateLog(Log log) throws SaveLogErrorException {
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
@@ -59,7 +59,7 @@ public class MysqlLogRepository implements LogRepository{
             try (PreparedStatement stmt = connection.prepareStatement(
                     "UPDATE `log`" +
                         "SET `title`= ?, `start_time`= ?, `end_time`= ?, `activity_type_id`= ?" +
-                        "WHERE log.id = ?")) {
+                        "WHERE `id` = ?")) {
 
                 stmt.setString(1, log.getTitle());
                 stmt.setString(2, SqlDateTimeConverter.toString(log.getStartTime()));
@@ -81,7 +81,7 @@ public class MysqlLogRepository implements LogRepository{
         try {
             connection = this.mysqlDriverAdapter.getConnection();
 
-            try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM `log` WHERE log.id = ?")) {
+            try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM `log` WHERE `id` = ?")) {
                 stmt.setString(1, id);
 
                 stmt.executeUpdate();

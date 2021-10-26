@@ -24,8 +24,8 @@ import java.text.ParseException;
 public class LogRestAdapter {
 
     @Autowired
-    @Qualifier("listTeamLogUseCase")
-    private ListLogUseCase listTeamLogUseCase;
+    @Qualifier("listLogUseCase")
+    private ListLogUseCase listLogUseCase;
 
     @Autowired
     @Qualifier("addLogUseCase")
@@ -53,7 +53,7 @@ public class LogRestAdapter {
         input.setEndDate(endDate);
 
         try {
-            this.listTeamLogUseCase.execute(input, output);
+            this.listLogUseCase.execute(input, output);
             return output;
         } catch (ParseException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -82,13 +82,13 @@ public class LogRestAdapter {
     @PutMapping("/edit/{logId}")
     public void editLog(
             @PathVariable String logId,
-            @RequestBody EditLogUseCaseInput input,
+            @RequestBody EditLogUseCaseInput requestBody,
             HttpServletResponse response){
 
-        input.setId(logId);
+        requestBody.setId(logId);
 
         try {
-            this.editLogUseCase.execute(input);
+            this.editLogUseCase.execute(requestBody);
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } catch (GetLogErrorException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

@@ -6,7 +6,6 @@ import ssl.ois.timelog.adapter.repository.log.LogRepository;
 import ssl.ois.timelog.exception.log.SaveLogErrorException;
 
 import java.text.ParseException;
-import java.util.UUID;
 
 public class AddLogUseCase {
     private final LogRepository logRepository;

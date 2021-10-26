@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import ssl.ois.timelog.adapter.repository.activity_type.ActivityTypeRepository;
 import ssl.ois.timelog.adapter.repository.log.LogRepository;
+import ssl.ois.timelog.service.activity_type.add.AddActivityTypeUseCase;
 import ssl.ois.timelog.service.log.add.AddLogUseCase;
 import ssl.ois.timelog.service.log.edit.EditLogUseCase;
 import ssl.ois.timelog.service.log.list.ListLogUseCase;
@@ -21,8 +22,8 @@ public class UseCaseConfig {
     @Autowired
     private ActivityTypeRepository activityTypeRepository;
 
-    @Bean(name="listTeamLogUseCase")
-    public ListLogUseCase listTeamLogUseCase(){
+    @Bean(name="listLogUseCase")
+    public ListLogUseCase listLogUseCase(){
         return new ListLogUseCase(logRepository);
     }
 
@@ -39,5 +40,10 @@ public class UseCaseConfig {
     @Bean(name="removeLogUseCase")
     public RemoveLogUseCase removeLogUseCase() {
         return new RemoveLogUseCase(logRepository);
+    }
+
+    @Bean(name="addActivityTypeUseCase")
+    public AddActivityTypeUseCase addActivityTypeUseCase(){
+        return new AddActivityTypeUseCase(activityTypeRepository);
     }
 }

@@ -1,17 +1,33 @@
 package ssl.ois.timelog.adapter.rest;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+import ssl.ois.timelog.exception.activity.DuplicateActivityTypeException;
+import ssl.ois.timelog.exception.activity.SaveActivityTypeErrorException;
+import ssl.ois.timelog.service.activity_type.add.AddActivityTypeUseCase;
+import ssl.ois.timelog.service.activity_type.add.AddActivityTypeUseCaseInput;
 
 import javax.servlet.http.HttpServletResponse;
-
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/v2/activity")
 public class ActivityRestAdapter {
+    @Autowired
+    @Qualifier("addActivityTypeUseCase")
+    private AddActivityTypeUseCase addActivityTypeUseCase;
     @PostMapping("/add")
-    public void addActivity(HttpServletResponse response) {
+    public void addActivity(AddActivityTypeUseCaseInput input, HttpServletResponse response) {
+        try {
+            this.addActivityTypeUseCase.execute(input);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+        } catch (SaveActivityTypeErrorException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (DuplicateActivityTypeException e) {
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
