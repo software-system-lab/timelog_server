@@ -6,9 +6,9 @@ public class ActivityType {
     private final UUID id;
     private String activityName;
     private UUID unitId;
-    private boolean isEnable;
-    private boolean isPrivate;
-    private boolean isDeleted;
+    private Boolean isEnable;
+    private Boolean isPrivate;
+    private Boolean isDeleted;
 
     public ActivityType(UUID id, String activityName, UUID unitId, Boolean isEnable, Boolean isPrivate, Boolean isDeleted) {
         this.id = id;
@@ -48,27 +48,27 @@ public class ActivityType {
         this.unitId = unitId;
     }
 
-    public boolean isEnable() {
+    public Boolean isEnable() {
         return isEnable;
     }
 
-    public void setEnable(boolean enable) {
+    public void setEnable(Boolean enable) {
         isEnable = enable;
     }
 
-    public boolean isPrivate() {
+    public Boolean isPrivate() {
         return isPrivate;
     }
 
-    public void setPrivate(boolean aPrivate) {
+    public void setPrivate(Boolean aPrivate) {
         isPrivate = aPrivate;
     }
 
-    public boolean isDeleted() {
+    public Boolean isDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
     }
 }

@@ -1,10 +1,18 @@
-package ssl.ois.timelog.service.activity_type.add;
+package ssl.ois.timelog.service.activity_type.edit;
 
-public class AddActivityTypeUseCaseInput {
+public class EditActivityTypeUseCaseInput {
+    private String id;
     private String activityName;
-    private String unitId;
     private Boolean isEnable;
     private Boolean isPrivate;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getActivityName() {
         return activityName;
@@ -12,14 +20,6 @@ public class AddActivityTypeUseCaseInput {
 
     public void setActivityName(String activityName) {
         this.activityName = activityName;
-    }
-
-    public String getUnitId() {
-        return unitId;
-    }
-
-    public void setUnitId(String unitId) {
-        this.unitId = unitId;
     }
 
     public Boolean isEnable() {

@@ -19,7 +19,7 @@ public class AddActivityTypeUseCase {
             ActivityType activityType = activityTypeRepository.findByNameAndUnitId(input.getActivityName(), input.getUnitId());
             if(activityType.isDeleted()){
                 activityType.setDeleted(false);
-                activityTypeRepository.editActivityType(activityType);
+                activityTypeRepository.updateActivityType(activityType);
             } else {
                 throw new DuplicateActivityTypeException();
             }

@@ -42,7 +42,7 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository{
         }
     }
 
-    public void editActivityType(ActivityType activityType) throws SaveActivityTypeErrorException{
+    public void updateActivityType(ActivityType activityType) throws SaveActivityTypeErrorException{
         Connection connection = null;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
@@ -56,6 +56,7 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository{
                 stmt.setInt(2, activityType.isEnable() ? 1 : 0);
                 stmt.setInt(3, activityType.isPrivate() ? 1 : 0);
                 stmt.setInt(4, activityType.isDeleted() ? 1 : 0);
+                stmt.setString(5, activityType.getId().toString());
 
                 stmt.executeUpdate();
             }
@@ -96,6 +97,40 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository{
             }
         } catch (SQLException e) {
             throw new GetActivityTypeErrorException(activityName);
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+        return activityType;
+    }
+
+    public ActivityType findById(String id) throws GetActivityTypeErrorException{
+        Connection connection = null;
+        ActivityType activityType = null;
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+            try (PreparedStatement stmt = connection.prepareStatement(
+                "SELECT `activity_type`.*" +
+                    "FROM `activity_type`" +
+                    "WHERE `activity_type`.`id` = ?")) {
+
+                stmt.setString(1, id);
+
+                try (ResultSet rs = stmt.executeQuery()) {
+                    rs.next();
+
+                    activityType = new ActivityType(
+                            UUID.fromString(rs.getString("id")),
+                            rs.getString("activity_name"),
+                            UUID.fromString(rs.getString("unit_id")),
+                            rs.getInt("is_enable") == 1,
+                            rs.getInt("is_private") == 1,
+                            rs.getInt("is_deleted") == 1
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new GetActivityTypeErrorException(id);
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
         }
