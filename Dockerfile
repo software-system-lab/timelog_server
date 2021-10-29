@@ -1,6 +1,6 @@
-FROM maven:3.6.3-jdk-11
-ADD . /app
+FROM openjdk:8
+ADD ./target/timelog_server-2.1.0.jar /app
 WORKDIR /app
 
 # Run spring-boot server
-CMD ["mvn", "spring-boot:run"]
+CMD ["java", "-jar", "timelog_server-2.1.0.jar"]
