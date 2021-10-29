@@ -30,6 +30,6 @@ public class ListLogUseCase {
         List<Log> logList = this.logRepository.findByPeriod(input.getUnitId(),
                 input.getStartDate(), dateFormat.format(endDate));
 
-        output.setLogDTOList(logList);
+        output.setLogs(logList);
     }
 }

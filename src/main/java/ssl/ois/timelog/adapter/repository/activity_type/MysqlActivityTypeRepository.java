@@ -2,6 +2,7 @@ package ssl.ois.timelog.adapter.repository.activity_type;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
+import ssl.ois.timelog.exception.DatabaseErrorException;
 import ssl.ois.timelog.exception.activity.GetActivityTypeErrorException;
 import ssl.ois.timelog.exception.activity.SaveActivityTypeErrorException;
 import ssl.ois.timelog.model.activity_type.ActivityType;
@@ -10,6 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class MysqlActivityTypeRepository implements ActivityTypeRepository{
@@ -48,8 +51,8 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository{
             connection = this.mysqlDriverAdapter.getConnection();
 
             try (PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE `activity_type`" +
-                        "SET `activity_name`= ?, `is_enable`= ?, `is_private`= ?, `is_deleted`= ?" +
+                    "UPDATE `activity_type` "+
+                        "SET `activity_name`= ?, `is_enable`= ?, `is_private`= ?, `is_deleted`= ? " +
                         "WHERE `id` = ?")) {
 
                 stmt.setString(1, activityType.getActivityName());
@@ -74,8 +77,8 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository{
             connection = this.mysqlDriverAdapter.getConnection();
 
             try (PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT `activity_type`.*" +
-                        "FROM `activity_type`" +
+                    "SELECT `activity_type`.* " +
+                        "FROM `activity_type` " +
                         "WHERE `activity_type`.`activity_name` = ? " +
                         "AND `activity_type`.`unit_id` = ? ")) {
 
@@ -110,8 +113,8 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository{
             connection = this.mysqlDriverAdapter.getConnection();
 
             try (PreparedStatement stmt = connection.prepareStatement(
-                "SELECT `activity_type`.*" +
-                    "FROM `activity_type`" +
+                "SELECT `activity_type`.* " +
+                    "FROM `activity_type` " +
                     "WHERE `activity_type`.`id` = ?")) {
 
                 stmt.setString(1, id);
@@ -135,5 +138,41 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository{
             this.mysqlDriverAdapter.closeConnection(connection);
         }
         return activityType;
+    }
+
+    public List<ActivityType> findByUnitId(String unitId) throws DatabaseErrorException{
+        Connection connection = null;
+        List<ActivityType> activityTypeList = new ArrayList<>();
+        try {
+            connection = this.mysqlDriverAdapter.getConnection();
+
+             try (PreparedStatement stmt = connection.prepareStatement(
+                     "SELECT `activity_type`.* " +
+                         "FROM `activity_type` " +
+                         "WHERE `activity_type`.`unit_id` = ?  ")) {
+
+                stmt.setString(1, unitId);
+
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        ActivityType activityType = new ActivityType(
+                                UUID.fromString(rs.getString("id")),
+                                rs.getString("activity_name"),
+                                UUID.fromString(rs.getString("unit_id")),
+                                rs.getInt("is_enable") == 1,
+                                rs.getInt("is_private") == 1,
+                                rs.getInt("is_deleted") == 1
+                        );
+                        activityTypeList.add(activityType);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseErrorException();
+        } finally {
+            this.mysqlDriverAdapter.closeConnection(connection);
+        }
+        return activityTypeList;
     }
 }

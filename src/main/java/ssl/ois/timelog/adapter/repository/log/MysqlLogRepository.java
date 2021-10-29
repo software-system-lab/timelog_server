@@ -29,7 +29,7 @@ public class MysqlLogRepository implements LogRepository{
             connection = this.mysqlDriverAdapter.getConnection();
 
             try (PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO `log`" +
+                    "INSERT INTO `log` " +
                         "(`id`, `unit_id`, `title`, `start_time`, `end_time`, `description`, `activity_type_id`, `create_by`) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
 
@@ -57,8 +57,8 @@ public class MysqlLogRepository implements LogRepository{
             connection = this.mysqlDriverAdapter.getConnection();
 
             try (PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE `log`" +
-                        "SET `title`= ?, `start_time`= ?, `end_time`= ?, `activity_type_id`= ?" +
+                    "UPDATE `log` " +
+                        "SET `title`= ?, `start_time`= ?, `end_time`= ?, `activity_type_id`= ? " +
                         "WHERE `id` = ?")) {
 
                 stmt.setString(1, log.getTitle());
@@ -101,8 +101,8 @@ public class MysqlLogRepository implements LogRepository{
             connection = this.mysqlDriverAdapter.getConnection();
 
             try (PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT `log`.* ,`activity_type`.`activity_name`" +
-                        "FROM `log`, `activity_type`" +
+                    "SELECT `log`.* ,`activity_type`.`activity_name` " +
+                        "FROM `log`, `activity_type` " +
                         "WHERE `log`.`activity_type_id` = `activity_type`.`id` " +
                         "AND `log`.`id` = ? ")) {
 
@@ -140,12 +140,12 @@ public class MysqlLogRepository implements LogRepository{
             connection = this.mysqlDriverAdapter.getConnection();
 
             try (PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT `log`.* ,`activity_type`.`activity_name`" +
-                        "FROM `log`, `activity_type`" +
+                    "SELECT `log`.* ,`activity_type`.`activity_name` " +
+                        "FROM `log`, `activity_type` " +
                         "WHERE `log`.`activity_type_id` = `activity_type`.`id` " +
                         "AND `log`.`unit_id` = ?  " +
                         "AND `log`.`start_time` >= ? " +
-                        "AND `log`.`end_time` < ? ")) {
+                        "AND `log`.`end_time` < ?")) {
 
                 stmt.setString(1, unitId);
                 stmt.setString(2, startDate);

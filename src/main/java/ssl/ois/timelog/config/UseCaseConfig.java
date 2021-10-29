@@ -8,6 +8,7 @@ import ssl.ois.timelog.adapter.repository.activity_type.ActivityTypeRepository;
 import ssl.ois.timelog.adapter.repository.log.LogRepository;
 import ssl.ois.timelog.service.activity_type.add.AddActivityTypeUseCase;
 import ssl.ois.timelog.service.activity_type.edit.EditActivityTypeUseCase;
+import ssl.ois.timelog.service.activity_type.list.ListActivityTypeUseCase;
 import ssl.ois.timelog.service.activity_type.remove.RemoveActivityTypeUseCase;
 import ssl.ois.timelog.service.log.add.AddLogUseCase;
 import ssl.ois.timelog.service.log.edit.EditLogUseCase;
@@ -57,5 +58,10 @@ public class UseCaseConfig {
     @Bean(name="removeActivityTypeUseCase")
     public RemoveActivityTypeUseCase removeActivityTypeUseCase(){
         return new RemoveActivityTypeUseCase(activityTypeRepository);
+    }
+
+    @Bean(name="listActivityTypeUseCase")
+    public ListActivityTypeUseCase listActivityTypeUseCase(){
+        return new ListActivityTypeUseCase(activityTypeRepository);
     }
 }

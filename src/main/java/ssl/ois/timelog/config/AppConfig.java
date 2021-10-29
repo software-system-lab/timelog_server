@@ -51,11 +51,6 @@ public class AppConfig {
         return new MysqlActivityTypeRepository();
     }
 
-//    @Bean
-//    public UnitRepository getUserRepository() {
-//        return new MysqlUnitRepository();
-//    }
-
     @Bean
     public MysqlDriverAdapter getMysqlDriverAdapter() {
         final String mysqlJdbcLink = "jdbc:mysql://" + this.mysqlHost + ":" + this.mysqlPort;

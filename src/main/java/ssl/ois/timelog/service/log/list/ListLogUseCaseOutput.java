@@ -12,11 +12,11 @@ public class ListLogUseCaseOutput {
         this.logs = new ArrayList<>();
     }
 
-    public List<Log> getLogDTOList() {
+    public List<Log> getLogs() {
         return logs;
     }
 
-    public void setLogDTOList(List<Log> logs) {
+    public void setLogs(List<Log> logs) {
         this.logs = logs;
     }
 }

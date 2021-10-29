@@ -79,7 +79,7 @@ public class LogRestAdapter {
         }
     }
 
-    @PutMapping("/edit/{logId}")
+    @PutMapping("/{logId}/edit")
     public void editLog(
             @PathVariable String logId,
             @RequestBody EditLogUseCaseInput requestBody,
@@ -99,7 +99,7 @@ public class LogRestAdapter {
         }
     }
 
-    @DeleteMapping("/remove/{logId}")
+    @DeleteMapping("/{logId}/remove")
     public void removeLog(@PathVariable String logId, HttpServletResponse response){
         RemoveLogUseCaseInput input = new RemoveLogUseCaseInput();
 
