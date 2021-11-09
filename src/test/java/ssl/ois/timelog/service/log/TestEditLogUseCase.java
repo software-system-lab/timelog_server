@@ -1,4 +1,4 @@
-package ssl.ois.timelog.service.log.edit;
+package ssl.ois.timelog.service.log;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,12 +15,14 @@ import ssl.ois.timelog.common.SqlDateTimeConverter;
 import ssl.ois.timelog.exception.log.GetLogErrorException;
 import ssl.ois.timelog.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.model.log.Log;
+import ssl.ois.timelog.service.log.edit.EditLogUseCase;
+import ssl.ois.timelog.service.log.edit.EditLogUseCaseInput;
 
 import java.text.ParseException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestEditUseCase {
+public class TestEditLogUseCase {
     @Autowired
     private EditLogUseCase editLogUseCase;
 
@@ -29,19 +31,17 @@ public class TestEditUseCase {
 
     @Before
     public void set_up() throws GetLogErrorException, ParseException {
-        Mockito.when(repository.findById(Mockito.anyString())).thenAnswer(i -> {
-            return new Log(
-                    i.getArgument(0),
-                    "b0be521b-4104-4475-ac9d-2120a957ecd0",
-                    "title",
-                    SqlDateTimeConverter.toDate("2021-10-19 12:00:00"),
-                    SqlDateTimeConverter.toDate("2021-10-19 13:00:00"),
-                    "",
-                    "00f9be59-11f5-4bf9-851f-6ea0ecfc5842",
-                    "Other",
-                    "b0be521b-4104-4475-ac9d-2120a957ecd0"
-            );
-        });
+        Mockito.when(repository.findById(Mockito.anyString())).thenAnswer(i -> new Log(
+                i.getArgument(0),
+                "b0be521b-4104-4475-ac9d-2120a957ecd0",
+                "title",
+                SqlDateTimeConverter.toDate("2021-10-19 12:00:00"),
+                SqlDateTimeConverter.toDate("2021-10-19 13:00:00"),
+                "",
+                "00f9be59-11f5-4bf9-851f-6ea0ecfc5842",
+                "Other",
+                "b0be521b-4104-4475-ac9d-2120a957ecd0"
+        ));
     }
 
     @Test

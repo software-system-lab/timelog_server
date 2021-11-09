@@ -1,4 +1,4 @@
-package ssl.ois.timelog.service.log.add;
+package ssl.ois.timelog.service.log;
 
 
 import org.junit.Assert;
@@ -14,8 +14,11 @@ import ssl.ois.timelog.adapter.repository.log.LogRepository;
 import ssl.ois.timelog.common.SqlDateTimeConverter;
 import ssl.ois.timelog.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.model.log.Log;
+import ssl.ois.timelog.service.log.add.AddLogUseCase;
+import ssl.ois.timelog.service.log.add.AddLogUseCaseInput;
 
 import java.text.ParseException;
+import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -46,6 +49,7 @@ public class TestAddLogUseCase {
 
         Log result = argument.getValue();
 
+        Assert.assertEquals(4, UUID.fromString(result.getId()).version());
         Assert.assertEquals("b0be521b-4104-4475-ac9d-2120a957ecd0", result.getUnitId());
         Assert.assertEquals("title", result.getTitle());
         Assert.assertEquals("2021-10-19 12:00:00", SqlDateTimeConverter.toString(result.getStartTime()));

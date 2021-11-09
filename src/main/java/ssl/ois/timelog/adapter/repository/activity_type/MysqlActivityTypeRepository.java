@@ -72,7 +72,7 @@ public class MysqlActivityTypeRepository implements ActivityTypeRepository{
 
     public ActivityType findByNameAndUnitId(String activityName, String unitId) throws GetActivityTypeErrorException{
         Connection connection = null;
-        ActivityType activityType = null;
+        ActivityType activityType;
         try {
             connection = this.mysqlDriverAdapter.getConnection();
 
