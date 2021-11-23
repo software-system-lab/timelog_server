@@ -22,7 +22,7 @@ public class MysqlDriverAdapter {
     }
 
     public Connection getConnection() throws SQLException {
-        final String url = this.host + "/" + this.database + "?useUnicode=true&characterEncoding=UTF-8";
+        final String url = this.host + "/" + this.database + "?useUnicode=true&characterEncoding=UTF-8&useSSL=false";
         Logger logger = Logger.getLogger(this.getClass().toString() + "::getConnection");
         logger.info(url);
         return DriverManager.getConnection(url, this.user, this.password);
