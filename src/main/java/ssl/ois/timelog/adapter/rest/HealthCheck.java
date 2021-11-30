@@ -9,10 +9,6 @@ import ssl.ois.timelog.adapter.database.MysqlDriverAdapter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 @RestController
 @RequestMapping("/api")
@@ -28,26 +24,6 @@ public class HealthCheck {
 
     @GetMapping(value = "/test")
     public String foo() {
-        try {
-            Connection c = adapter.getConnection();
-            PreparedStatement statement = c.prepareStatement("SELECT * from activity_user_mapper LIMIT 1");
-            ResultSet result = statement.executeQuery();
-
-            int i = 0;
-            result.next();
-            System.out.println(result.getString("activity_type_name"));
-//            while (result.next()) {
-//                i++;
-//                System.out.println(result.getString("activity_type_name"));
-//                if (i > 20) break;
-//            }
-            c.close();
-        } catch (SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
-            System.out.println("SQLState: " + e.getSQLState());
-            System.out.println("VendorError: " + e.getErrorCode());
-        }
-
         return "get successfully";
     }
 
