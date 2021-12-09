@@ -19,7 +19,7 @@ name: rancher_cluster_token
 ---
 kind: pipeline
 type: docker
-name: Analysis
+name: Test
 
 steps:
 - name: Run test
@@ -32,7 +32,7 @@ steps:
       from_secret:
         mysql_password
   commands:
-  - mvn test
+    - mvn test
 
 trigger:
   branch:
@@ -50,9 +50,8 @@ steps:
 - name: Build Jar
   image: maven:3.6.3-jdk-11
   commands:
-  - mvn install -DskipTests
-  - mvn package spring-boot:repackage
-
+    - mvn install -DskipTests
+    - mvn package spring-boot:repackage
 - name: Publish Docker Image
   image: plugins/docker
   settings:
@@ -68,11 +67,11 @@ steps:
 
 trigger:
   branch:
-  - master
-  - beta
-  - tdcc-demo
+    - master
+    - beta
+    - tdcc-demo
   event:
-  - push
+    - push
 
 depends_on:
   - Test
@@ -84,7 +83,7 @@ name: Deployment
 
 steps:
 - name: Deploy Demo
-  image: nightlord851108/kustomize
+  image: ssl1321ois/kustomize
   environment:
     KUBE_CLUSTER_URL:
       from_secret:
@@ -93,15 +92,17 @@ steps:
       from_secret:
         rancher_cluster_token
   commands:
-  - cd kustomize/overlays/demo
-  - kustomize edit set image ssl1321ois/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
-  - kustomize build . | kubectl apply --server=$${KUBE_CLUSTER_URL}  --token=$${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=ois-demo -f -
+    - cd kustomize/overlays/demo
+    - kustomize edit set image ssl1321ois/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
+    - kustomize build . | kubectl apply --server=$${KUBE_CLUSTER_URL}  --token=$${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=ois-demo -f -
   when:
+    branch:
+      - tdcc-demo
     event:
-    - push
+      - push
 
 depends_on:
   - Publish
 trigger:
   branch:
-  - tdcc-demo
+    - tdcc-demo
