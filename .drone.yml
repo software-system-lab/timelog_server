@@ -83,7 +83,7 @@ name: Deployment
 
 steps:
 - name: Deploy Demo
-  image: ssl1321ois/kustomize
+  image: nightlord851108/kustomize
   environment:
     KUBE_CLUSTER_URL:
       from_secret:
