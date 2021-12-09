@@ -12,12 +12,6 @@ kind: secret
 name: docker_hub_password
 ---
 kind: secret
-name: sonar_url
----
-kind: secret
-name: sonar_project_token
----
-kind: secret
 name: rancher_kube_cluster_url
 ---
 kind: secret
@@ -42,10 +36,10 @@ steps:
 
 trigger:
   branch:
-  - master
-  - beta
-  - dev
-  - tdcc-demo
+    - master
+    - beta
+    - dev
+    - tdcc-demo
 
 ---
 kind: pipeline
