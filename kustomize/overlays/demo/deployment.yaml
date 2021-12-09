@@ -21,25 +21,39 @@ spec:
             - name: api-http
               containerPort: 9000
           env:
-            - name: NODE_ENV
-              value: production
             - name: MYSQL_HOST
               valueFrom:
                 secretKeyRef:
                   key: MYSQL_HOST
-                  name: timelog-server-env-production
+                  name: timelog-server-env-demo
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
                   key: MYSQL_USER
-                  name: timelog-server-env-production
+                  name: timelog-server-env-demo
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: MYSQL_PASSWORD
-                  name: timelog-server-env-production
+                  name: timelog-server-env-demo
             - name: TIMELOG_MYSQL_DB
               valueFrom:
                 secretKeyRef:
                   key: TIMELOG_MYSQL_DB
-                  name: timelog-server-env-production
+                  name: timelog-server-env-demo
+            - name: AMS_HOST
+                valueFrom:
+                  secretKeyRef:
+                    key: AMS_HOST
+                    name: timelog-server-env-demo
+            - name: AMS_PORT
+                valueFrom:
+                  secretKeyRef:
+                    key: AMS_PORT
+                    name: timelog-server-env-demo
+            - name: AMS_PROTOCOL
+                valueFrom:
+                  secretKeyRef:
+                    key: AMS_PROTOCOL
+                    name: timelog-server-env-demo
+

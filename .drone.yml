@@ -38,22 +38,14 @@ steps:
       from_secret:
         mysql_password
   commands:
-  - mvn test
-
-- name: Sonar Scanner
-  image: aosapps/drone-sonar-plugin
-  settings:
-    sonar_token:
-      from_secret: sonar_project_token
-    sonar_host:
-      from_secret: sonar_url
-
+    - mvn test
 
 trigger:
   branch:
     - master
     - beta
     - dev
+    - tdcc-demo
 
 ---
 kind: pipeline
@@ -61,6 +53,12 @@ type: docker
 name: Publish
 
 steps:
+- name: Build Jar
+  image: maven:3.6.3-jdk-11
+  commands:
+    - mvn install -DskipTests
+    - mvn package spring-boot:repackage
+
 - name: Publish Docker Image
   image: plugins/docker
   settings:
@@ -76,10 +74,11 @@ steps:
 
 trigger:
   branch:
-  - master
-  - beta
+    - master
+    - beta
+    - tdcc-demo
   event:
-  - push
+    - push
 
 depends_on:
   - Test
@@ -90,7 +89,7 @@ type: docker
 name: Deployment
 
 steps:
-- name: Deploy Production
+- name: Deploy Demo
   image: nightlord851108/kustomize
   environment:
     KUBE_CLUSTER_URL:
@@ -100,17 +99,15 @@ steps:
       from_secret:
         rancher_cluster_token
   commands:
-  - cd kustomize/overlays/production
-  - kustomize edit set image ssl1321ois/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
-  - kustomize build . | kubectl apply --server=$${KUBE_CLUSTER_URL}  --token=$${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=ois-production -f -
+    - cd kustomize/overlays/demo
+    - kustomize edit set image ssl1321ois/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
+    - kustomize build . | kubectl apply --server=$${KUBE_CLUSTER_URL}  --token=$${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=ois-demo -f -
   when:
-    branch:
-    - master
     event:
-    - push
+      - push
 
 depends_on:
   - Publish
 trigger:
   branch:
-  - master
+  - tdcc-demo
