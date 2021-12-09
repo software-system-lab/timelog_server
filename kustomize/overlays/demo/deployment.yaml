@@ -42,18 +42,18 @@ spec:
                   key: TIMELOG_MYSQL_DB
                   name: timelog-server-env-demo
             - name: AMS_HOST
-                valueFrom:
-                  secretKeyRef:
-                    key: AMS_HOST
-                    name: timelog-server-env-demo
+              valueFrom:
+                secretKeyRef:
+                  key: AMS_HOST
+                  name: timelog-server-env-demo
             - name: AMS_PORT
-                valueFrom:
-                  secretKeyRef:
-                    key: AMS_PORT
-                    name: timelog-server-env-demo
+              valueFrom:
+                secretKeyRef:
+                  key: AMS_PORT
+                  name: timelog-server-env-demo
             - name: AMS_PROTOCOL
-                valueFrom:
-                  secretKeyRef:
-                    key: AMS_PROTOCOL
-                    name: timelog-server-env-demo
+              valueFrom:
+                secretKeyRef:
+                  key: AMS_PROTOCOL
+                  name: timelog-server-env-demo
 
