@@ -225,20 +225,25 @@ public class MysqlLogRepository implements LogRepository {
         List<Log> logList = new ArrayList<>();
         try {
             connection = this.mysqlDriverAdapter.getConnection();
-            
+
             try (PreparedStatement stmt = connection.prepareStatement(
                 "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
                 "FROM `log`, `activity_user_mapper` as `activity`" +
-                "WHERE `activity`.`unit_id` = ? " +
+                "WHERE ((`activity`.`unit_id` = ? " +
                 "AND `log`.`activity_user_mapper_id` = `activity`.`id`" +
-                "AND `log`.`user_id` = ? " +
+                "AND `log`.`user_id` = ? )" +
+                "OR (`activity`.`unit_id` = ? AND `activity`.`is_private` = 0 " +
+                "AND `log`.`activity_user_mapper_id` = `activity`.`id` " +
+                "AND `log`.`user_id` = ?))" +
                 "AND `log`.`start_time` >= ? " +
                 "AND `log`.`end_time` < ? ")) {
 
                 stmt.setString(1, teamID);
                 stmt.setString(2, userID);
-                stmt.setString(3, startDate);
-                stmt.setString(4, endDate);
+                stmt.setString(3, userID);
+                stmt.setString(4, userID);
+                stmt.setString(5, startDate);
+                stmt.setString(6, endDate);
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         UUID logID = UUID.fromString(rs.getString("id"));
