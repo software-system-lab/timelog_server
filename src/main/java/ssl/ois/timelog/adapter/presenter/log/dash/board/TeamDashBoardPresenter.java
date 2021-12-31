@@ -31,6 +31,8 @@ public class TeamDashBoardPresenter extends TeamDashboardUseCaseOutputBound {
 
             data.setHour(hour);
             data.setMinute(minute);
+            data.setStartTime(startTime.getTime());
+            data.setEndTime(endTime.getTime());
 
             viewModel.add(log.getActivityTypeName(), data);
         }
@@ -57,6 +59,8 @@ public class TeamDashBoardPresenter extends TeamDashboardUseCaseOutputBound {
     
                 data.setHour(memberHour);
                 data.setMinute(memberMinute);
+                data.setStartTime(startTime.getTime());
+                data.setEndTime(endTime.getTime());
 
                 memberDashboard.add(log.getActivityTypeName(), data);
             }

@@ -1,9 +1,6 @@
 package ssl.ois.timelog.adapter.view.model.log.dash.board;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 
 public class TeamDashBoardViewModel {
@@ -52,6 +49,8 @@ public class TeamDashBoardViewModel {
     }
 
     public static class Data {
+        private long startTime;
+        private long endTime;
         private long timeLength;
         private int hour;
         private int minute;
@@ -78,6 +77,22 @@ public class TeamDashBoardViewModel {
 
         public void setMinute(int minute) {
             this.minute = minute;
+        }
+
+        public long getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(long startTime) {
+            this.startTime = startTime;
+        }
+
+        public long getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(long endTime) {
+            this.endTime = endTime;
         }
     }
 

@@ -34,25 +34,17 @@ public class TeamDashboardUseCase {
         c.setTime(endDate);
         c.add(Calendar.DATE, 1);
         endDate = c.getTime();
-        List<Log> logList = this.logRepository.findByPeriodAndTeam(input.getTeamID(),
-                input.getStartDate(), dateFormat.format(endDate));
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
+        List<Log> logList = this.logRepository.findByPeriodAndTeam(
+                input.getTeamID(),
+                input.getStartDate(),
+                dateFormat.format(endDate),
+                input.getFilterList()
+        );
 
         //team dashboard
         List<LogDTO> teamLogDTOList = new ArrayList<>();
-        if (input.getFilterList() == null) {
-            for (Log log : logList) {
-                teamLogDTOList.add(this.buildLogDTO(log));
-            }
-        } else {
-            for (Log log : logList) {
-                for (String filterName : input.getFilterList()) {
-                    if (log.getActivityTypeName().equals(filterName)) {
-                        teamLogDTOList.add(this.buildLogDTO(log));
-                    }
-                }
-            }
+        for (Log log : logList) {
+            teamLogDTOList.add(this.buildLogDTO(log));
         }
         output.setTeamLogDTOList(teamLogDTOList);
 
@@ -67,27 +59,19 @@ public class TeamDashboardUseCase {
                 }
             }
 
-            List<Log> memberLogList = this.logRepository.findByPeriodAndUserIDWithTeamID(input.getTeamID(),
-                    member.getUserID().toString(), input.getStartDate(), dateFormat.format(endDate));
+            List<Log> memberLogList = this.logRepository.findByPeriodAndUserIDWithTeamID(
+                    input.getTeamID(),
+                    member.getUserID().toString(),
+                    input.getStartDate(),
+                    dateFormat.format(endDate),
+                    input.getFilterList()
+            );
             List<LogDTO> logDTOList = new ArrayList<>();
 
-            if(input.getFilterList() != null){
-                for (Log log : memberLogList) {
-                    // filter team log
-                    for(String filterName: input.getFilterList()) {
-                        if (log.getActivityTypeName().equals(filterName) && teamMapperIdMap.containsKey(log.getActivityUserMapperID())) {
-                            logDTOList.add(this.buildLogDTO(log));
-                        }
-                    }
-                    // filter personal log
-                    if (input.getPersonal() && !teamMapperIdMap.containsKey(log.getActivityUserMapperID())) {
-                        logDTOList.add(this.buildLogDTO(log));
-                    }
-                }
-            } else {
-                for (Log log : memberLogList) {
-                    logDTOList.add(this.buildLogDTO(log));
-                }
+            for (Log log : memberLogList) {
+                if (teamMapperIdMap.containsKey(log.getActivityUserMapperID()))
+                    log.setActivityTypeName(log.getActivityTypeName() + " / " + teamMapperIdMap.get(log.getActivityUserMapperID()));
+                logDTOList.add(this.buildLogDTO(log));
             }
 
             output.addMemberLog(member.getUsername(), logDTOList);

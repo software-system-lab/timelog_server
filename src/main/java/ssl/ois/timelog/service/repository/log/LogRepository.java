@@ -6,6 +6,7 @@ import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public interface LogRepository {
     Boolean removeByID(String logID) throws GetLogErrorException, SaveLogErrorException;
     UUID findActivityUserMapperID(String userID, String activityTypeName) throws DatabaseErrorException;
     List<Log> findByPeriod(String userID, String startDate, String endDate) throws ParseException, DatabaseErrorException;
-    List<Log> findByPeriodAndTeam(String userID, String startDate, String endDate) throws ParseException, DatabaseErrorException;
-    List<Log> findByPeriodAndUserIDWithTeamID(String teamID, String userID, String startDate, String endDate) throws ParseException, DatabaseErrorException;
+    List<Log> findByPeriodAndTeam(String userID, String startDate, String endDate, List<String> filter) throws ParseException, DatabaseErrorException;
+    List<Log> findByPeriodAndUserIDWithTeamID(String teamID, String userID, String startDate, String endDate, List<String> filter) throws ParseException, DatabaseErrorException;
     
 }

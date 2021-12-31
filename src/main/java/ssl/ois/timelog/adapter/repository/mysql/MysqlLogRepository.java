@@ -9,10 +9,7 @@ import ssl.ois.timelog.service.exception.log.GetLogErrorException;
 import ssl.ois.timelog.service.exception.log.SaveLogErrorException;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -177,23 +174,37 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public List<Log> findByPeriodAndTeam(String teamID, String startDate, String endDate) throws DatabaseErrorException {
+    public List<Log> findByPeriodAndTeam(String teamID, String startDate, String endDate, List<String> filter) throws DatabaseErrorException {
         Connection connection = null;
         List<Log> logList = new ArrayList<>();
         try {
             connection = this.mysqlDriverAdapter.getConnection();
-            
-            try (PreparedStatement stmt = connection.prepareStatement(
+
+            String query =
                 "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
                 "FROM `log`, `activity_user_mapper` as `activity`" +
                 "WHERE `activity`.`unit_id` = ? " +
                 "AND `log`.`activity_user_mapper_id` = `activity`.`id`" +
                 "AND `log`.`start_time` >= ? " +
-                "AND `log`.`end_time` < ? ")) {
+                "AND `log`.`end_time` < ? ";
 
+            if (filter != null) {
+                query += "AND `log`.`activity_type` in (";
+                if (filter.size() == 0) query += "''";
+                else {
+                    for (int i = 0; i < filter.size(); i++) {
+                        if (i == 0) query += "'" + filter.get(i) + "'";
+                        else query += ",'" + filter.get(i) + "'";
+                    }
+                }
+                query += ")";
+            }
+
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, teamID);
                 stmt.setString(2, startDate);
                 stmt.setString(3, endDate);
+
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         UUID logID = UUID.fromString(rs.getString("id"));
@@ -212,6 +223,7 @@ public class MysqlLogRepository implements LogRepository {
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new DatabaseErrorException();
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);
@@ -220,30 +232,46 @@ public class MysqlLogRepository implements LogRepository {
     }
 
     @Override
-    public List<Log> findByPeriodAndUserIDWithTeamID(String teamID, String userID, String startDate, String endDate) throws DatabaseErrorException {
+    public List<Log> findByPeriodAndUserIDWithTeamID(String teamID, String userID, String startDate, String endDate, List<String> filter) throws DatabaseErrorException {
         Connection connection = null;
         List<Log> logList = new ArrayList<>();
         try {
             connection = this.mysqlDriverAdapter.getConnection();
 
-            try (PreparedStatement stmt = connection.prepareStatement(
+            String query =
                 "SELECT `log`.* ,`activity`.`unit_id`,`activity`.`activity_type_name`" +
                 "FROM `log`, `activity_user_mapper` as `activity`" +
                 "WHERE ((`activity`.`unit_id` = ? " +
                 "AND `log`.`activity_user_mapper_id` = `activity`.`id`" +
-                "AND `log`.`user_id` = ? )" +
-                "OR (`activity`.`unit_id` = ? AND `activity`.`is_private` = 0 " +
+                "AND `log`.`user_id` = ? ";
+
+            if (filter != null) {
+                query += "AND `log`.`activity_type` in (";
+                if (filter.size() == 0) query += "''";
+                else {
+                    for (int i = 0; i < filter.size(); i++) {
+                        if (i == 0) query += "'" + filter.get(i) + "'";
+                        else query += ",'" + filter.get(i) + "'";
+                    }
+                }
+                query += ")";
+            }
+
+            query +=
+                ") OR (`activity`.`unit_id` = ? AND `activity`.`is_private` = 0 " +
                 "AND `log`.`activity_user_mapper_id` = `activity`.`id` " +
                 "AND `log`.`user_id` = ?))" +
                 "AND `log`.`start_time` >= ? " +
-                "AND `log`.`end_time` < ? ")) {
+                "AND `log`.`end_time` < ? ";
 
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, teamID);
                 stmt.setString(2, userID);
                 stmt.setString(3, userID);
                 stmt.setString(4, userID);
                 stmt.setString(5, startDate);
                 stmt.setString(6, endDate);
+
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         UUID logID = UUID.fromString(rs.getString("id"));
@@ -262,6 +290,7 @@ public class MysqlLogRepository implements LogRepository {
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new DatabaseErrorException();
         } finally {
             this.mysqlDriverAdapter.closeConnection(connection);

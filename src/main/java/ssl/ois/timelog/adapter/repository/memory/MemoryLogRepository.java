@@ -68,7 +68,7 @@ public class MemoryLogRepository implements LogRepository {
     }
 
     @Override
-    public List<Log> findByPeriodAndTeam(String userID, String startDateString, String endDateString) throws ParseException {
+    public List<Log> findByPeriodAndTeam(String userID, String startDateString, String endDateString, List<String> filter) throws ParseException {
         final List<Log> logList = new ArrayList<>();
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date startDate;
@@ -88,7 +88,7 @@ public class MemoryLogRepository implements LogRepository {
     }
 
     @Override
-    public List<Log> findByPeriodAndUserIDWithTeamID(String teamID, String userID, String startDateString, String endDateString) throws ParseException {
+    public List<Log> findByPeriodAndUserIDWithTeamID(String teamID, String userID, String startDateString, String endDateString, List<String> filter) throws ParseException {
         final List<Log> logList = new ArrayList<>();
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date startDate;

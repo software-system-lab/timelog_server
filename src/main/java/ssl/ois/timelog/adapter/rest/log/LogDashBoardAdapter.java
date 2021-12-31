@@ -60,6 +60,7 @@ public class LogDashBoardAdapter {
         } catch (ParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new TeamDashBoardViewModel());
         } catch (DatabaseErrorException | AccountErrorException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new TeamDashBoardViewModel());
         }
     }
