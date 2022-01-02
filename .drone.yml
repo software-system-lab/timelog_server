@@ -25,7 +25,7 @@ name: rancher_cluster_token
 ---
 kind: pipeline
 type: docker
-name: Analysis
+name: Test
 
 steps:
 - name: Run test
@@ -40,13 +40,13 @@ steps:
   commands:
   - mvn test
 
-- name: Sonar Scanner
-  image: aosapps/drone-sonar-plugin
-  settings:
-    sonar_token:
-      from_secret: sonar_project_token
-    sonar_host:
-      from_secret: sonar_url
+#- name: Sonar Scanner
+#  image: aosapps/drone-sonar-plugin
+#  settings:
+#    sonar_token:
+#      from_secret: sonar_project_token
+#    sonar_host:
+#      from_secret: sonar_url
 
 
 trigger:
@@ -55,34 +55,40 @@ trigger:
     - beta
     - dev
 
-#---
-#kind: pipeline
-#type: docker
-#name: Publish
-#
-#steps:
-#- name: Publish Docker Image
-#  image: plugins/docker
-#  settings:
-#    repo: ssl1321ois/timelog_server
-#    tags:
-#      ${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
-#    username:
-#      from_secret:
-#        docker_hub_user
-#    password:
-#      from_secret:
-#        docker_hub_password
-#
-#trigger:
-#  branch:
-#  - master
-#  - beta
-#  event:
-#  - push
-#
-#depends_on:
-#  - Test
+---
+kind: pipeline
+type: docker
+name: Publish
+
+steps:
+- name: Build Jar
+  image: maven:3.6.3-jdk-11
+  commands:
+    - mvn install -DskipTests
+    - mvn package spring-boot:repackage
+- name: Publish Docker Image
+  image: plugins/docker
+  settings:
+    repo: ssl1321ois/timelog_server
+    tags:
+      ${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
+    username:
+      from_secret:
+        docker_hub_user
+    password:
+      from_secret:
+        docker_hub_password
+
+trigger:
+  branch:
+  - master
+  - beta
+  - dev
+  event:
+  - push
+
+depends_on:
+  - Test
 
 #---
 #kind: pipeline
