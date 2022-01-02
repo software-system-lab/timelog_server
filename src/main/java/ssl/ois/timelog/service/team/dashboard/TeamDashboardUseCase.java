@@ -69,9 +69,12 @@ public class TeamDashboardUseCase {
             List<LogDTO> logDTOList = new ArrayList<>();
 
             for (Log log : memberLogList) {
-                if (teamMapperIdMap.containsKey(log.getActivityUserMapperID()))
-                    log.setActivityTypeName(log.getActivityTypeName() + " / " + teamMapperIdMap.get(log.getActivityUserMapperID()));
-                logDTOList.add(this.buildLogDTO(log));
+                if (!teamMapperIdMap.containsKey(log.getActivityUserMapperID()) && input.getPersonal()) {
+                    log.setActivityTypeName(log.getActivityTypeName() + " / Personal");
+                    logDTOList.add(this.buildLogDTO(log));
+                } else if (teamMapperIdMap.containsKey(log.getActivityUserMapperID())) {
+                    logDTOList.add(this.buildLogDTO(log));
+                }
             }
 
             output.addMemberLog(member.getUsername(), logDTOList);
