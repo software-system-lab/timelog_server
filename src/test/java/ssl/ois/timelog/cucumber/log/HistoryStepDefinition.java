@@ -1,8 +1,7 @@
 package ssl.ois.timelog.cucumber.log;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
+
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,6 +11,7 @@ import ssl.ois.timelog.adapter.presenter.log.history.LogHistoryPresenter;
 import ssl.ois.timelog.adapter.repository.memory.MemoryLogRepository;
 import ssl.ois.timelog.adapter.repository.memory.MemoryUnitRepository;
 import ssl.ois.timelog.cucumber.common.UserLogin;
+import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.team.Team;
@@ -34,7 +34,6 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.ParseException;
-import java.util.UUID;
 
 public class HistoryStepDefinition {
     private UnitRepository unitRepository;
@@ -42,6 +41,7 @@ public class HistoryStepDefinition {
     private AccountManager accountManager;
 
     private String userID;
+    private String teamID = "11111111-0000-0000-0000-000000000000";
     private HistoryLogUseCaseOutput output;
 
     @Before
@@ -60,11 +60,25 @@ public class HistoryStepDefinition {
             HashMap<String, Unit> amsService = new HashMap<String, Unit>();
             HashMap<UUID, Role> memberRoleMap = new HashMap<UUID, Role>();
             memberRoleMap.put(UUID.fromString(this.userID), Role.MEMBER);
-            Team team = new Team(UUID.randomUUID(), memberRoleMap);
+            Team team = new Team(UUID.fromString(this.teamID), memberRoleMap);
             System.out.println(team.getMemberRoleMap());
             amsService.put("team1", team);
             amsService.put("current user", loginService.getUser());
             this.accountManager = new MemoryAMSManager(amsService);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Given("[History] I am a member of a team with ID {string}")
+    public void history_i_am_a_member_of_a_team_with_team_id(String teamID) {
+        List<ActivityType> activityTypeList = new ArrayList<>();
+        activityTypeList.add(new ActivityType(UUID.fromString("22222222-0000-0000-0000-000000000001"), "team activity type 1", true, true));
+        activityTypeList.add(new ActivityType(UUID.fromString("22222222-0000-0000-0000-000000000002"), "team activity type 2", true, true));
+        Map<UUID, Role> roleMap = new HashMap<>();
+        roleMap.put(UUID.fromString(this.userID), Role.MEMBER);
+        try {
+            this.unitRepository.addActivityType(new Team(UUID.fromString(teamID), activityTypeList, roleMap));
         } catch (Exception e) {
             fail(e.getMessage());
         }

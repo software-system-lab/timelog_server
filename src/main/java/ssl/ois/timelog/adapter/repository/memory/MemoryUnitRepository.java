@@ -6,6 +6,7 @@ import ssl.ois.timelog.model.activity.type.ActivityType;
 import ssl.ois.timelog.model.connect.Unit;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MemoryUnitRepository implements UnitRepository {
     /*
@@ -24,6 +25,7 @@ public class MemoryUnitRepository implements UnitRepository {
 
     @Override
     public void addActivityType(Unit unit) {
+        System.out.println(unit.getID());
         this.save(unit);
     }
 
@@ -55,6 +57,9 @@ public class MemoryUnitRepository implements UnitRepository {
 
     @Override
     public List<UUID> getActivityMapperIDListByUnitID(String unitID) throws DatabaseErrorException {
-        return new ArrayList<>();
+        return this.findByUnitID(unitID).getActivityTypeList()
+                .stream()
+                .map(ActivityType::getId)
+                .collect(Collectors.toList());
     }
 }
