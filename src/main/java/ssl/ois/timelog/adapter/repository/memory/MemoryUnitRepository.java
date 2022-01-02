@@ -25,7 +25,6 @@ public class MemoryUnitRepository implements UnitRepository {
 
     @Override
     public void addActivityType(Unit unit) {
-        System.out.println(unit.getID());
         this.save(unit);
     }
 

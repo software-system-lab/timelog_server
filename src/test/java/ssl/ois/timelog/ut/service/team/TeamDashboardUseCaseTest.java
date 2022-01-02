@@ -132,8 +132,7 @@ public class TeamDashboardUseCaseTest {
         assertEquals("22222222-0000-0000-0000-000000000000", output.getTeamLogDTOList().get(0).getId());
         assertEquals("dummy log title", output.getTeamLogDTOList().get(0).getTitle());
 
-        assertEquals("22222222-0000-0000-0000-000000000000", output.getMemberdashboardMap().get("Mashu").get(0).getId());
-        assertEquals("dummy log title", output.getMemberdashboardMap().get("Mashu").get(0).getTitle());
+        assertEquals(0, output.getMemberdashboardMap().get("Mashu").size());
     }
 
     @Test
@@ -157,5 +156,33 @@ public class TeamDashboardUseCaseTest {
         }
 
         assertEquals(0, output.getTeamLogDTOList().size());
+    }
+
+    @Test
+    public void test_get_team_dashboard_containing_personal_log() {
+        TeamDashboardUseCase uc = new TeamDashboardUseCase(this.logRepository, this.accountManager, this.unitRepository);
+        TeamDashboardUseCaseInput input = new TeamDashboardUseCaseInput();
+        List<Person> members = new ArrayList<>();
+        members.add(new Person(this.dummyUserName, this.dummyUser.getID()));
+        input.setStartDate("2021/12/31 00:00");
+        input.setEndDate("2021/12/31 23:59");
+        input.setTeamID(this.dummyTeam.getID().toString());
+        input.setPersonal(true);
+        input.setFilterList(null);
+        input.setMemberList(members);
+
+        TeamDashboardUseCaseOutput output = new TeamDashBoardPresenter();
+        try {
+            uc.execute(input, output);
+        } catch (Exception e) {
+            fail("failed to execute usecase");
+        }
+
+        assertEquals(1, output.getTeamLogDTOList().size());
+        assertEquals("22222222-0000-0000-0000-000000000000", output.getTeamLogDTOList().get(0).getId());
+        assertEquals("dummy log title", output.getTeamLogDTOList().get(0).getTitle());
+
+        assertEquals("22222222-0000-0000-0000-000000000000", output.getMemberdashboardMap().get("Mashu").get(0).getId());
+        assertEquals("dummy log title", output.getMemberdashboardMap().get("Mashu").get(0).getTitle());
     }
 }

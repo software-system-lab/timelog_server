@@ -61,7 +61,6 @@ public class HistoryStepDefinition {
             HashMap<UUID, Role> memberRoleMap = new HashMap<UUID, Role>();
             memberRoleMap.put(UUID.fromString(this.userID), Role.MEMBER);
             Team team = new Team(UUID.fromString(this.teamID), memberRoleMap);
-            System.out.println(team.getMemberRoleMap());
             amsService.put("team1", team);
             amsService.put("current user", loginService.getUser());
             this.accountManager = new MemoryAMSManager(amsService);
