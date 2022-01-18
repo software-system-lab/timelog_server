@@ -23,6 +23,7 @@ name: rancher_kube_cluster_url
 kind: secret
 name: rancher_cluster_token
 ---
+
 kind: pipeline
 type: kubernetes
 name: Test
@@ -40,22 +41,14 @@ steps:
   commands:
   - mvn test
 
-#- name: Sonar Scanner
-#  image: aosapps/drone-sonar-plugin
-#  settings:
-#    sonar_token:
-#      from_secret: sonar_project_token
-#    sonar_host:
-#      from_secret: sonar_url
-
-
 trigger:
   branch:
-    - master
-    - beta
-    - dev
+  - master
+  - beta
+  - dev
 
 ---
+
 kind: pipeline
 type: kubernetes
 name: Publish
@@ -64,14 +57,13 @@ steps:
 - name: Build Jar
   image: maven:3.6.3-jdk-11
   commands:
-    - mvn install -DskipTests
-    - mvn package spring-boot:repackage
+  - mvn install -DskipTests
+  - mvn package spring-boot:repackage
 - name: Publish Docker Image
   image: plugins/docker
   settings:
     repo: ssl1321ois/timelog_server
-    tags:
-      ${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
+    tags: ${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
     username:
       from_secret:
         docker_hub_user
@@ -87,9 +79,10 @@ trigger:
   - push
 
 depends_on:
-  - Test
+- Test
 
 ---
+
 kind: pipeline
 type: kubernetes
 name: Deployment
@@ -115,7 +108,9 @@ steps:
     - push
 
 depends_on:
-  - Publish
+- Publish
 trigger:
   branch:
   - master
+  events:
+  - push
