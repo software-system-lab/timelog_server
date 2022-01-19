@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: timelog-v2-server
+  name: timelog-server
 spec:
   type: ClusterIP
   selector:
-    app: timelog-v2-server
+    app: timelog-server
   ports:
     - name: http
       port: 9000
