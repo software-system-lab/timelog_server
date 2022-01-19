@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: timelog-v2-server
+  name: timelog-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: timelog-v2-server
+      app: timelog-server
   template:
     metadata:
       labels:
-        app: timelog-v2-server
+        app: timelog-server
     spec:
       containers:
-        - name: timelog-v2-server
+        - name: timelog-server
           image: ssl1321ois/timelog_server
           imagePullPolicy: Always
           ports:
