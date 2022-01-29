@@ -3,8 +3,8 @@ package ssl.ois.timelog.service.activity.type.edit;
 public class EditActivityTypeUseCaseInput {
     private String targetActivityTypeName;
     private String activityTypeName;
-    private Boolean isEnable;
-    private Boolean isPrivate;
+    private boolean isEnable;
+    private boolean isPrivate;
     private String unitID;
 
     public String getTargetActivityTypeName() {
@@ -23,19 +23,19 @@ public class EditActivityTypeUseCaseInput {
         this.activityTypeName = activityTypeName;
     }
 
-    public Boolean getIsEnable() {
+    public boolean getIsEnable() {
         return this.isEnable;
     }
 
-    public void setIsEnable(Boolean isEnable) {
+    public void setIsEnable(boolean isEnable) {
         this.isEnable = isEnable;
     }
 
-    public Boolean getIsPrivate() {
+    public boolean getIsPrivate() {
         return this.isPrivate;
     }
 
-    public void setIsPrivate(Boolean isPrivate) {
+    public void setIsPrivate(boolean isPrivate) {
         this.isPrivate = isPrivate;
     }
 
