@@ -1,4 +1,3 @@
-
 kind: secret
 name: mysql_user
 ---
@@ -6,22 +5,16 @@ kind: secret
 name: mysql_password
 ---
 kind: secret
-name: docker_hub_user
+name: docker_user
 ---
 kind: secret
-name: docker_hub_password
+name: docker_password
 ---
 kind: secret
-name: sonar_url
+name: cluster_url
 ---
 kind: secret
-name: sonar_project_token
----
-kind: secret
-name: rancher_kube_cluster_url
----
-kind: secret
-name: rancher_cluster_token
+name: cluster_token
 ---
 
 kind: pipeline
@@ -66,10 +59,10 @@ steps:
     tags: ${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
     username:
       from_secret:
-        docker_hub_user
+        docker_user
     password:
       from_secret:
-        docker_hub_password
+        docker_password
 
 trigger:
   branch:
@@ -91,12 +84,12 @@ steps:
 - name: Deploy Production
   image: nightlord851108/kustomize
   environment:
-    KUBE_CLUSTER_URL:
+    CLUSTER_URL:
       from_secret:
-        rancher_kube_cluster_url
+        cluster_url
     CLUSTER_TOKEN:
       from_secret:
-        rancher_cluster_token
+        cluster_token
   commands:
   - cd kustomize/overlays/production
   - kustomize edit set image ssl1321ois/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
