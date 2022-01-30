@@ -1,18 +1,15 @@
 package ssl.ois.timelog.adapter.manager.directory;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import ssl.ois.timelog.model.user.User;
 import ssl.ois.timelog.service.manager.AccountManager;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.HashMap;
-import java.util.Iterator;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import ssl.ois.timelog.service.exception.AccountErrorException;
@@ -36,16 +33,26 @@ public class DirectoryAMSManager implements AccountManager {
 
     //Get Belonging Teams
     //Returns Map of Team(UUID) as Index, TeamName(String) as value 
-    public Map<UUID,String> getBelongingTeams(String username)throws AccountErrorException {
+    public Map<UUID, String> getBelongingTeams(String username)throws AccountErrorException {
         Map<UUID,String> teamList = new HashMap<>();
         try {
             // final String requestAddress = this.url + "/team/get/memberOf";
             final String requestAddress = this.url + "/team/get/belonging-teams";
-            List<LinkedHashMap<String,String>> result = this.restTemplate.postForObject(requestAddress, username, List.class);
-            for(LinkedHashMap<String,String> each : result) {
-                String uid = each.get("id").replaceAll("^\"|\"$", "");
-                String name = each.get("name").replaceAll("^\"|\"$", "");
-                teamList.put(UUID.fromString(uid),name);
+            JsonObject body = new JsonObject();
+            body.addProperty("username", username);
+
+            HttpEntity<String> req = new HttpEntity<>(body.toString());
+            ResponseEntity<List<TeamDTO>> res = this.restTemplate.exchange(
+                requestAddress,
+                HttpMethod.POST,
+                req,
+                new ParameterizedTypeReference<List<TeamDTO>>() { }
+            );
+
+            for (TeamDTO team: res.getBody()) {
+                String id = team.getId().replaceAll("^\"|\"$", "");
+                String name = team.getName().replaceAll("^\"|\"$", "");
+                teamList.put(UUID.fromString(id), name);
             }
         } catch (RestClientException e) {
             e.printStackTrace();
