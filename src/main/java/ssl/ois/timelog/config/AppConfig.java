@@ -30,16 +30,14 @@ public class AppConfig {
     private String mysqlUser;
     @Value("${mysql.password}")
     private String mysqlPasswd;
-    @Value("${ams.host}")
-    private String amsHost;
-    @Value("${ams.port}")
-    private String amsPort;
+    @Value("${ams.url}")
+    private String amsUrl;
     @Value("${ams.protocol}")
     private String amsProtocol;
 
     @Bean 
     public AccountManager getAMSManager() {
-        return new DirectoryAMSManager(this.amsProtocol,this.amsHost, this.amsPort);
+        return new DirectoryAMSManager(this.amsProtocol, this.amsUrl);
     } 
 
     @Bean

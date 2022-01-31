@@ -24,10 +24,9 @@ public class DirectoryAMSManager implements AccountManager {
     private String url;
     private RestTemplate restTemplate;
 
-    public DirectoryAMSManager(String amsProtocol,String amsHost, String amsPort){
-        this.url = amsProtocol + "://" + amsHost + ":" + amsPort;
+    public DirectoryAMSManager(String amsProtocol, String amsUrl){
+        this.url = amsProtocol + "://" + amsUrl;
         this.restTemplate = new RestTemplate();
-
     }
 
 
