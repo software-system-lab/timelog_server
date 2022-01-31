@@ -49,10 +49,5 @@ spec:
             - name: AMS_HOST
               valueFrom:
                 secretKeyRef:
-                  key: AMS_HOST
-                  name: timelog-server-env-production
-            - name: AMS_PORT
-              valueFrom:
-                secretKeyRef:
-                  key: AMS_PORT
+                  key: AMS_URL
                   name: timelog-server-env-production
