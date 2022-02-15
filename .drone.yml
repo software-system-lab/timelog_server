@@ -56,8 +56,7 @@ steps:
   image: plugins/docker
   settings:
     repo: ssl1321ois/timelog_server
-    tags:
-      ${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
+    tags: ${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
     username:
       from_secret:
         docker_user
