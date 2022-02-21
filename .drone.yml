@@ -17,6 +17,7 @@ kind: secret
 name: cluster_token
 ---
 
+
 kind: pipeline
 type: kubernetes
 name: Test
