@@ -30,10 +30,10 @@ public class LogDashBoardPresenter extends HistoryLogUseCaseOutputBound {
             data.setHour(hour);
             data.setMinute(minute);
 
-            if (!log.getTeamName().equals("Personal")){
+            if(log.getTeamName() != "Personal"){
                 viewModel.add(log.getTeamName(), data);
             }
-            else {
+            else{
                 viewModel.add(log.getActivityTypeName(), data);
             }
         }

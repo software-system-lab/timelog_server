@@ -56,7 +56,7 @@ public class HistoryLogUseCase {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
 
         List<LogDTO> logDTOList = new ArrayList<>();
-        if (input.getFilterList() == null) {
+        if(input.getFilterList() == null){
             for (Log log: logList) {
                 LogDTO logDTO = new LogDTO();
                 logDTO.setId(log.getID().toString());
@@ -64,21 +64,19 @@ public class HistoryLogUseCase {
                 logDTO.setTitle(log.getTitle());
                 logDTO.setStartTime(simpleDateFormat.format(log.getStartTime()));
                 logDTO.setEndTime(simpleDateFormat.format(log.getEndTime()));
-                if (teamMapperIdMap.containsKey(log.getActivityUserMapperID())){
-                    logDTO.setTeamName(teamMapperIdMap.get(log.getActivityUserMapperID()) + " (team)");
-                } else {
-                    logDTO.setTeamName("Personal");
+                if(teamMapperIdMap.containsKey(log.getActivityUserMapperID())){
+                    logDTO.setTeamName(teamMapperIdMap.get(log.getActivityUserMapperID()));
                 }
                 logDTOList.add(logDTO);
             }
         } else {
             for (Log log: logList) {
-                for (String filterName: input.getFilterList()) {
+                for(String filterName: input.getFilterList()) {
                     String teamName = "Personal";
-                    if (teamMapperIdMap.containsKey(log.getActivityUserMapperID())) {
-                        teamName = teamMapperIdMap.get(log.getActivityUserMapperID()) + " (team)";
+                    if(teamMapperIdMap.containsKey(log.getActivityUserMapperID())){
+                        teamName = teamMapperIdMap.get(log.getActivityUserMapperID());
                     }
-                    if (log.getActivityTypeName().equals(filterName) || teamName.equals(filterName)) {
+                    if(log.getActivityTypeName().equals(filterName)|| teamName.equals(filterName)) {
                         LogDTO logDTO = new LogDTO();
                         logDTO.setId(log.getID().toString());
                         logDTO.setActivityTypeName(log.getActivityTypeName());
@@ -90,7 +88,7 @@ public class HistoryLogUseCase {
                     }
                 }
             }
-        }
+        }      
 
         output.setLogDTOList(logDTOList);
     }
