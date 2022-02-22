@@ -30,7 +30,7 @@ steps:
     MYSQL_PASSWORD:
       from_secret: mysql_password
   commands:
-  - mvn test
+  - mvn test -q
 
 trigger:
   branch:
@@ -48,8 +48,8 @@ steps:
 - name: Build Jar
   image: maven:3.6.3-jdk-11
   commands:
-  - mvn install -DskipTests
-  - mvn package spring-boot:repackage
+  - mvn install -DskipTests -q
+  - mvn package spring-boot:repackage -q
 - name: Publish Docker Image
   image: plugins/docker
   settings:
