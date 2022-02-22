@@ -6,7 +6,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: timelog-server-pod
+    app: timelog-server
   ports:
     - name: http
       port: 9000
