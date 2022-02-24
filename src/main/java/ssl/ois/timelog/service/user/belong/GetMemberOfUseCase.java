@@ -29,20 +29,23 @@ public class GetMemberOfUseCase {
     }
 
     public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException,InitTeamDataErrorException {
-        try{
-            Map<UUID,String> teamIdList = this.accountManager.getBelongingTeams(input.getUsername());
-            for(Map.Entry<UUID, String> teamID : teamIdList.entrySet()) {
-                Unit team = this.unitRepository.findByUnitID(teamID.getKey().toString());
-                if(team == null){
-                    Map<UUID,Role> memberRoleMap = this.accountManager.getTeamRoleRelation(teamID.getKey().toString());
-                    team = new Team(teamID.getKey(),memberRoleMap);
+        try {
+            Map<UUID, String> teamIdList = this.accountManager.getBelongingTeams(input.getUsername());
+            for (Map.Entry<UUID, String> entry: teamIdList.entrySet()) {
+                Unit team = this.unitRepository.findByUnitID(entry.getKey().toString());
+
+                // if the unit is a team
+                if (team == null) {
+                    Map<UUID, Role> memberRoleMap = this.accountManager.getMemberRoleOfTeam(entry.getKey().toString());
+                    team = new Team(entry.getKey(), memberRoleMap);
                     ActivityType activityType = new ActivityType("Other", true, false);
                     team.addActivityType(activityType);
                     this.unitRepository.save(team);
                     // this.unitRepository.addRoleRelation(teamID.getKey().toString(), memberRoleMap);
                     // this.unitRepository.addActivityType(team);
                 }
-                output.addTeamToList(teamID.getValue(),teamID.getKey());
+
+                output.addTeamToList(entry.getValue(),entry.getKey());
             }
         } catch (AccountErrorException e) {
             throw new GetMemberOfErrorException();

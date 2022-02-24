@@ -48,8 +48,8 @@ public class TeamDashboardUseCaseInput {
 		this.memberList = memberList;
 	}
 
-    public void addMemberToList(String username, UUID userID) {
-		this.memberList.add(new Person(username, userID));
+    public void addMemberToList(String username, String displayName, UUID userID) {
+		this.memberList.add(new Person(username, displayName, userID));
 	}
 
     public String getGroupname() {

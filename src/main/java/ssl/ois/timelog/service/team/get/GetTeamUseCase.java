@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.UUID;
 
+import ssl.ois.timelog.common.MemberDTO;
 import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.service.exception.team.GetTeamErrorException;
@@ -22,13 +23,24 @@ public class GetTeamUseCase {
         System.out.println(input.getTeamID());
         try {
             //Get UUID of members
-            Map<UUID, Role> teamMap = accountManager.getTeamRoleRelation(input.getTeamID());
-            for(Map.Entry<UUID, Role> entry: teamMap.entrySet()){
-                if(entry.getValue().equals(Role.LEADER)){
-                    output.setLeader(accountManager.getNameById(entry.getKey().toString()), entry.getKey());
+            Map<UUID, MemberDTO> teamMap = accountManager.getTeamRoleRelation(input.getTeamID());
+            for(Map.Entry<UUID, MemberDTO> entry: teamMap.entrySet()){
+                if (entry.getValue().getRole().equals(Role.LEADER)){
+                    output.setLeader(
+                        entry.getValue().getUsername(),
+                        entry.getValue().getDisplayName(),
+                        entry.getKey()
+                    );
                 }
-                output.addMemberToList(accountManager.getNameById(entry.getKey().toString()), entry.getKey());
+
+                output.addMemberToList(
+                    entry.getValue().getUsername(),
+                    entry.getValue().getDisplayName(),
+                    entry.getKey()
+                );
             }
+
+            accountManager.getMemberRoleOfTeam(input.getTeamID());
 
         } catch (AccountErrorException e) {
             throw new GetTeamErrorException();

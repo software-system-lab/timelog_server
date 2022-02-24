@@ -3,6 +3,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import ssl.ois.timelog.common.MemberDTO;
 import ssl.ois.timelog.service.manager.AccountManager;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -62,27 +63,27 @@ public class DirectoryAMSManager implements AccountManager {
 
     //Get Team Member and Role
     //Returns Map of Member(UUID) as index, Role(Role) as value 
-    public Map<UUID, Role> getTeamRoleRelation(String teamID) throws AccountErrorException {
-        Map<UUID, Role> memberRoleMap = new HashMap<>();
+    public Map<UUID, MemberDTO> getTeamRoleRelation(String teamId) throws AccountErrorException {
+        Map<UUID, MemberDTO> memberRoleMap = new HashMap<>();
         try {
-            final String requestAddress = this.url + "/team/" + teamID;
+            final String requestAddress = this.url + "/team/" + teamId + "/members";
 
-            ResponseEntity<TeamDTO> res = this.restTemplate.exchange(
+            ResponseEntity<List<MemberDTO>> res = this.restTemplate.exchange(
                 requestAddress,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<TeamDTO>() { }
+                new ParameterizedTypeReference<List<MemberDTO>>() { }
             );
-            TeamDTO teamDTO = res.getBody();
-            assert teamDTO != null;
+            List<MemberDTO> members = res.getBody();
+            assert members != null;
 
-            memberRoleMap.put(UUID.fromString(teamDTO.getLeader().getUserId()), Role.LEADER);
-            for (UserDTO user: teamDTO.getMembers()){
-                memberRoleMap.putIfAbsent(UUID.fromString(user.getUserId()), Role.MEMBER);
+            for (MemberDTO member: members) {
+                memberRoleMap.put(UUID.fromString(member.getUserId()), member);
             }
         } catch (RestClientException e) {
             throw new AccountErrorException(e.toString());
-        } 
+        }
+
         return memberRoleMap;
     }
 
@@ -115,15 +116,28 @@ public class DirectoryAMSManager implements AccountManager {
 
     // Get Member role of Unit
     // If it is not Team, return null instead
-    public Map<UUID,Role> getMemberRoleOfTeam(String unitID) throws AccountErrorException {
-        Map<UUID,Role> result = new HashMap<>();
+    public Map<UUID, Role> getMemberRoleOfTeam(String unitID) throws AccountErrorException {
+        Map<UUID, Role> result = new HashMap<>();
         try{
-            final String requestAddress = this.url + "/team/member/role";
-            List<LinkedHashMap<String,String>> request = this.restTemplate.postForObject(requestAddress, unitID, List.class);
-            for(LinkedHashMap<String,String> each : request) {     
-                result.put(UUID.fromString(each.get("id").replaceAll("^\"|\"$", "")),Role.valueOf(each.get("role").replaceAll("^\"|\"$", "")));
+            final String requestAddress = this.url + "/team/" + unitID + "/members";
+
+            ResponseEntity<List<LinkedHashMap<String, String>>> res = this.restTemplate.exchange(
+                requestAddress,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<LinkedHashMap<String, String>>>() { }
+            );
+
+            if (res.getBody() == null) return result;
+
+            for (LinkedHashMap<String, String> member: res.getBody()) {
+                System.out.println(member.entrySet());
+                result.put(
+                    UUID.fromString(member.get("userId").replaceAll("^\"|\"$", "")),
+                    Role.valueOf(member.get("role").replaceAll("^\"|\"$", ""))
+                );
             }
-        }catch (RestClientException e){
+        } catch (RestClientException e) {
             System.out.println(e.toString());
             // throw new AccountErrorException(e.toString());
             return result;

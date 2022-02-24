@@ -14,8 +14,8 @@ public class GetTeamUseCaseOutput {
 		return this.leader;
 	}
 
-	public void setLeader(String username, UUID userID) {
-		this.leader = new Person(username, userID);
+	public void setLeader(String username, String displayName, UUID userID) {
+		this.leader = new Person(username, displayName, userID);
 	}
 
     public GetTeamUseCaseOutput(){
@@ -26,7 +26,7 @@ public class GetTeamUseCaseOutput {
 		return this.memberList;
 	}
 
-    public void addMemberToList(String username, UUID userID) {
-		this.memberList.add(new Person(username, userID));
+    public void addMemberToList(String username, String displayName, UUID userID) {
+		this.memberList.add(new Person(username, displayName, userID));
 	}
 }

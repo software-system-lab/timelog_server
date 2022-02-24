@@ -113,7 +113,7 @@ public class TeamDashboardUseCaseTest {
         TeamDashboardUseCase uc = new TeamDashboardUseCase(this.logRepository, this.accountManager, this.unitRepository);
         TeamDashboardUseCaseInput input = new TeamDashboardUseCaseInput();
         List<Person> members = new ArrayList<>();
-        members.add(new Person(this.dummyUserName, this.dummyUser.getID()));
+        members.add(new Person(this.dummyUserName, "",  this.dummyUser.getID()));
         input.setStartDate("2021/12/31 00:00");
         input.setEndDate("2021/12/31 23:59");
         input.setTeamID(this.dummyTeam.getID().toString());
@@ -132,7 +132,7 @@ public class TeamDashboardUseCaseTest {
         assertEquals("22222222-0000-0000-0000-000000000000", output.getTeamLogDTOList().get(0).getId());
         assertEquals("dummy log title", output.getTeamLogDTOList().get(0).getTitle());
 
-        assertEquals(0, output.getMemberdashboardMap().get("Mashu").size());
+        assertEquals(0, output.getMemberDashboardMap().get("Mashu").size());
     }
 
     @Test
@@ -140,7 +140,7 @@ public class TeamDashboardUseCaseTest {
         TeamDashboardUseCase uc = new TeamDashboardUseCase(this.logRepository, this.accountManager, this.unitRepository);
         TeamDashboardUseCaseInput input = new TeamDashboardUseCaseInput();
         List<Person> members = new ArrayList<>();
-        members.add(new Person(this.dummyUserName, this.dummyUser.getID()));
+        members.add(new Person(this.dummyUserName, "", this.dummyUser.getID()));
         input.setStartDate("2021/12/01 00:00");
         input.setEndDate("2021/12/20 23:59");
         input.setTeamID(this.dummyTeam.getID().toString());
@@ -163,7 +163,7 @@ public class TeamDashboardUseCaseTest {
         TeamDashboardUseCase uc = new TeamDashboardUseCase(this.logRepository, this.accountManager, this.unitRepository);
         TeamDashboardUseCaseInput input = new TeamDashboardUseCaseInput();
         List<Person> members = new ArrayList<>();
-        members.add(new Person(this.dummyUserName, this.dummyUser.getID()));
+        members.add(new Person(this.dummyUserName, "", this.dummyUser.getID()));
         input.setStartDate("2021/12/31 00:00");
         input.setEndDate("2021/12/31 23:59");
         input.setTeamID(this.dummyTeam.getID().toString());
@@ -182,7 +182,7 @@ public class TeamDashboardUseCaseTest {
         assertEquals("22222222-0000-0000-0000-000000000000", output.getTeamLogDTOList().get(0).getId());
         assertEquals("dummy log title", output.getTeamLogDTOList().get(0).getTitle());
 
-        assertEquals("22222222-0000-0000-0000-000000000000", output.getMemberdashboardMap().get("Mashu").get(0).getId());
-        assertEquals("dummy log title", output.getMemberdashboardMap().get("Mashu").get(0).getTitle());
+        assertEquals("22222222-0000-0000-0000-000000000000", output.getMemberDashboardMap().get("Mashu").get(0).getId());
+        assertEquals("dummy log title", output.getMemberDashboardMap().get("Mashu").get(0).getTitle());
     }
 }

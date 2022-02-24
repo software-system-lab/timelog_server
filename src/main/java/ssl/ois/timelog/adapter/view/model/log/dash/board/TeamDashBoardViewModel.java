@@ -98,12 +98,14 @@ public class TeamDashBoardViewModel {
 
     public static class MemberDashboard {
         private String username;
+        private String displayName;
         private String totalTime;
         private Map<String, Data> dataMap; 
     
-        public MemberDashboard(String username) {
+        public MemberDashboard(String username, String displayName) {
             this.dataMap = new HashMap<>();
             this.username = username;
+            this.displayName = displayName;
         }
     
         public void setUsername(String username){
@@ -112,6 +114,14 @@ public class TeamDashBoardViewModel {
 
         public String getUsername(){
             return this.username;
+        }
+
+        public void setDisplayName(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
         }
 
         public String getTotalTime() {

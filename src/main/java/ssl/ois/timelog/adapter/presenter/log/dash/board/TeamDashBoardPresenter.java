@@ -41,10 +41,17 @@ public class TeamDashBoardPresenter extends TeamDashboardUseCaseOutputBound {
         int minute = this.getMinute(totalTime);
         viewModel.setTotalTime(String.format("%02d:%02d", hour, minute));
 
-        for (Map.Entry<String, List<LogDTO>> entry : this.getMemberdashboardMap().entrySet()){
-            TeamDashBoardViewModel.MemberDashboard memberDashboard = new TeamDashBoardViewModel.MemberDashboard(entry.getKey());
+        for (Map.Entry<String, List<LogDTO>> entry : this.getMemberDashboardMap().entrySet()){
+            String username = entry.getKey();
+            String displayName = this.getMemberDisplayNameMap().get(username);
+            TeamDashBoardViewModel.MemberDashboard memberDashboard = new TeamDashBoardViewModel.MemberDashboard(
+                username,
+                displayName
+            );
+
+            List<LogDTO> logList = entry.getValue();
             long memberTotalTime = 0;
-            for (LogDTO log : entry.getValue()){
+            for (LogDTO log : logList){
                 TeamDashBoardViewModel.Data data = new TeamDashBoardViewModel.Data();
                 SimpleDateFormat dateFormat = new SimpleDateFormat(Log.DATE_FORMAT);
                 Date startTime = dateFormat.parse(log.getStartTime());

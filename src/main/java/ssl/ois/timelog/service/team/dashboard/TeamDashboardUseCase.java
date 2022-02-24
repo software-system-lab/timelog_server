@@ -77,7 +77,7 @@ public class TeamDashboardUseCase {
                 }
             }
 
-            output.addMemberLog(member.getUsername(), logDTOList);
+            output.addMemberLog(member.getUsername(), member.getDisplayName(), logDTOList);
         }
     }
 

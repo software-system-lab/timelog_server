@@ -8,6 +8,7 @@ import java.util.Map;
 public interface TeamDashboardUseCaseOutput {
     List<LogDTO> getTeamLogDTOList();
     void setTeamLogDTOList(List<LogDTO> teamLogDTOList);
-    void addMemberLog(String username, List<LogDTO> memberLogDTOList);
-    Map<String, List<LogDTO>> getMemberdashboardMap(); 
+    void addMemberLog(String username, String displayName, List<LogDTO> memberLogDTOList);
+    Map<String, List<LogDTO>> getMemberDashboardMap();
+    Map<String, String> getMemberDisplayNameMap();
 }

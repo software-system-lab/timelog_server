@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.apache.logging.log4j.CloseableThreadContext.Instance;
 
+import ssl.ois.timelog.common.MemberDTO;
 import ssl.ois.timelog.model.connect.Unit;
 import ssl.ois.timelog.model.team.Role;
 import ssl.ois.timelog.model.team.Team;
@@ -33,11 +34,15 @@ public class MemoryAMSManager implements AccountManager {
         return belongingTeams;
     }
 
-    public Map<UUID, Role> getTeamRoleRelation(String teamName) throws AccountErrorException {
-        if(directory.get(teamName) instanceof Team)
-            return directory.get(teamName).getMemberRoleMap();
-        else
-            throw new AccountErrorException(teamName + "is not a team");
+    public Map<UUID, MemberDTO> getTeamRoleRelation(String teamId) throws AccountErrorException {
+//        Unit targetUnit = null;
+//        for (Map.Entry<String, Unit> entry: this.directory.entrySet()) {
+//            if (entry.getValue().getID().toString().equals(teamId)) {
+//                targetUnit = entry.getValue();
+//                break;
+//            }
+//        }
+        return new HashMap<>();
     }
 
     public UUID getTeamIdByTeamName(String teamName) throws AccountErrorException{
