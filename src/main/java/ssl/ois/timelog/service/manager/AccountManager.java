@@ -10,7 +10,6 @@ import ssl.ois.timelog.service.exception.AccountErrorException;
 public interface AccountManager {
     Map<UUID,String> getBelongingTeams(String username)throws AccountErrorException;
     Map<UUID, MemberDTO> getTeamRoleRelation(String teamId)throws AccountErrorException;
-    UUID getTeamIdByTeamName(String teamName) throws AccountErrorException;
     String getNameById(String id) throws AccountErrorException;
     Map<UUID,Role> getMemberRoleOfTeam(String unitID) throws AccountErrorException;
 }

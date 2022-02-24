@@ -87,21 +87,6 @@ public class DirectoryAMSManager implements AccountManager {
         return memberRoleMap;
     }
 
-    //Get UUID From Name
-    //Returns UUID of Name
-    public UUID getTeamIdByTeamName(String teamName) throws AccountErrorException{
-        UUID id = null;
-        try {
-            final String requestAddress = this.url + "/team/get/uuid/user";
-            String result = this.restTemplate.postForObject(requestAddress, teamName, String.class);
-            String uid = result.replaceAll("^\"|\"$", "");
-            id = UUID.fromString(uid);
-        } catch (RestClientException e){
-            throw new AccountErrorException(e.toString());
-        }
-        return id;
-    }
-
     //get any name by any id
     public String getNameById(String id) throws AccountErrorException{
         String result;

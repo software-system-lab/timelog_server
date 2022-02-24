@@ -45,13 +45,6 @@ public class MemoryAMSManager implements AccountManager {
         return new HashMap<>();
     }
 
-    public UUID getTeamIdByTeamName(String teamName) throws AccountErrorException{
-        if(directory.get(teamName) instanceof Team)
-            return directory.get(teamName).getID();
-        else
-            throw new AccountErrorException(teamName + "is not a team");
-    }
-
     public String getNameById(String id) throws AccountErrorException{
         for(Map.Entry<String, Unit> pair: directory.entrySet()){
             if(pair.getValue().getID().equals(UUID.fromString(id))){
