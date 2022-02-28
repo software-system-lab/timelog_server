@@ -30,7 +30,7 @@ steps:
     MYSQL_PASSWORD:
       from_secret: mysql_password
   commands:
-  - mvn test
+  - mvn test -q
 
 trigger:
   branch:
