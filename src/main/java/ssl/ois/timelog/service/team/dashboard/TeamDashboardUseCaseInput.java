@@ -15,6 +15,7 @@ public class TeamDashboardUseCaseInput {
     private String groupname;
     private List<String> filterList;
     private Boolean personal;
+    private Boolean ssl;
 
     public String getTeamID() {
         return teamID;
@@ -65,5 +66,13 @@ public class TeamDashboardUseCaseInput {
     public Boolean getPersonal() { return personal; }
 
     public void setPersonal(Boolean personal) { this.personal = personal; }
+
+    public Boolean getSsl() {
+        return this.ssl;
+    }
+
+    public void setSsl(Boolean ssl) {
+        this.ssl = ssl;
+    }
 }
 

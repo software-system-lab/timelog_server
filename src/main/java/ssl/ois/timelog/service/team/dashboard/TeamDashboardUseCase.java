@@ -1,5 +1,6 @@
 package ssl.ois.timelog.service.team.dashboard;
 
+import ssl.ois.timelog.common.MemberDTO;
 import ssl.ois.timelog.model.log.Log;
 import ssl.ois.timelog.service.exception.AccountErrorException;
 import ssl.ois.timelog.service.exception.DatabaseErrorException;
@@ -9,9 +10,11 @@ import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
 import ssl.ois.timelog.service.team.Person;
 
+import java.lang.reflect.Member;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class TeamDashboardUseCase {
@@ -34,12 +37,39 @@ public class TeamDashboardUseCase {
         c.setTime(endDate);
         c.add(Calendar.DATE, 1);
         endDate = c.getTime();
-        List<Log> logList = this.logRepository.findByPeriodAndTeam(
-                input.getTeamID(),
-                input.getStartDate(),
-                dateFormat.format(endDate),
-                input.getFilterList()
-        );
+
+        Map<UUID, MemberDTO> memberMap = accountManager.getTeamRoleRelation(input.getTeamID());
+
+        Set<String> teamIdSet = new HashSet<>();
+        for (Map.Entry<UUID, MemberDTO> memberEntry: memberMap.entrySet()) {
+            MemberDTO memberDTO = memberEntry.getValue();
+            teamIdSet.addAll(
+                    accountManager.getBelongingTeams(memberDTO.getUsername())
+                        .keySet()
+                        .stream()
+                        .map(UUID::toString)
+                        .collect(Collectors.toList())
+            );
+        }
+
+        List<Log> logList = new ArrayList<>();
+        if (input.getSsl() != null) {
+            for (String teamId: teamIdSet) {
+                logList.addAll(this.logRepository.findByPeriodAndTeam(
+                        teamId,
+                        input.getStartDate(),
+                        dateFormat.format(endDate),
+                        input.getFilterList()
+                ));
+            }
+        } else {
+            logList.addAll(this.logRepository.findByPeriodAndTeam(
+                    input.getTeamID(),
+                    input.getStartDate(),
+                    dateFormat.format(endDate),
+                    input.getFilterList()
+            ));
+        }
 
         //team dashboard
         List<LogDTO> teamLogDTOList = new ArrayList<>();
@@ -48,24 +78,39 @@ public class TeamDashboardUseCase {
         }
         output.setTeamLogDTOList(teamLogDTOList);
 
-        //member dashboard
-        for (Person member : input.getMemberList()) {
+
+        for (Map.Entry<UUID, MemberDTO> memberEntry: memberMap.entrySet()) {
+            MemberDTO memberDTO = memberEntry.getValue();
+
             Map<UUID, String> teamMapperIdMap = new HashMap<>();
             //TeamID/TeamName
-            Map<UUID, String> belongTeams = accountManager.getBelongingTeams(member.getUsername());
+            Map<UUID, String> belongTeams = accountManager.getBelongingTeams(memberDTO.getUsername());
             for (Map.Entry<UUID, String> entry : belongTeams.entrySet()) {
                 for (UUID id : unitRepository.getActivityMapperIDListByUnitID(entry.getKey().toString())) {
                     teamMapperIdMap.put(id, entry.getValue());
                 }
             }
 
-            List<Log> memberLogList = this.logRepository.findByPeriodAndUserIDWithTeamID(
-                    input.getTeamID(),
-                    member.getUserID().toString(),
-                    input.getStartDate(),
-                    dateFormat.format(endDate),
-                    input.getFilterList()
-            );
+            List<Log> memberLogList = new ArrayList<>();
+            if (input.getSsl() != null) {
+                for (Map.Entry<UUID, String> belongTeam: belongTeams.entrySet()) {
+                    memberLogList.addAll(this.logRepository.findByPeriodAndUserIDWithTeamID(
+                            belongTeam.getKey().toString(),
+                            memberDTO.getUserId(),
+                            input.getStartDate(),
+                            dateFormat.format(endDate),
+                            input.getFilterList()
+                    ));
+                }
+            } else {
+                memberLogList.addAll(this.logRepository.findByPeriodAndUserIDWithTeamID(
+                        input.getTeamID(),
+                        memberDTO.getUserId(),
+                        input.getStartDate(),
+                        dateFormat.format(endDate),
+                        input.getFilterList()
+                ));
+            }
             List<LogDTO> logDTOList = new ArrayList<>();
 
             for (Log log : memberLogList) {
@@ -77,7 +122,7 @@ public class TeamDashboardUseCase {
                 }
             }
 
-            output.addMemberLog(member.getUsername(), member.getDisplayName(), logDTOList);
+            output.addMemberLog(memberDTO.getUsername(), memberDTO.getDisplayName(), logDTOList);
         }
     }
 
