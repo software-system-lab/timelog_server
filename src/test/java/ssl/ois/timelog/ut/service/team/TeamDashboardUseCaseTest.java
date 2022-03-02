@@ -36,6 +36,7 @@ public class TeamDashboardUseCaseTest {
     UnitRepository unitRepository;
 
     String dummyUserName = "Mashu";
+    String dummyTeamName = "OIS";
     Unit dummyUser;
     Unit dummyTeam;
 
@@ -105,6 +106,7 @@ public class TeamDashboardUseCaseTest {
 
         Map<String, Unit> userMap = new HashMap<>();
         userMap.put(this.dummyUserName, this.dummyUser);
+        userMap.put(this.dummyTeamName, this.dummyTeam);
         this.accountManager = new MemoryAMSManager(userMap);
     }
 
@@ -131,8 +133,6 @@ public class TeamDashboardUseCaseTest {
         assertEquals(1, output.getTeamLogDTOList().size());
         assertEquals("22222222-0000-0000-0000-000000000000", output.getTeamLogDTOList().get(0).getId());
         assertEquals("dummy log title", output.getTeamLogDTOList().get(0).getTitle());
-
-        assertEquals(0, output.getMemberDashboardMap().get("Mashu").size());
     }
 
     @Test
@@ -177,6 +177,7 @@ public class TeamDashboardUseCaseTest {
         } catch (Exception e) {
             fail("failed to execute usecase");
         }
+        System.out.println(output.getMemberDashboardMap());
 
         assertEquals(1, output.getTeamLogDTOList().size());
         assertEquals("22222222-0000-0000-0000-000000000000", output.getTeamLogDTOList().get(0).getId());
