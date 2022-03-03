@@ -2,42 +2,54 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: timelog-v2-server
+  name: timelog-server-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: timelog-v2-server
+      app: timelog-server
   template:
     metadata:
       labels:
-        app: timelog-v2-server
+        app: timelog-server
     spec:
       containers:
-        - name: timelog-v2-server
+        - name: timelog-server
           image: ssl1321ois/timelog_server
           imagePullPolicy: Always
           ports:
             - name: api-http
               containerPort: 9000
           env:
+            - name: NODE_ENV
+              value: staging
             - name: MYSQL_HOST
               valueFrom:
                 secretKeyRef:
                   key: MYSQL_HOST
-                  name: timelog-server-env-beta
+                  name: timelog-server-env-staging
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
                   key: MYSQL_USER
-                  name: timelog-server-env-beta
+                  name: timelog-server-env-staging
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: MYSQL_PASSWORD
-                  name: timelog-server-env-beta
+                  name: timelog-server-env-staging
             - name: TIMELOG_MYSQL_DB
               valueFrom:
                 secretKeyRef:
                   key: TIMELOG_MYSQL_DB
-                  name: timelog-server-env-beta
+                  name: timelog-server-env-staging
+            - name: AMS_PROTOCOL
+              valueFrom:
+                secretKeyRef:
+                  key: AMS_PROTOCOL
+                  name: timelog-server-env-staging
+            - name: AMS_URL
+              valueFrom:
+                secretKeyRef:
+                  key: AMS_URL
+                  name: timelog-server-env-staging
