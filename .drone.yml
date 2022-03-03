@@ -35,7 +35,7 @@ steps:
 trigger:
   branch:
   - master
-  - beta
+  - rc
   - dev
 
 ---
@@ -63,6 +63,7 @@ steps:
 trigger:
   branch:
   - master
+  - rc
   event:
   - push
 
@@ -73,7 +74,40 @@ depends_on:
 
 kind: pipeline
 type: kubernetes
-name: Deployment
+name: Deploy Staging
+
+steps:
+- name: Deploy Staging
+  image: nightlord851108/kustomize
+  environment:
+    CLUSTER_URL:
+      from_secret: cluster_url
+    CLUSTER_TOKEN:
+      from_secret: cluster_token
+  commands:
+    - cd kustomize/overlays/rc
+    - kustomize edit set image ssl1321ois/timelog_server:${DRONE_COMMIT_BRANCH}.${DRONE_COMMIT_SHA:0:8}
+    - kustomize build . | kubectl apply --server=$${CLUSTER_URL} --token=$${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=rc -f -
+  when:
+    branch:
+    - rc
+    event:
+    - push
+
+trigger:
+  branch:
+  - rc
+  events:
+  - push
+
+depends_on:
+- Publish
+
+---
+
+kind: pipeline
+type: kubernetes
+name: Deploy Production
 
 steps:
 - name: Deploy Production
@@ -93,10 +127,11 @@ steps:
     event:
     - push
 
-depends_on:
-- Publish
 trigger:
   branch:
   - master
   events:
   - push
+
+depends_on:
+- Publish
