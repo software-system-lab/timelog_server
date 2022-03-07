@@ -39,21 +39,22 @@ public class TeamDashboardUseCase {
         endDate = c.getTime();
 
         Map<UUID, MemberDTO> memberMap = accountManager.getTeamRoleRelation(input.getTeamID());
-
         Set<String> teamIdSet = new HashSet<>();
-        for (Map.Entry<UUID, MemberDTO> memberEntry: memberMap.entrySet()) {
-            MemberDTO memberDTO = memberEntry.getValue();
-            teamIdSet.addAll(
-                    accountManager.getBelongingTeams(memberDTO.getUsername())
-                        .keySet()
-                        .stream()
-                        .map(UUID::toString)
-                        .collect(Collectors.toList())
-            );
-        }
 
+        // team log
         List<Log> logList = new ArrayList<>();
-        if (input.getSsl() != null) {
+        if (input.getSsl() != null && input.getSsl()) {
+            for (Map.Entry<UUID, MemberDTO> memberEntry: memberMap.entrySet()) {
+                MemberDTO memberDTO = memberEntry.getValue();
+                teamIdSet.addAll(
+                  accountManager.getBelongingTeams(memberDTO.getUsername())
+                    .keySet()
+                    .stream()
+                    .map(UUID::toString)
+                    .collect(Collectors.toList())
+                );
+            }
+
             for (String teamId: teamIdSet) {
                 logList.addAll(this.logRepository.findByPeriodAndTeam(
                         teamId,
@@ -71,35 +72,36 @@ public class TeamDashboardUseCase {
             ));
         }
 
-        //team dashboard
+        // filter duplicate log
+        // Map<logId, Log>
+        Map<String, Log> teamLogMap = new HashMap<>();
+        for (Log log: logList) {
+            teamLogMap.putIfAbsent(log.getID().toString(), log);
+        }
+
         List<LogDTO> teamLogDTOList = new ArrayList<>();
-        for (Log log : logList) {
+        for (Map.Entry<String, Log> logEntry: teamLogMap.entrySet()) {
+            Log log = logEntry.getValue();
             teamLogDTOList.add(this.buildLogDTO(log));
         }
         output.setTeamLogDTOList(teamLogDTOList);
 
-
+        // member log
         for (Map.Entry<UUID, MemberDTO> memberEntry: memberMap.entrySet()) {
             MemberDTO memberDTO = memberEntry.getValue();
 
-            Map<UUID, String> teamMapperIdMap = new HashMap<>();
             //TeamID/TeamName
             Map<UUID, String> belongTeams = accountManager.getBelongingTeams(memberDTO.getUsername());
-            for (Map.Entry<UUID, String> entry : belongTeams.entrySet()) {
-                for (UUID id : unitRepository.getActivityMapperIDListByUnitID(entry.getKey().toString())) {
-                    teamMapperIdMap.put(id, entry.getValue());
-                }
-            }
-
             List<Log> memberLogList = new ArrayList<>();
-            if (input.getSsl() != null) {
-                for (Map.Entry<UUID, String> belongTeam: belongTeams.entrySet()) {
+
+            if (input.getSsl() != null && input.getSsl()) {
+                for (String teamId: teamIdSet) {
                     memberLogList.addAll(this.logRepository.findByPeriodAndUserIDWithTeamID(
-                            belongTeam.getKey().toString(),
-                            memberDTO.getUserId(),
-                            input.getStartDate(),
-                            dateFormat.format(endDate),
-                            input.getFilterList()
+                      teamId,
+                      memberDTO.getUserId(),
+                      input.getStartDate(),
+                      dateFormat.format(endDate),
+                      input.getFilterList()
                     ));
                 }
             } else {
@@ -111,13 +113,27 @@ public class TeamDashboardUseCase {
                         input.getFilterList()
                 ));
             }
+
+            // filter duplicate log
+            // Map<logId, Log>
+            Map<String, Log> memberLogMap = new HashMap<>();
+            for (Log memberLog: memberLogList) {
+                memberLogMap.putIfAbsent(memberLog.getID().toString(), memberLog);
+            }
+
             List<LogDTO> logDTOList = new ArrayList<>();
 
-            for (Log log : memberLogList) {
-                if (!teamMapperIdMap.containsKey(log.getActivityUserMapperID()) && input.getPersonal()) {
+            Set<UUID> teamActivityIds = new HashSet<>();
+            for (Map.Entry<UUID, String> entry : belongTeams.entrySet()) {
+                teamActivityIds.addAll(this.unitRepository.getActivityMapperIDListByUnitID(entry.getKey().toString()));
+            }
+
+            for (Map.Entry<String, Log> memberLogEntry: memberLogMap.entrySet()) {
+                Log log = memberLogEntry.getValue();
+                if (!teamActivityIds.contains(log.getActivityUserMapperID()) && input.getPersonal()) {
                     log.setActivityTypeName(log.getActivityTypeName() + " (Personal)");
                     logDTOList.add(this.buildLogDTO(log));
-                } else if (teamMapperIdMap.containsKey(log.getActivityUserMapperID())) {
+                } else if (teamActivityIds.contains(log.getActivityUserMapperID())) {
                     logDTOList.add(this.buildLogDTO(log));
                 }
             }
