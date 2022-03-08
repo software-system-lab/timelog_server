@@ -26,6 +26,7 @@ import ssl.ois.timelog.service.team.dashboard.TeamDashboardUseCaseInput;
 import ssl.ois.timelog.service.team.dashboard.TeamDashboardUseCaseOutput;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -121,7 +122,7 @@ public class TeamDashboardUseCaseTest {
         input.setTeamID(this.dummyTeam.getID().toString());
         input.setPersonal(false);
         input.setFilterList(null);
-        input.setMemberList(members);
+        input.setMemberList(members.stream().map(Person::getUsername).collect(Collectors.toList()));
 
         TeamDashboardUseCaseOutput output = new TeamDashBoardPresenter();
         try {
@@ -146,7 +147,7 @@ public class TeamDashboardUseCaseTest {
         input.setTeamID(this.dummyTeam.getID().toString());
         input.setPersonal(false);
         input.setFilterList(null);
-        input.setMemberList(members);
+        input.setMemberList(members.stream().map(Person::getUsername).collect(Collectors.toList()));
 
         TeamDashboardUseCaseOutput output = new TeamDashBoardPresenter();
         try {
@@ -169,7 +170,7 @@ public class TeamDashboardUseCaseTest {
         input.setTeamID(this.dummyTeam.getID().toString());
         input.setPersonal(true);
         input.setFilterList(null);
-        input.setMemberList(members);
+        input.setMemberList(members.stream().map(Person::getUsername).collect(Collectors.toList()));
 
         TeamDashboardUseCaseOutput output = new TeamDashBoardPresenter();
         try {

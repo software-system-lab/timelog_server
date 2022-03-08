@@ -11,7 +11,7 @@ public class TeamDashboardUseCaseInput {
     private String teamID;
     private String startDate;
     private String endDate;
-    private List<Person> memberList;
+    private List<String> memberList;
     private String groupname;
     private List<String> filterList;
     private Boolean personal;
@@ -41,23 +41,19 @@ public class TeamDashboardUseCaseInput {
         this.endDate = endDate;
     }
 
-    public List<Person> getMemberList() {
-		return this.memberList;
-	}
+    public List<String> getMemberList() {
+        return this.memberList;
+    }
 
-    public void setMemberList(List<Person> memberList) {
+    public void setMemberList(List<String> memberList) {
 		this.memberList = memberList;
-	}
-
-    public void addMemberToList(String username, String displayName, UUID userID) {
-		this.memberList.add(new Person(username, displayName, userID));
 	}
 
     public String getGroupname() {
 		return groupname;
 	}
 
-	public void setGroupname(String groupname) { this.groupname = groupname; }
+    public void setGroupname(String groupname) { this.groupname = groupname; }
 
     public List<String> getFilterList() { return this.filterList; }
 
