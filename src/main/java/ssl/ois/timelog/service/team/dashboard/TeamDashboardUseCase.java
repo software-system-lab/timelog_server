@@ -38,14 +38,18 @@ public class TeamDashboardUseCase {
         c.add(Calendar.DATE, 1);
         endDate = c.getTime();
 
+        // get member of team
         Map<UUID, MemberDTO> memberMap = accountManager.getTeamRoleRelation(input.getTeamID());
         List<LogDTO> teamLogDTOList = new ArrayList<>();
 
         for (Map.Entry<UUID, MemberDTO> memberEntry: memberMap.entrySet()) {
             MemberDTO memberDTO = memberEntry.getValue();
+
+            // get belonging team of user
             Map<UUID, String> belongTeams = accountManager.getBelongingTeams(memberDTO.getUsername());
 
-            Set<String> teamIdSet = belongTeams
+            // generate belonging team id set
+            Set<String> belongTeamIdSet = belongTeams
               .keySet()
               .stream()
               .map(UUID::toString).collect(Collectors.toSet());
@@ -53,7 +57,7 @@ public class TeamDashboardUseCase {
             List<Log> memberLogList = new ArrayList<>();
 
             if (input.getSsl() != null && input.getSsl()) {
-                for (String teamId: teamIdSet) {
+                for (String teamId: belongTeamIdSet) {
                     memberLogList.addAll(this.logRepository.findByPeriodAndUserIDWithTeamID(
                       teamId,
                       memberDTO.getUserId(),
@@ -63,9 +67,12 @@ public class TeamDashboardUseCase {
                     ));
                 }
 
-                // filter duplicate log
-                // Map<logId, Log>
-                Map<String, Log> memberLogMap = new HashMap<>();
+                // filter duplicate log using map
+                // logRepository.findByPeriodAndUserIDWithTeamID() will return both
+                // the logs that the user added on the target team and the personal logs,
+                // therefore, if the user belongs to multiple team, the personal logs will
+                // be fetched multiple times.
+                Map<String, Log> memberLogMap = new HashMap<>(); // Map<logId, Log>
                 for (Log memberLog: memberLogList) {
                     memberLogMap.putIfAbsent(memberLog.getID().toString(), memberLog);
                 }
@@ -80,9 +87,10 @@ public class TeamDashboardUseCase {
                 ));
             }
 
+            // activity ids of teams
             Set<UUID> teamActivityIds = new HashSet<>();
-            for (Map.Entry<UUID, String> entry : belongTeams.entrySet()) {
-                teamActivityIds.addAll(this.unitRepository.getActivityMapperIDListByUnitID(entry.getKey().toString()));
+            for (UUID teamId : belongTeams.keySet()) {
+                teamActivityIds.addAll(this.unitRepository.getActivityMapperIDListByUnitID(teamId.toString()));
             }
 
             List<LogDTO> logDTOList = new ArrayList<>();
