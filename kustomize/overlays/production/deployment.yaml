@@ -28,6 +28,11 @@ spec:
                 secretKeyRef:
                   key: MYSQL_HOST
                   name: timelog-server-env-production
+            - name: MYSQL_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: MYSQL_PORT
+                  name: timelog-server-env-production
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:

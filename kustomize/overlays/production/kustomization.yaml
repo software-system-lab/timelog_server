@@ -1,5 +1,10 @@
----
 resources:
-  - ../../base
+- ../../base
 patchesStrategicMerge:
-  - deployment.yaml
+- deployment.yaml
+- service.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: ssl1321ois/timelog_server
+  newTag: master.203a321e
