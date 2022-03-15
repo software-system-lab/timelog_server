@@ -22,7 +22,7 @@ test:
   - mvn test -q
 
 build jar:
-  stage: build
+  stage: build-jar
   image: maven:3.6.3-jdk-11
   dependencies:
   - test
@@ -39,7 +39,7 @@ build jar:
     - target/
 
 push image:
-  stage: build
+  stage: build-image
   image: docker:19.03.13
   dependencies:
   - build jar
@@ -57,7 +57,7 @@ deploy staging:
   stage: deploy
   image: nightlord851108/kustomize
   script:
-  - cd deployment/overlay/rc
+  - cd deployment/overlays/rc
   - kustomize edit set image ssl1321ois/timelog_server:${CI_COMMIT_BRANCH}.${CI_COMMIT_SHORT_SHA}
   - kustomize build . | kubectl apply --server=${CLUSTER_URL} --token=${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=rc -f -
   only:
@@ -68,7 +68,7 @@ deploy production:
   stage: deploy
   image: nightlord851108/kustomize
   script:
-  - cd deployment/overlay/production
+  - cd deployment/overlays/production
   - kustomize edit set image ssl1321ois/timelog_server:${CI_COMMIT_BRANCH}.${CI_COMMIT_SHORT_SHA}
   - kustomize build . | kubectl apply --server=${CLUSTER_URL} --token=${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=production -f -
   only:
@@ -77,5 +77,6 @@ deploy production:
 
 stages:
 - test
-- build
+- build-jar
+- build-image
 - deploy
