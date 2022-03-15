@@ -1,0 +1,81 @@
+variables:
+  # variables for docker service to build image during CI
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+
+# service of dind to build image during CI
+services:
+  - docker:19.03.13-dind
+
+
+test:
+  stage: test
+  image: maven:3.6.3-jdk-11
+  only:
+    refs:
+    - dev
+    - rc
+    - master
+  script:
+  - mvn test -q
+
+build jar:
+  stage: build
+  image: maven:3.6.3-jdk-11
+  dependencies:
+  - test
+  script:
+  - mvn install -DskipTests -q
+  - mvn package spring-boot:repackage -q
+  only:
+    refs:
+    - dev
+    - rc
+    - master
+  artifacts:
+    paths:
+    - target/
+
+push image:
+  stage: build
+  image: docker:19.03.13
+  dependencies:
+  - build jar
+  script:
+  - docker build -t ssl1321ois/timelog_server:${CI_COMMIT_BRANCH}.${CI_COMMIT_SHORT_SHA} .
+  - docker login -u=${DOCKER_USER} -p=${DOCKER_PASSWORD}
+  - docker push ssl1321ois/timelog_server:${CI_COMMIT_BRANCH}.${CI_COMMIT_SHORT_SHA}
+  only:
+    refs:
+    - dev
+    - rc
+    - master
+
+deploy staging:
+  stage: deploy
+  image: nightlord851108/kustomize
+  script:
+  - cd deployment/overlay/rc
+  - kustomize edit set image ssl1321ois/timelog_server:${CI_COMMIT_BRANCH}.${CI_COMMIT_SHORT_SHA}
+  - kustomize build . | kubectl apply --server=${CLUSTER_URL} --token=${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=rc -f -
+  only:
+    refs:
+    - rc
+
+deploy production:
+  stage: deploy
+  image: nightlord851108/kustomize
+  script:
+  - cd deployment/overlay/production
+  - kustomize edit set image ssl1321ois/timelog_server:${CI_COMMIT_BRANCH}.${CI_COMMIT_SHORT_SHA}
+  - kustomize build . | kubectl apply --server=${CLUSTER_URL} --token=${CLUSTER_TOKEN} --insecure-skip-tls-verify=true --namespace=production -f -
+  only:
+    refs:
+    - master
+
+stages:
+- test
+- build
+- deploy
