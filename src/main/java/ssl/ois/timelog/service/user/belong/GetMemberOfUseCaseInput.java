@@ -1,7 +1,7 @@
 package ssl.ois.timelog.service.user.belong;
 
 public class GetMemberOfUseCaseInput {
-    private String username;
+	private String username;
 
 	public String getUsername() {
 		return username;
@@ -10,5 +10,4 @@ public class GetMemberOfUseCaseInput {
 	public void setUsername(String Username) {
 		this.username = Username;
 	}
-
 }

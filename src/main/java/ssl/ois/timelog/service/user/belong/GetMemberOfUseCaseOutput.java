@@ -1,14 +1,17 @@
 package ssl.ois.timelog.service.user.belong;
 
+import ssl.ois.timelog.model.activity.type.ActivityType;
+
 import java.util.List;
 import java.util.UUID;
 import java.lang.String;
 import java.util.ArrayList;
 
 public class GetMemberOfUseCaseOutput {
-	class Team {
+	static class Team {
 		private String teamName;
 		private UUID teamID;
+		private List<ActivityType> activityTypeList;
 
 		public String getTeamName() {
 			return teamName;
@@ -26,25 +29,35 @@ public class GetMemberOfUseCaseOutput {
 			this.teamID = teamID;
 		}
 
+		public List<ActivityType> getActivityTypeList() {
+			return activityTypeList;
+		}
+
+		public void setActivityTypeList(List<ActivityType> activityTypeList) {
+			this.activityTypeList = activityTypeList;
+		}
+
 		public Team (){}
-		public Team(String teamName, UUID teamID) {
+
+		public Team(String teamName, UUID teamID, List<ActivityType> activityTypeList) {
 			this.teamID = teamID;
 			this.teamName = teamName;
+			this.activityTypeList = activityTypeList;
 		}
 	}
 
-	private List<Team> teamList;
+	private final List<Team> teamList;
 
-    public GetMemberOfUseCaseOutput(){
-        this.teamList = new ArrayList<>();
-    }
+	public GetMemberOfUseCaseOutput(){
+			this.teamList = new ArrayList<>();
+	}
 
 	public List<Team> getTeamList() {
 		return this.teamList;
 	}
 
-	public void addTeamToList(String teamName, UUID teamID) {
-		this.teamList.add(new Team(teamName, teamID));
+	public void addTeamToList(String teamName, UUID teamID, List<ActivityType> activityTypeList) {
+		this.teamList.add(new Team(teamName, teamID, activityTypeList));
 	}
 
 //

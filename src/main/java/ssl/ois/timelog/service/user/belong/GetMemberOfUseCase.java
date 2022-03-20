@@ -1,5 +1,6 @@
 package ssl.ois.timelog.service.user.belong;
 
+import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class GetMemberOfUseCase {
         this.accountManager = accountManager;
     }
 
-    public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException,InitTeamDataErrorException {
+    public void execute(GetMemberOfUseCaseInput input, GetMemberOfUseCaseOutput output)throws GetMemberOfErrorException, InitTeamDataErrorException {
         try {
             Map<UUID, String> teamIdList = this.accountManager.getBelongingTeams(input.getUsername());
             for (Map.Entry<UUID, String> entry: teamIdList.entrySet()) {
@@ -45,7 +46,9 @@ public class GetMemberOfUseCase {
                     // this.unitRepository.addActivityType(team);
                 }
 
-                output.addTeamToList(entry.getValue(),entry.getKey());
+                List<ActivityType> activityTypeList = team.getActivityTypeList();
+
+                output.addTeamToList(entry.getValue(), entry.getKey(), activityTypeList);
             }
         } catch (AccountErrorException e) {
             throw new GetMemberOfErrorException();
