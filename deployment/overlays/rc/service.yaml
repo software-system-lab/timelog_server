@@ -4,9 +4,10 @@ kind: Service
 metadata:
   name: timelog-server-svc
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: timelog-server
   ports:
     - name: http
       port: 9000
+      nodePort: 30998
