@@ -1,10 +1,6 @@
 package ssl.ois.timelog.service.team.dashboard;
 
-import ssl.ois.timelog.service.team.Person;
-
 import java.util.List;
-import java.util.UUID;
-
 
 
 public class TeamDashboardUseCaseInput {
@@ -15,7 +11,7 @@ public class TeamDashboardUseCaseInput {
     private String groupname;
     private List<String> filterList;
     private Boolean personal;
-    private Boolean ssl;
+    private String teamName;
 
     public String getTeamID() {
         return teamID;
@@ -63,12 +59,12 @@ public class TeamDashboardUseCaseInput {
 
     public void setPersonal(Boolean personal) { this.personal = personal; }
 
-    public Boolean getSsl() {
-        return this.ssl;
+    public String getTeamName() {
+        return this.teamName;
     }
 
-    public void setSsl(Boolean ssl) {
-        this.ssl = ssl;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 }
 

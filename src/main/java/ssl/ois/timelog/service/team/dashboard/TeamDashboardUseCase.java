@@ -8,9 +8,7 @@ import ssl.ois.timelog.service.log.LogDTO;
 import ssl.ois.timelog.service.manager.AccountManager;
 import ssl.ois.timelog.service.repository.log.LogRepository;
 import ssl.ois.timelog.service.repository.user.UnitRepository;
-import ssl.ois.timelog.service.team.Person;
 
-import java.lang.reflect.Member;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -21,6 +19,9 @@ public class TeamDashboardUseCase {
     private LogRepository logRepository;
     private AccountManager accountManager;
     private UnitRepository unitRepository;
+
+    private final String SSL = "Software System Lab";
+    private final String SUNBIRD = "Sunbird";
 
     public TeamDashboardUseCase(LogRepository logRepository, AccountManager accountManager, UnitRepository unitRepository) {
         this.logRepository = logRepository;
@@ -53,10 +54,9 @@ public class TeamDashboardUseCase {
               .keySet()
               .stream()
               .map(UUID::toString).collect(Collectors.toSet());
-
             List<Log> memberLogList = new ArrayList<>();
 
-            if (input.getSsl() != null && input.getSsl()) {
+            if (input.getTeamName() != null && (input.getTeamName().equals(SSL) || input.getTeamName().equals(SUNBIRD))) {
                 for (String teamId: belongTeamIdSet) {
                     memberLogList.addAll(this.logRepository.findByPeriodAndUserIDWithTeamID(
                       teamId,
