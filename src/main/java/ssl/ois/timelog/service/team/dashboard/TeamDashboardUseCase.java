@@ -22,6 +22,7 @@ public class TeamDashboardUseCase {
 
     private final String SSL = "Software System Lab";
     private final String SUNBIRD = "Sunbird";
+    private final String SUNBIRD_MASTER = "Sunbird Master";
 
     public TeamDashboardUseCase(LogRepository logRepository, AccountManager accountManager, UnitRepository unitRepository) {
         this.logRepository = logRepository;
@@ -56,7 +57,10 @@ public class TeamDashboardUseCase {
               .map(UUID::toString).collect(Collectors.toSet());
             List<Log> memberLogList = new ArrayList<>();
 
-            if (input.getTeamName() != null && (input.getTeamName().equals(SSL) || input.getTeamName().equals(SUNBIRD))) {
+            if (input.getTeamName() != null &&
+                    (input.getTeamName().equals(SSL) ||
+                            input.getTeamName().equals(SUNBIRD) ||
+                            input.getTeamName().equals(SUNBIRD_MASTER))) {
                 for (String teamId: belongTeamIdSet) {
                     memberLogList.addAll(this.logRepository.findByPeriodAndUserIDWithTeamID(
                       teamId,
